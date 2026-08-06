@@ -1,41 +1,19 @@
-let html5QrCode;
-
 document.addEventListener("DOMContentLoaded", initialise);
 
 async function initialise() {
 
-    // Load selected event
-    const eventName = localStorage.getItem("CurrentEventName");
+    const eventName =
+        localStorage.getItem("CurrentEventName");
 
     document.getElementById("eventName").textContent =
         eventName || "No Event Selected";
 
-    // Start camera
-    await startScanner();
-
-}
-
-async function startScanner() {
-
     try {
 
-        html5QrCode = new Html5Qrcode("camera");
+        await Scanner.start(ticketScanned);
 
-        await html5QrCode.start(
-
-            { facingMode: "environment" },
-
-            {
-                fps: 10,
-                qrbox: {
-                    width: 250,
-                    height: 250
-                }
-            },
-
-            onScanSuccess
-
-        );
+        document.getElementById("scanStatus").innerHTML =
+            "🟢 READY TO SCAN";
 
     }
     catch (err) {
@@ -43,32 +21,94 @@ async function startScanner() {
         console.error(err);
 
         document.getElementById("scanStatus").innerHTML =
-            "🔴 Camera Failed";
+            "🔴 CAMERA FAILED";
 
     }
 
 }
 
-async function onScanSuccess(decodedText) {
+// =====================================
+// Ticket Scanned
+// =====================================
 
-    console.log("Scanned:", decodedText);
+async function ticketScanned(ticketNumber) {
 
-    document.getElementById("ticketNumber").textContent = decodedText;
+    console.log("Ticket:", ticketNumber);
 
     document.getElementById("scanStatus").innerHTML =
-        "🟢 QR Code Read";
+        "⏳ Checking Ticket...";
 
-    // Stop duplicate reads
-    await html5QrCode.pause(true);
+    try {
 
-    // Resume after 2 seconds
-    setTimeout(async () => {
+        const result =
+            await GateKeeperAPI.checkIn(
+
+                ticketNumber,
+
+                localStorage.getItem("CurrentEventId")
+
+            );
+
+        if (result.success) {
+
+            document.getElementById("scanStatus").innerHTML =
+                "🟢 CHECKED IN";
+
+            document.getElementById("ticketNumber").textContent =
+                result.ticketNumber || ticketNumber;
+
+            document.getElementById("ticketHolder").textContent =
+                result.holder || "-";
+
+            document.getElementById("ticketType").textContent =
+                result.ticketType || "-";
+
+            document.getElementById("ticketTime").textContent =
+                new Date().toLocaleTimeString();
+
+            if (result.checkedInToday !== undefined) {
+
+                document.getElementById("checkedInCount").textContent =
+                    result.checkedInToday;
+
+            }
+
+            if (result.currentlyOnSite !== undefined) {
+
+                document.getElementById("onSiteCount").textContent =
+                    result.currentlyOnSite;
+
+            }
+
+        }
+        else {
+
+            document.getElementById("scanStatus").innerHTML =
+                "🔴 " + (result.message || "Ticket Rejected");
+
+        }
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        document.getElementById("scanStatus").innerHTML =
+            "🔴 API ERROR";
+
+    }
+
+    setTimeout(() => {
 
         document.getElementById("scanStatus").innerHTML =
             "🟢 READY TO SCAN";
 
-        await html5QrCode.resume();
-
-    }, 2000);
+    }, 1500);
 
 }
+
+window.addEventListener("beforeunload", async () => {
+
+    await Scanner.stop();
+
+});
