@@ -1,46 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GateKeeper</title>
 
-    <style>
-        body{
-            font-family:Arial,Helvetica,sans-serif;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-            background:#0d6efd;
-            color:white;
-            margin:0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .card{
-            background:white;
-            color:#333;
-            padding:40px;
-            border-radius:12px;
-            text-align:center;
-            box-shadow:0 10px 30px rgba(0,0,0,.2);
-        }
+<title>GateKeeper</title>
 
-        h1{
-            margin-top:0;
-        }
-    </style>
+<link rel="stylesheet" href="css/site.css">
+
 </head>
 
 <body>
 
-<div class="card">
+<div class="app">
 
-<h1>GateKeeper</h1>
+    <header>
 
-<p>Frontend successfully deployed! HUrrah</p>
+        <h1>GateKeeper</h1>
+
+        <div class="status online">
+            ● Online
+        </div>
+
+    </header>
+
+    <main>
+
+        <section class="event-select">
+
+            <label for="eventSelect">Current Event</label>
+
+            <select id="eventSelect">
+                <option>Loading events...</option>
+            </select>
+
+        </section>
+
+        <section class="menu">
+
+            <button class="menu-card" id="btnCheckIn">
+
+                <div class="icon">📷</div>
+
+                <h2>Check In</h2>
+
+                <p>Scan tickets as guests arrive.</p>
+
+            </button>
+
+            <button class="menu-card" id="btnCheckOut">
+
+                <div class="icon">🚪</div>
+
+                <h2>Check Out</h2>
+
+                <p>Scan guests leaving the event.</p>
+
+            </button>
+
+            <button class="menu-card" id="btnStatus">
+
+                <div class="icon">📊</div>
+
+                <h2>Event Status</h2>
+
+                <p>Attendance and live statistics.</p>
+
+            </button>
+
+            <button class="menu-card" id="btnSettings">
+
+                <div class="icon">⚙</div>
+
+                <h2>Settings</h2>
+
+                <p>Application settings.</p>
+
+            </button>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        Version 1.0.0
+
+    </footer>
 
 </div>
 
+<script src="js/app.js"></script>
+
 </body>
+
 </html>
