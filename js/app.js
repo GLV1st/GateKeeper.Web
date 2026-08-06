@@ -1,25 +1,64 @@
-console.log("GateKeeper Started");
+document.addEventListener("DOMContentLoaded", initialise);
 
-document.getElementById("btnCheckIn").onclick=()=>{
+async function initialise() {
 
-    alert("Check In screen coming next.");
+    console.log("GateKeeper Started");
 
-};
+    await loadEvents();
 
-document.getElementById("btnCheckOut").onclick=()=>{
+    document.getElementById("eventSelect").addEventListener("change", eventChanged);
 
-    alert("Check Out screen coming next.");
+}
 
-};
+async function loadEvents() {
 
-document.getElementById("btnStatus").onclick=()=>{
+    const ddl = document.getElementById("eventSelect");
 
-    alert("Status screen coming next.");
+    ddl.innerHTML = "";
 
-};
+    const events = await GateKeeperAPI.getEvents();
 
-document.getElementById("btnSettings").onclick=()=>{
+    if (!events || events.length === 0) {
 
-    alert("Settings screen coming next.");
+        ddl.innerHTML = "<option>No Events Available</option>";
+        return;
 
-};
+    }
+
+    ddl.innerHTML = "<option value=''>Select Event...</option>";
+
+    events.forEach(event => {
+
+        const option = document.createElement("option");
+
+        option.value = event.Id;
+        option.textContent = event.Name;
+
+        ddl.appendChild(option);
+
+    });
+
+    // Restore previously selected event
+    const savedEventId = localStorage.getItem("CurrentEventId");
+
+    if (savedEventId) {
+
+        ddl.value = savedEventId;
+
+    }
+
+}
+
+function eventChanged() {
+
+    const ddl = document.getElementById("eventSelect");
+
+    if (ddl.value === "")
+        return;
+
+    localStorage.setItem("CurrentEventId", ddl.value);
+    localStorage.setItem("CurrentEventName", ddl.options[ddl.selectedIndex].text);
+
+    console.log("Current Event:", ddl.value);
+
+}
