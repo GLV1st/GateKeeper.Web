@@ -112,13 +112,15 @@ async function ticketScanned(ticketNumber) {
 
     }
     catch (err) {
+console.log(result);
+    console.error(err);
 
-        console.error(err);
+    alert(err);
 
-        document.getElementById("scanStatus").innerHTML =
-            "🔴 API ERROR";
+    document.getElementById("scanStatus").innerHTML =
+        "🔴 API ERROR";
 
-    }
+}}
 
     setTimeout(() => {
 
