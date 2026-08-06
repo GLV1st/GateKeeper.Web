@@ -4,7 +4,7 @@
         {
             "label": "🚀 Git Commit & Push",
             "type": "process",
-            "command": "cmd",
+            "command": "cmd.exe",
             "args": [
                 "/c",
                 "git add . && git commit -m \"${input:commitMessage}\" && git push && git status"
@@ -19,7 +19,7 @@
         {
             "id": "commitMessage",
             "type": "promptString",
-            "description": "Commit message"
+            "description": "Enter commit message"
         }
     ]
 }

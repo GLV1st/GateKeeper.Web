@@ -15,86 +15,95 @@
 
 <div class="app">
 
-    <header>
+<header class="page-header">
 
-        <button class="home-button" onclick="window.location.href='index.html'">
-            🏠 Home
-        </button>
+    <button class="home-button" onclick="window.location.href='index.html'">
+        🏠 Home
+    </button>
 
-        <div class="status online">
-            ● Online
-        </div>
+    <div class="status online">
+        ● Online
+    </div>
 
-    </header>
+</header>
 
-    <main>
+<main>
 
-        <h1>Check In</h1>
+<h1 class="page-title">Check In</h1>
 
-        <section class="event-info">
+<div class="event-name" id="eventName">
 
-            <label>Current Event</label>
+Loading...
 
-            <h2 id="eventName">Loading...</h2>
+</div>
 
-        </section>
+<div class="camera-card">
 
-        <section class="camera">
+    <div id="camera">
 
-            <div class="camera-placeholder">
+        📷 Camera Starting...
 
-                Camera Preview
+    </div>
 
-            </div>
+</div>
 
-        </section>
+<div id="scanStatus" class="scan-ready">
 
-        <section class="scan-status">
+    🟢 READY TO SCAN
 
-            <div id="scanStatus" class="ready">
+</div>
 
-                🟢 READY TO SCAN
+<div class="ticket-card">
 
-            </div>
+    <h2>Last Ticket</h2>
 
-        </section>
+    <div class="ticket-row">
+        <span>Ticket Number</span>
+        <strong id="ticketNumber">-</strong>
+    </div>
 
-        <section class="last-ticket">
+    <div class="ticket-row">
+        <span>Holder</span>
+        <strong id="ticketHolder">-</strong>
+    </div>
 
-            <h2>Last Ticket</h2>
+    <div class="ticket-row">
+        <span>Ticket Type</span>
+        <strong id="ticketType">-</strong>
+    </div>
 
-            <table>
+    <div class="ticket-row">
+        <span>Time</span>
+        <strong id="ticketTime">-</strong>
+    </div>
 
-                <tr>
-                    <td>Number</td>
-                    <td id="ticketNumber">-</td>
-                </tr>
+</div>
 
-                <tr>
-                    <td>Type</td>
-                    <td id="ticketType">-</td>
-                </tr>
+<div class="stats-card">
 
-                <tr>
-                    <td>Holder</td>
-                    <td id="ticketHolder">-</td>
-                </tr>
+    <div class="stat-row">
 
-                <tr>
-                    <td>Time</td>
-                    <td id="ticketTime">-</td>
-                </tr>
+        <span>Checked In Today</span>
 
-            </table>
+        <strong id="checkedInCount">0</strong>
 
-        </section>
+    </div>
 
-    </main>
+    <div class="stat-row">
+
+        <span>Currently On Site</span>
+
+        <strong id="onSiteCount">0</strong>
+
+    </div>
+
+</div>
+
+</main>
 
 </div>
 
 <script src="js/checkin.js"></script>
 
 </body>
-
 </html>
