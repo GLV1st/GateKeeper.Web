@@ -22,36 +22,11 @@ class GateKeeperAPI {
 
     }
 
-}
-class GateKeeperAPI {
-
-    static async getEvents() {
-
-        try {
-
-            const response = await fetch(`${CONFIG.apiUrl}/events`);
-
-            if (!response.ok)
-                throw new Error("Unable to load events.");
-
-            return await response.json();
-
-        }
-        catch (err) {
-
-            console.error(err);
-
-            return [];
-
-        }
-
-    }
-
     static async checkIn(ticketNumber, eventId) {
 
         try {
 
-            const response = await fetch(`${CONFIG.apiUrl}/checkin`, {
+            const response = await fetch(`${CONFIG.apiUrl}/tickets/checkin`, {
 
                 method: "POST",
 
