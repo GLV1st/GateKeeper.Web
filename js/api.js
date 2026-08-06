@@ -51,10 +51,10 @@ class GateKeeperAPI {
 
             console.error(err);
 
-            return {
-                success: false,
-                message: err.message
-            };
+           return {
+    Status: "ERROR",
+    Message: err.message
+};
 
         }
 

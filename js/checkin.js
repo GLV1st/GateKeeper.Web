@@ -40,51 +40,73 @@ async function ticketScanned(ticketNumber) {
 
     try {
 
-        const result =
-            await GateKeeperAPI.checkIn(
+        const result = await GateKeeperAPI.checkIn(
 
-                ticketNumber,
+            ticketNumber,
 
-                localStorage.getItem("CurrentEventId")
+            localStorage.getItem("CurrentEventId")
 
-            );
+        );
 
-        if (result.success) {
+        switch (result.Status) {
 
-            document.getElementById("scanStatus").innerHTML =
-                "🟢 CHECKED IN";
+            case "SUCCESS":
 
-            document.getElementById("ticketNumber").textContent =
-                result.ticketNumber || ticketNumber;
+                document.getElementById("scanStatus").innerHTML =
+                    "🟢 " + result.Message;
 
-            document.getElementById("ticketHolder").textContent =
-                result.holder || "-";
+                document.getElementById("ticketNumber").textContent =
+                    result.TicketNumber;
 
-            document.getElementById("ticketType").textContent =
-                result.ticketType || "-";
+                document.getElementById("ticketHolder").textContent =
+                    result.CustomerName;
 
-            document.getElementById("ticketTime").textContent =
-                new Date().toLocaleTimeString();
+                document.getElementById("ticketType").textContent =
+                    result.TicketType;
 
-            if (result.checkedInToday !== undefined) {
+                document.getElementById("ticketTime").textContent =
+                    new Date().toLocaleTimeString();
 
-                document.getElementById("checkedInCount").textContent =
-                    result.checkedInToday;
+                break;
 
-            }
+            case "ALREADY_CHECKED_IN":
 
-            if (result.currentlyOnSite !== undefined) {
+                document.getElementById("scanStatus").innerHTML =
+                    "🟠 " + result.Message;
 
-                document.getElementById("onSiteCount").textContent =
-                    result.currentlyOnSite;
+                document.getElementById("ticketNumber").textContent =
+                    result.TicketNumber;
 
-            }
+                document.getElementById("ticketHolder").textContent =
+                    result.CustomerName;
 
-        }
-        else {
+                document.getElementById("ticketType").textContent =
+                    result.TicketType;
 
-            document.getElementById("scanStatus").innerHTML =
-                "🔴 " + (result.message || "Ticket Rejected");
+                break;
+
+            case "CANCELLED":
+
+                document.getElementById("scanStatus").innerHTML =
+                    "🔴 " + result.Message;
+
+                break;
+
+            case "NOT_FOUND":
+
+                document.getElementById("scanStatus").innerHTML =
+                    "🔴 " + result.Message;
+
+                break;
+
+            default:
+
+                document.getElementById("scanStatus").innerHTML =
+                    "🔴 Unknown response";
+
+                console.log(result);
+
+                break;
 
         }
 
