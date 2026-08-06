@@ -29,71 +29,71 @@
 
 <main>
 
-<h1 class="page-title">Check In</h1>
+<main class="checkin-page">
 
-<div class="event-name" id="eventName">
+    <h1 class="page-title">Check In</h1>
 
-Loading...
-
-</div>
-
-<div class="camera-card">
-
-<div id="camera"></div>
-
-</div>
-
-<div id="scanStatus" class="scan-ready">
-
-    🟢 READY TO SCAN
-
-</div>
-
-<div class="ticket-card">
-
-    <h2>Last Ticket</h2>
-
-    <div class="ticket-row">
-        <span>Ticket Number</span>
-        <strong id="ticketNumber">-</strong>
+    <div class="event-name" id="eventName">
+        Loading...
     </div>
 
-    <div class="ticket-row">
-        <span>Holder</span>
-        <strong id="ticketHolder">-</strong>
+    <div class="checkin-grid">
+
+        <section class="camera-card">
+
+            <div id="camera"></div>
+
+            <div id="scanStatus" class="scan-ready">
+                🟢 READY TO SCAN
+            </div>
+
+        </section>
+
+        <section class="info-panel">
+
+            <div class="ticket-card">
+
+                <h2>Last Ticket</h2>
+
+                <div class="ticket-row">
+                    <span>Ticket</span>
+                    <strong id="ticketNumber">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Holder</span>
+                    <strong id="ticketHolder">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Type</span>
+                    <strong id="ticketType">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Time</span>
+                    <strong id="ticketTime">-</strong>
+                </div>
+
+            </div>
+
+            <div class="stats-card">
+
+                <div class="stat-row">
+                    <span>Checked In</span>
+                    <strong id="checkedInCount">0</strong>
+                </div>
+
+                <div class="stat-row">
+                    <span>On Site</span>
+                    <strong id="onSiteCount">0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
     </div>
-
-    <div class="ticket-row">
-        <span>Ticket Type</span>
-        <strong id="ticketType">-</strong>
-    </div>
-
-    <div class="ticket-row">
-        <span>Time</span>
-        <strong id="ticketTime">-</strong>
-    </div>
-
-</div>
-
-<div class="stats-card">
-
-    <div class="stat-row">
-
-        <span>Checked In Today</span>
-
-        <strong id="checkedInCount">0</strong>
-
-    </div>
-
-    <div class="stat-row">
-
-        <span>Currently On Site</span>
-
-        <strong id="onSiteCount">0</strong>
-
-    </div>
-
-</div>
 
 </main>
 

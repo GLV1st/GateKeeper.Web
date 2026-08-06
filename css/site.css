@@ -297,3 +297,144 @@ font-weight:bold;
 color:#16a34a;
 
 }
+/* ==========================================
+   CHECK IN PAGE
+========================================== */
+
+.checkin-page{
+
+    max-width:1400px;
+    margin:auto;
+    padding:20px;
+
+}
+
+.page-title{
+
+    text-align:center;
+    margin-bottom:5px;
+
+}
+
+.event-name{
+
+    text-align:center;
+    color:#666;
+    font-size:1.1rem;
+    margin-bottom:20px;
+
+}
+
+.checkin-grid{
+
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+
+}
+
+.camera-card{
+
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+#camera{
+
+    width:100%;
+    min-height:500px;
+    border-radius:12px;
+    overflow:hidden;
+    background:#000;
+
+}
+
+.scan-ready{
+
+    margin-top:20px;
+    text-align:center;
+    padding:16px;
+    font-size:1.3rem;
+    font-weight:bold;
+    border-radius:10px;
+    background:#e9f8ed;
+    color:#0a7c2f;
+
+}
+
+.info-panel{
+
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+
+}
+
+.ticket-card,
+.stats-card{
+
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.ticket-card h2{
+
+    margin-top:0;
+    margin-bottom:20px;
+
+}
+
+.ticket-row,
+.stat-row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+
+}
+
+.ticket-row:last-child,
+.stat-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.ticket-row strong,
+.stat-row strong{
+
+    font-size:1.1rem;
+
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+    .checkin-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    #camera{
+
+        min-height:350px;
+
+    }
+
+    .scan-ready{
+
+        font-size:1.1rem;
+
+    }
+
+}
