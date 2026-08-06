@@ -62,3 +62,39 @@ function eventChanged() {
     console.log("Current Event:", ddl.value);
 
 }
+// =====================
+// NAVIGATION
+// =====================
+
+document.getElementById("btnCheckIn").addEventListener("click", () => {
+
+    const eventId = localStorage.getItem("CurrentEventId");
+
+    if (!eventId) {
+
+        alert("Please select an event first.");
+        return;
+
+    }
+
+    window.location.href = "checkin.html";
+
+});
+
+document.getElementById("btnCheckOut").addEventListener("click", () => {
+
+    alert("Coming next...");
+
+});
+
+document.getElementById("btnStatus").addEventListener("click", () => {
+
+    alert("Coming next...");
+
+});
+
+document.getElementById("btnSettings").addEventListener("click", () => {
+
+    alert("Coming next...");
+
+});

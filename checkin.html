@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GateKeeper - Check In</title>
+
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+
+        <button class="home-button" onclick="window.location.href='index.html'">
+            🏠 Home
+        </button>
+
+        <div class="status online">
+            ● Online
+        </div>
+
+    </header>
+
+    <main>
+
+        <h1>Check In</h1>
+
+        <section class="event-info">
+
+            <label>Current Event</label>
+
+            <h2 id="eventName">Loading...</h2>
+
+        </section>
+
+        <section class="camera">
+
+            <div class="camera-placeholder">
+
+                Camera Preview
+
+            </div>
+
+        </section>
+
+        <section class="scan-status">
+
+            <div id="scanStatus" class="ready">
+
+                🟢 READY TO SCAN
+
+            </div>
+
+        </section>
+
+        <section class="last-ticket">
+
+            <h2>Last Ticket</h2>
+
+            <table>
+
+                <tr>
+                    <td>Number</td>
+                    <td id="ticketNumber">-</td>
+                </tr>
+
+                <tr>
+                    <td>Type</td>
+                    <td id="ticketType">-</td>
+                </tr>
+
+                <tr>
+                    <td>Holder</td>
+                    <td id="ticketHolder">-</td>
+                </tr>
+
+                <tr>
+                    <td>Time</td>
+                    <td id="ticketTime">-</td>
+                </tr>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/checkin.js"></script>
+
+</body>
+
+</html>

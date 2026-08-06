@@ -3,8 +3,12 @@
     "tasks": [
         {
             "label": "🚀 Git Commit & Push",
-            "type": "shell",
-            "command": "git add .; git commit -m \"${input:commitMessage}\"; if ($LASTEXITCODE -eq 0) { git push; git status }",
+            "type": "process",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "git add . && git commit -m \"${input:commitMessage}\" && git push && git status"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
