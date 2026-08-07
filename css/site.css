@@ -192,9 +192,7 @@ footer {
 
 .page-title {
     text-align: center;
-
     font-size: clamp(28px, 4vw, 46px);
-
     margin-bottom: 5px;
 }
 
@@ -256,57 +254,52 @@ footer {
    CAMERA VIEW
 ========================================== */
 
-/*
-   IMPORTANT
-
-   Keep this geometry stable.
-
-   Do NOT use aspect-ratio here.
-   Do NOT force the video height.
-   Do NOT use object-fit: cover.
-
-   html5-qrcode needs to control the
-   video/canvas geometry itself.
-*/
-
 #camera {
     width: 100%;
-    height: 200px;
+
+    height: 500px;
     min-height: 0;
-    max-height: 200px;
+    max-height: 500px;
 
     border-radius: 12px;
+
     overflow: hidden;
+
     background: #000;
+
     position: relative;
 }
 
 
-/*
-   Let html5-qrcode control the video.
-
-   We deliberately do NOT force:
-
-       height: 100%
-       object-fit: cover
-
-   because this can make the visible
-   video and scan region disagree.
-*/
+/* ==========================================
+   HTML5-QRCODE VIDEO
+========================================== */
 
 #camera video {
-    display: block;
+    width: 100% !important;
+    height: 100% !important;
 
-    max-width: 100%;
+    display: block !important;
+
+    object-fit: cover !important;
 }
 
 
-/*
-   Keep html5-qrcode internal elements
-   inside the camera container.
-*/
+/* ==========================================
+   HTML5-QRCODE CONTAINER
+========================================== */
 
 #camera > div {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+
+/* ==========================================
+   KEEP CANVAS INSIDE CAMERA
+========================================== */
+
+#camera canvas {
     max-width: 100%;
 }
 
@@ -423,16 +416,20 @@ footer {
         padding: 15px;
     }
 
-    /*
-       Stack camera and information.
-
-       IMPORTANT:
-       Camera remains 500px high.
-       We are NOT changing its geometry.
-    */
-
     .checkin-grid {
         grid-template-columns: 1fr;
+    }
+
+
+    /* --------------------------------------
+       CAMERA
+    -------------------------------------- */
+
+    #camera {
+        height: 400px;
+
+        min-height: 0;
+        max-height: 400px;
     }
 
 }
@@ -447,7 +444,6 @@ footer {
     html,
     body {
         width: 100%;
-
         overflow-x: hidden;
     }
 
@@ -475,7 +471,6 @@ footer {
 
     .home-button {
         padding: 9px 13px;
-
         font-size: 14px;
     }
 
@@ -486,19 +481,16 @@ footer {
 
     .checkin-page {
         width: 100%;
-
         padding: 0;
     }
 
     .page-title {
         font-size: 28px;
-
         margin-bottom: 2px;
     }
 
     .event-name {
         font-size: 18px;
-
         margin-bottom: 10px;
     }
 
@@ -516,26 +508,55 @@ footer {
     }
 
 
-    /*
-       IMPORTANT
+    /* --------------------------------------
+       CAMERA
+       
+       THIS IS THE IMPORTANT PART.
 
-       Keep camera at 500px.
+       The previous CSS was setting:
+       
+       height: 500px;
+       min-height: 500px;
 
-       This is the geometry that is currently
-       working with your scanner.
+       which overrode your smaller
+       camera setting.
 
-       DO NOT use aspect-ratio.
-       DO NOT shrink this to 300px.
-    */
+       Now the phone camera is 320px.
+    -------------------------------------- */
 
     #camera {
         width: 100%;
 
-        height: 500px;
+        height: 320px;
 
-        min-height: 500px;
+        min-height: 0;
+        max-height: 320px;
 
         border-radius: 8px;
+    }
+
+
+    /* --------------------------------------
+       VIDEO
+    -------------------------------------- */
+
+    #camera video {
+        width: 100% !important;
+        height: 100% !important;
+
+        display: block !important;
+
+        object-fit: cover !important;
+    }
+
+
+    /* --------------------------------------
+       QR CONTAINER
+    -------------------------------------- */
+
+    #camera > div {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
 
@@ -606,7 +627,6 @@ footer {
 
     .event-name {
         font-size: 16px;
-
         margin-bottom: 7px;
     }
 
@@ -615,24 +635,49 @@ footer {
     }
 
 
-    /*
-       Still keep the scanner geometry stable.
-    */
+    /* --------------------------------------
+       SMALL PHONE CAMERA
+    -------------------------------------- */
 
     #camera {
         width: 100%;
 
-        height: 500px;
+        height: 300px;
 
-        min-height: 500px;
+        min-height: 0;
+        max-height: 300px;
+
+        border-radius: 8px;
     }
 
+
+    /* --------------------------------------
+       VIDEO
+    -------------------------------------- */
+
+    #camera video {
+        width: 100% !important;
+        height: 100% !important;
+
+        display: block !important;
+
+        object-fit: cover !important;
+    }
+
+
+    /* --------------------------------------
+       STATUS
+    -------------------------------------- */
 
     .scan-ready {
         padding: 8px;
-
         font-size: 15px;
     }
+
+
+    /* --------------------------------------
+       INFORMATION
+    -------------------------------------- */
 
     .ticket-card,
     .stats-card {
@@ -642,7 +687,6 @@ footer {
     .ticket-row,
     .stat-row {
         font-size: 13px;
-
         padding: 4px 0;
     }
 
