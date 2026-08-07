@@ -18,6 +18,7 @@ body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: #f4f6f9;
     color: #222;
+    overflow-x: hidden;
 }
 
 
@@ -29,7 +30,7 @@ body {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
 }
 
 
@@ -37,7 +38,6 @@ body {
    HEADER
 ========================================== */
 
-header,
 .page-header {
     width: 100%;
 
@@ -45,19 +45,14 @@ header,
     justify-content: space-between;
     align-items: center;
 
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-header h1 {
-    color: #2e7d32;
-    font-size: 2rem;
+    margin-bottom: 15px;
 }
 
 .online {
     color: #16a34a;
     font-weight: bold;
     white-space: nowrap;
+    font-size: 16px;
 }
 
 
@@ -70,22 +65,20 @@ header h1 {
     align-items: center;
     justify-content: center;
 
-    gap: 8px;
+    gap: 7px;
 
-    padding: 12px 18px;
+    padding: 10px 16px;
 
     background: #2563eb;
     color: white;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 9px;
 
     cursor: pointer;
 
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-
-    transition: 0.2s;
 }
 
 .home-button:hover {
@@ -98,43 +91,34 @@ header h1 {
 
 
 /* ==========================================
-   EVENT SELECT
+   HOME PAGE
 ========================================== */
 
 .event-select {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 label {
     display: block;
-
     font-weight: bold;
-
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 select {
     width: 100%;
-
-    padding: 15px;
+    padding: 13px;
 
     font-size: 1rem;
 
     border-radius: 10px;
-
     border: 1px solid #ccc;
 
     background: white;
 }
 
-
-/* ==========================================
-   HOME MENU
-========================================== */
-
 .menu {
     display: grid;
-    gap: 20px;
+    gap: 18px;
 }
 
 .menu-card {
@@ -145,43 +129,23 @@ select {
 
     background: white;
 
-    padding: 28px;
+    padding: 25px;
 
     text-align: center;
 
     cursor: pointer;
 
-    transition: 0.2s;
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.menu-card:hover {
-    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
 }
 
 .icon {
-    font-size: 48px;
-    margin-bottom: 15px;
+    font-size: 44px;
+    margin-bottom: 12px;
 }
 
 .menu-card h2 {
     color: #2e7d32;
-    margin-bottom: 10px;
-}
-
-
-/* ==========================================
-   FOOTER
-========================================== */
-
-footer {
-    text-align: center;
-
-    margin-top: 40px;
-
-    color: #888;
+    margin-bottom: 8px;
 }
 
 
@@ -191,35 +155,31 @@ footer {
 
 .checkin-page {
     width: 100%;
-
     max-width: 1400px;
-
     margin: 0 auto;
-
-    padding: 0;
 }
 
 
 /* ==========================================
-   CHECK IN TITLE
+   TITLE
 ========================================== */
 
 .page-title {
     text-align: center;
 
-    font-size: clamp(28px, 4vw, 46px);
+    font-size: clamp(30px, 4vw, 46px);
 
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .event-name {
     text-align: center;
 
-    font-size: clamp(18px, 3vw, 34px);
+    font-size: clamp(18px, 3vw, 32px);
 
     font-weight: bold;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
     color: #1e3a8a;
 
@@ -238,9 +198,9 @@ footer {
 
     grid-template-columns:
         minmax(0, 2fr)
-        minmax(300px, 1fr);
+        minmax(280px, 1fr);
 
-    gap: 20px;
+    gap: 18px;
 
     align-items: start;
 }
@@ -257,40 +217,31 @@ footer {
 
     border-radius: 16px;
 
-    padding: 16px;
+    padding: 10px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.08);
+        0 4px 12px rgba(0, 0, 0, .08);
 
     overflow: hidden;
 }
 
 
 /* ==========================================
-   CAMERA
+   CAMERA CONTAINER
+
+   IMPORTANT:
+   Keep a fixed height.
+
+   Do NOT use aspect-ratio here.
 ========================================== */
-
-/*
-   IMPORTANT
-
-   Keep the camera at a fixed height.
-
-   Do NOT use aspect-ratio.
-   Do NOT force the video dimensions.
-   Do NOT resize #camera inside media queries.
-
-   html5-qrcode needs to control its own
-   internal video and scan overlay.
-*/
 
 #camera {
     width: 100%;
 
-    height: 500px;
+    height: 360px;
+    min-height: 360px;
 
-    min-height: 500px;
-
-    border-radius: 12px;
+    border-radius: 10px;
 
     overflow: hidden;
 
@@ -300,22 +251,18 @@ footer {
 }
 
 
-/* ==========================================
-   DO NOT OVERRIDE HTML5-QRCODE VIDEO
-========================================== */
-
 /*
-   Deliberately empty.
+   IMPORTANT:
 
-   Do NOT add:
+   Do NOT force the html5-qrcode video
+   to 100% width/height.
 
-   #camera video {
-       width: 100%;
-       height: 100%;
-       object-fit: cover;
-   }
+   html5-qrcode controls the scanner
+   geometry itself.
 
-   html5-qrcode controls the video itself.
+   Forcing the video dimensions can make
+   the scan box and actual camera image
+   stop lining up.
 */
 
 
@@ -326,17 +273,17 @@ footer {
 .scan-ready {
     width: 100%;
 
-    margin-top: 12px;
+    margin-top: 10px;
 
-    padding: 12px;
+    padding: 11px;
 
     text-align: center;
 
-    font-size: clamp(16px, 2vw, 22px);
+    font-size: clamp(16px, 2vw, 21px);
 
     font-weight: bold;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background: #e9f8ed;
 
@@ -345,22 +292,7 @@ footer {
 
 
 /* ==========================================
-   INFORMATION PANEL
-========================================== */
-
-.info-panel {
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 16px;
-}
-
-
-/* ==========================================
-   TICKET / STATS CARDS
+   TICKET CARD
 ========================================== */
 
 .ticket-card,
@@ -369,21 +301,25 @@ footer {
 
     background: white;
 
-    border-radius: 16px;
+    border-radius: 15px;
 
-    padding: 20px;
+    padding: 17px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.08);
+        0 4px 12px rgba(0, 0, 0, .08);
+
+    margin-bottom: 15px;
 }
 
 .ticket-card h2 {
-    margin: 0 0 15px;
+    margin: 0 0 10px;
+
+    font-size: 22px;
 }
 
 
 /* ==========================================
-   TICKET ROWS
+   TICKET / STAT ROWS
 ========================================== */
 
 .ticket-row,
@@ -391,12 +327,11 @@ footer {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     gap: 15px;
 
-    padding: 10px 0;
+    padding: 9px 0;
 
     border-bottom: 1px solid #eee;
 }
@@ -422,17 +357,32 @@ footer {
 
 
 /* ==========================================
+   INFORMATION PANEL
+========================================== */
+
+.info-panel {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* ==========================================
    TABLET
 ========================================== */
 
 @media (max-width: 900px) {
 
     .app {
-        padding: 15px;
+        padding: 12px;
     }
 
     /*
-       Stack camera and ticket information.
+       Stack the camera and ticket information.
     */
 
     .checkin-grid {
@@ -441,9 +391,15 @@ footer {
 
     /*
        IMPORTANT:
-       Camera remains 500px high.
-       Do NOT alter #camera here.
+       Keep scanner height fixed.
+
+       Do NOT use aspect-ratio.
     */
+
+    #camera {
+        height: 360px;
+        min-height: 360px;
+    }
 
 }
 
@@ -457,12 +413,11 @@ footer {
     html,
     body {
         width: 100%;
-
         overflow-x: hidden;
     }
 
     .app {
-        padding: 8px;
+        padding: 7px;
     }
 
 
@@ -470,38 +425,31 @@ footer {
        HEADER
     -------------------------------------- */
 
-    header,
     .page-header {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
-    header h1 {
-        font-size: 1.4rem;
+    .home-button {
+        padding: 8px 12px;
+
+        font-size: 14px;
+
+        border-radius: 8px;
     }
 
     .online {
         font-size: 14px;
     }
 
-    .home-button {
-        padding: 9px 13px;
-
-        font-size: 14px;
-    }
-
 
     /* --------------------------------------
-       CHECK IN
+       TITLE
     -------------------------------------- */
-
-    .checkin-page {
-        width: 100%;
-
-        padding: 0;
-    }
 
     .page-title {
         font-size: 28px;
+
+        line-height: 1.1;
 
         margin-bottom: 2px;
     }
@@ -509,7 +457,9 @@ footer {
     .event-name {
         font-size: 18px;
 
-        margin-bottom: 10px;
+        line-height: 1.2;
+
+        margin-bottom: 9px;
     }
 
 
@@ -518,31 +468,32 @@ footer {
     -------------------------------------- */
 
     .camera-card {
-        width: 100%;
+        padding: 7px;
 
-        padding: 8px;
+        border-radius: 11px;
 
-        border-radius: 10px;
+        margin-bottom: 10px;
     }
 
 
     /*
-       IMPORTANT:
+       THIS IS THE IMPORTANT PART.
 
-       Camera stays at 500px.
+       Keep the scanner at a known fixed
+       geometry.
 
-       This is intentional while we establish
-       the known-working scanner geometry.
+       Do NOT change this to aspect-ratio.
     */
 
     #camera {
         width: 100%;
 
-        height: 500px;
-
-        min-height: 500px;
+        height: 300px;
+        min-height: 300px;
 
         border-radius: 8px;
+
+        overflow: hidden;
     }
 
 
@@ -551,9 +502,9 @@ footer {
     -------------------------------------- */
 
     .scan-ready {
-        margin-top: 8px;
+        margin-top: 7px;
 
-        padding: 9px;
+        padding: 8px;
 
         font-size: 16px;
 
@@ -562,31 +513,36 @@ footer {
 
 
     /* --------------------------------------
-       INFORMATION
+       TICKET
     -------------------------------------- */
-
-    .info-panel {
-        gap: 8px;
-    }
 
     .ticket-card,
     .stats-card {
         padding: 10px;
 
-        border-radius: 10px;
+        border-radius: 11px;
+
+        margin-bottom: 9px;
     }
 
     .ticket-card h2 {
-        font-size: 18px;
+        font-size: 19px;
 
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
+
+
+    /* --------------------------------------
+       ROWS
+    -------------------------------------- */
 
     .ticket-row,
     .stat-row {
         padding: 6px 0;
 
         font-size: 14px;
+
+        gap: 10px;
     }
 
     .ticket-row strong,
@@ -607,6 +563,15 @@ footer {
         padding: 5px;
     }
 
+    .home-button {
+        padding: 7px 10px;
+        font-size: 13px;
+    }
+
+    .online {
+        font-size: 13px;
+    }
+
     .page-title {
         font-size: 25px;
     }
@@ -623,22 +588,23 @@ footer {
 
 
     /*
-       IMPORTANT:
+       KEEP EXACTLY THE SAME CAMERA
+       GEOMETRY AS THE NORMAL PHONE.
 
-       Still keep the scanner geometry unchanged.
+       This is deliberate.
     */
 
     #camera {
         width: 100%;
 
-        height: 500px;
+        height: 300px;
+        min-height: 300px;
 
-        min-height: 500px;
+        border-radius: 8px;
     }
 
-
     .scan-ready {
-        padding: 8px;
+        padding: 7px;
 
         font-size: 15px;
     }
@@ -646,13 +612,19 @@ footer {
     .ticket-card,
     .stats-card {
         padding: 8px;
+
+        border-radius: 9px;
+    }
+
+    .ticket-card h2 {
+        font-size: 17px;
     }
 
     .ticket-row,
     .stat-row {
         font-size: 13px;
 
-        padding: 4px 0;
+        padding: 5px 0;
     }
 
     .ticket-row strong,
@@ -660,4 +632,43 @@ footer {
         font-size: 14px;
     }
 
+}
+
+
+/* ==========================================
+   VERY SMALL PHONE
+========================================== */
+
+@media (max-width: 350px) {
+
+    .page-title {
+        font-size: 23px;
+    }
+
+    .event-name {
+        font-size: 15px;
+    }
+
+    /*
+       Still do not change scanner geometry.
+    */
+
+    #camera {
+        height: 280px;
+        min-height: 280px;
+    }
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+footer {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #888;
 }
