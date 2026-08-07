@@ -95,7 +95,7 @@ header h1 {
 
 
 /* ==========================================
-   HOME / EVENT SELECT
+   EVENT SELECT
 ========================================== */
 
 .event-select {
@@ -200,6 +200,8 @@ footer {
     font-weight: bold;
     margin-bottom: 20px;
     color: #1e3a8a;
+
+    overflow-wrap: anywhere;
 }
 
 
@@ -244,20 +246,18 @@ footer {
 
 /* ==========================================
    CAMERA
+   IMPORTANT:
+   Keep fixed geometry so html5-qrcode
+   scanning area remains aligned.
 ========================================== */
 
 #camera {
     width: 100%;
+    height: 420px;
 
-    /*
-       IMPORTANT:
-       No fixed height.
-       This allows the camera to scale.
-    */
+    min-height: 0;
 
-    aspect-ratio: 16 / 9;
-
-    border-radius: 10px;
+    border-radius: 12px;
 
     overflow: hidden;
 
@@ -267,9 +267,9 @@ footer {
 }
 
 
-/*
-   html5-qrcode video
-*/
+/* ==========================================
+   HTML5 QR CODE VIDEO
+========================================== */
 
 #camera video {
     width: 100% !important;
@@ -281,9 +281,8 @@ footer {
 }
 
 
-/*
-   html5-qrcode internal container
-*/
+/* Keep internal scanner container inside
+   the camera area */
 
 #camera > div {
     max-width: 100% !important;
@@ -402,17 +401,19 @@ footer {
         padding: 15px;
     }
 
+    /*
+       Stack camera and ticket information.
+    */
+
     .checkin-grid {
         grid-template-columns: 1fr;
     }
 
     /*
-       Keep camera wide on tablet.
+       IMPORTANT:
+       Do NOT change #camera height here.
+       Scanner remains at 420px.
     */
-
-    #camera {
-        aspect-ratio: 16 / 9;
-    }
 
 }
 
@@ -433,9 +434,14 @@ footer {
         padding: 8px;
     }
 
+
+    /* --------------------------------------
+       HEADER
+    -------------------------------------- */
+
     header,
     .page-header {
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     header h1 {
@@ -452,9 +458,12 @@ footer {
     }
 
 
-    /* Check In */
+    /* --------------------------------------
+       CHECK IN
+    -------------------------------------- */
 
     .checkin-page {
+        width: 100%;
         padding: 0;
     }
 
@@ -469,32 +478,41 @@ footer {
     }
 
 
-    /* Camera */
+    /* --------------------------------------
+       CAMERA CARD
+    -------------------------------------- */
 
     .camera-card {
+        width: 100%;
+
         padding: 8px;
+
         border-radius: 10px;
     }
 
+
+    /*
+       Keep scanner geometry stable.
+       Do NOT use aspect-ratio here.
+    */
+
     #camera {
         width: 100%;
+        height: 300px;
 
-        /*
-           4:3 gives a useful phone-sized
-           scanning area without making
-           the page excessively tall.
-        */
-
-        aspect-ratio: 4 / 3;
+        min-height: 0;
 
         border-radius: 8px;
     }
 
 
-    /* Status */
+    /* --------------------------------------
+       SCAN STATUS
+    -------------------------------------- */
 
     .scan-ready {
         margin-top: 8px;
+
         padding: 9px;
 
         font-size: 16px;
@@ -503,7 +521,9 @@ footer {
     }
 
 
-    /* Information */
+    /* --------------------------------------
+       INFORMATION
+    -------------------------------------- */
 
     .info-panel {
         gap: 8px;
@@ -518,12 +538,14 @@ footer {
 
     .ticket-card h2 {
         font-size: 18px;
+
         margin-bottom: 5px;
     }
 
     .ticket-row,
     .stat-row {
         padding: 6px 0;
+
         font-size: 14px;
     }
 
@@ -536,7 +558,7 @@ footer {
 
 
 /* ==========================================
-   VERY SMALL PHONES
+   SMALL PHONE
 ========================================== */
 
 @media (max-width: 400px) {
@@ -551,14 +573,32 @@ footer {
 
     .event-name {
         font-size: 16px;
+
+        margin-bottom: 7px;
     }
 
     .camera-card {
         padding: 6px;
     }
 
+
+    /*
+       Keep camera at same geometry as
+       normal phones.
+    */
+
     #camera {
-        aspect-ratio: 16 / 9;
+        width: 100%;
+        height: 300px;
+
+        min-height: 0;
+    }
+
+
+    .scan-ready {
+        padding: 8px;
+
+        font-size: 15px;
     }
 
     .ticket-card,
@@ -569,6 +609,7 @@ footer {
     .ticket-row,
     .stat-row {
         font-size: 13px;
+
         padding: 4px 0;
     }
 
