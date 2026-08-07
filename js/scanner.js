@@ -214,45 +214,32 @@ window.Scanner = {
                 // actual camera view dimensions.
                 //
 
-                qrbox: (
-                    viewfinderWidth,
-                    viewfinderHeight
-                ) => {
+               qrbox: (
+    viewfinderWidth,
+    viewfinderHeight
+) => {
 
-                    /*
-                     * Use most of the camera width.
-                     */
+    // Keep the scan area square
+    // and comfortably inside the camera view.
 
-                    const width =
-                        Math.floor(
-                            viewfinderWidth * 0.88
-                        );
+    const size =
+        Math.floor(
+            Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+            ) * 0.60
+        );
 
+    this.log(
+        `Scan area: ${size} x ${size}`
+    );
 
-                    /*
-                     * Use most of the camera height.
-                     */
+    return {
+        width: size,
+        height: size
+    };
 
-                    const height =
-                        Math.floor(
-                            viewfinderHeight * 0.70
-                        );
-
-
-                    this.log(
-                        `Scan area: ${width} x ${height}`
-                    );
-
-
-                    return {
-
-                        width: width,
-                        height: height
-
-                    };
-
-                },
-
+},
 
                 // =================================
                 // CAMERA ASPECT RATIO
