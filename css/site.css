@@ -1,136 +1,85 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+/* ==========================================
+   GATEKEEPER GLOBAL
+========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-
-    font-family:Segoe UI,Arial,sans-serif;
-    background:#f4f6f9;
-    color:#222;
-
+html,
+body {
+    width: 100%;
+    min-height: 100%;
 }
 
-.app{
-
-    max-width:700px;
-    margin:auto;
-    padding:25px;
-
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
 }
 
-header{
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:35px;
+/* ==========================================
+   MAIN APP
+========================================== */
 
+.app {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-header h1{
 
-    color:#2e7d32;
-    font-size:2rem;
+/* ==========================================
+   HEADER
+========================================== */
 
+header,
+.page-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-.online{
-
-    color:#16a34a;
-    font-weight:bold;
-
+header h1 {
+    color: #2e7d32;
+    font-size: 2rem;
 }
 
-.event-select{
-
-    margin-bottom:30px;
-
+.online {
+    color: #16a34a;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-label{
 
-    display:block;
-    font-weight:bold;
-    margin-bottom:10px;
+/* ==========================================
+   HOME BUTTON
+========================================== */
 
-}
-
-select{
-
-    width:100%;
-    padding:15px;
-    font-size:1rem;
-    border-radius:10px;
-    border:1px solid #ccc;
-    background:white;
-
-}
-
-.menu{
-
-    display:grid;
-    gap:20px;
-
-}
-
-.menu-card{
-
-    border:none;
-    border-radius:14px;
-    background:white;
-    padding:28px;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.menu-card:hover{
-
-    transform:translateY(-3px);
-
-}
-
-.icon{
-
-    font-size:48px;
-    margin-bottom:15px;
-
-}
-
-.menu-card h2{
-
-    color:#2e7d32;
-    margin-bottom:10px;
-
-}
-
-footer{
-
-    text-align:center;
-    margin-top:40px;
-    color:#888;
-
-}
 .home-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
 
-    padding: 10px 18px;
+    padding: 12px 18px;
 
     background: #2563eb;
     color: white;
 
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
 
     cursor: pointer;
 
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
 
     transition: 0.2s;
@@ -139,302 +88,493 @@ footer{
 .home-button:hover {
     background: #1d4ed8;
 }
-.page-header{
 
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-
+.home-button:active {
+    transform: scale(0.98);
 }
 
-.page-title{
 
-text-align:center;
-font-size:46px;
-margin-bottom:10px;
+/* ==========================================
+   HOME / EVENT SELECT
+========================================== */
 
+.event-select {
+    margin-bottom: 30px;
 }
 
-.event-name{
-
-text-align:center;
-font-size:34px;
-font-weight:bold;
-margin-bottom:30px;
-color:#1e3a8a;
-
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.camera-card{
-
-background:white;
-border-radius:18px;
-padding:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.1);
-margin-bottom:25px;
-
+select {
+    width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: white;
 }
 
-#camera{
 
-height:420px;
+/* ==========================================
+   HOME MENU
+========================================== */
 
-border:4px dashed #cbd5e1;
-
-border-radius:14px;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:34px;
-
-color:#64748b;
-
-background:#f8fafc;
-
+.menu {
+    display: grid;
+    gap: 20px;
 }
 
-.scan-ready{
+.menu-card {
+    width: 100%;
 
-background:#16a34a;
+    border: none;
+    border-radius: 14px;
 
-color:white;
+    background: white;
 
-padding:18px;
+    padding: 28px;
 
-border-radius:12px;
+    text-align: center;
 
-text-align:center;
+    cursor: pointer;
 
-font-size:30px;
+    transition: 0.2s;
 
-font-weight:bold;
-
-margin-bottom:25px;
-
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.ticket-card{
-
-background:white;
-
-border-radius:18px;
-
-padding:25px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.1);
-
-margin-bottom:20px;
-
+.menu-card:hover {
+    transform: translateY(-3px);
 }
 
-.ticket-card h2{
-
-margin-top:0;
-
+.icon {
+    font-size: 48px;
+    margin-bottom: 15px;
 }
 
-.ticket-row{
-
-display:flex;
-
-justify-content:space-between;
-
-padding:14px 0;
-
-border-bottom:1px solid #eee;
-
-font-size:20px;
-
+.menu-card h2 {
+    color: #2e7d32;
+    margin-bottom: 10px;
 }
 
-.stats-card{
 
-background:white;
+/* ==========================================
+   FOOTER
+========================================== */
 
-border-radius:18px;
-
-padding:25px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.1);
-
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #888;
 }
 
-.stat-row{
 
-display:flex;
-
-justify-content:space-between;
-
-padding:18px 0;
-
-font-size:22px;
-
-font-weight:bold;
-
-}
-
-.home-button{
-
-padding:14px 22px;
-
-font-size:18px;
-
-border-radius:10px;
-
-}
-
-.online{
-
-font-size:18px;
-
-font-weight:bold;
-
-color:#16a34a;
-
-}
 /* ==========================================
    CHECK IN PAGE
 ========================================== */
 
-.checkin-page{
-
-    max-width:1400px;
-    margin:auto;
-    padding:20px;
-
+.checkin-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
 }
 
-.page-title{
 
-    text-align:center;
-    margin-bottom:5px;
+/* ==========================================
+   CHECK IN TITLE
+========================================== */
 
+.page-title {
+    text-align: center;
+    font-size: clamp(28px, 4vw, 46px);
+    margin-bottom: 5px;
 }
 
-.event-name{
-
-    text-align:center;
-    color:#666;
-    font-size:1.1rem;
-    margin-bottom:20px;
-
+.event-name {
+    text-align: center;
+    font-size: clamp(18px, 3vw, 34px);
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1e3a8a;
 }
 
-.checkin-grid{
 
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:20px;
+/* ==========================================
+   CHECK IN GRID
+========================================== */
 
+.checkin-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(300px, 1fr);
+
+    gap: 20px;
+
+    align-items: start;
 }
 
-.camera-card{
 
-    background:#fff;
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+/* ==========================================
+   CAMERA CARD
+========================================== */
 
+.camera-card {
+    width: 100%;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
 }
 
-#camera{
 
-    width:100%;
-    min-height:500px;
-    border-radius:12px;
-    overflow:hidden;
-    background:#000;
+/* ==========================================
+   CAMERA
+========================================== */
 
+#camera {
+    width: 100%;
+
+    /*
+       IMPORTANT:
+       No fixed height.
+       This allows the camera to scale.
+    */
+
+    aspect-ratio: 16 / 9;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #000;
+
+    position: relative;
 }
 
-.scan-ready{
 
-    margin-top:20px;
-    text-align:center;
-    padding:16px;
-    font-size:1.3rem;
-    font-weight:bold;
-    border-radius:10px;
-    background:#e9f8ed;
-    color:#0a7c2f;
+/*
+   html5-qrcode video
+*/
 
+#camera video {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block;
+
+    object-fit: cover;
 }
 
-.info-panel{
 
-    display:flex;
-    flex-direction:column;
-    gap:20px;
+/*
+   html5-qrcode internal container
+*/
 
+#camera > div {
+    max-width: 100% !important;
 }
+
+
+/* ==========================================
+   SCAN STATUS
+========================================== */
+
+.scan-ready {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 12px;
+
+    text-align: center;
+
+    font-size: clamp(16px, 2vw, 22px);
+
+    font-weight: bold;
+
+    border-radius: 10px;
+
+    background: #e9f8ed;
+
+    color: #0a7c2f;
+}
+
+
+/* ==========================================
+   INFORMATION PANEL
+========================================== */
+
+.info-panel {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* ==========================================
+   TICKET / STATS CARDS
+========================================== */
 
 .ticket-card,
-.stats-card{
+.stats-card {
+    width: 100%;
 
-    background:#fff;
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    background: white;
 
+    border-radius: 16px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.ticket-card h2{
-
-    margin-top:0;
-    margin-bottom:20px;
-
+.ticket-card h2 {
+    margin: 0 0 15px;
 }
+
+
+/* ==========================================
+   TICKET ROWS
+========================================== */
 
 .ticket-row,
-.stat-row{
+.stat-row {
+    display: flex;
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 0;
-    border-bottom:1px solid #eee;
+    justify-content: space-between;
 
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #eee;
 }
 
 .ticket-row:last-child,
-.stat-row:last-child{
+.stat-row:last-child {
+    border-bottom: none;
+}
 
-    border-bottom:none;
-
+.ticket-row span,
+.stat-row span {
+    color: #555;
 }
 
 .ticket-row strong,
-.stat-row strong{
+.stat-row strong {
+    font-size: 1.05rem;
 
-    font-size:1.1rem;
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+
+    .app {
+        padding: 15px;
+    }
+
+    .checkin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /*
+       Keep camera wide on tablet.
+    */
+
+    #camera {
+        aspect-ratio: 16 / 9;
+    }
 
 }
 
-/* Mobile */
 
-@media(max-width:900px){
+/* ==========================================
+   PHONE
+========================================== */
 
-    .checkin-grid{
+@media (max-width: 600px) {
 
-        grid-template-columns:1fr;
-
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
     }
 
-    #camera{
-
-        min-height:350px;
-
+    .app {
+        padding: 8px;
     }
 
-    .scan-ready{
+    header,
+    .page-header {
+        margin-bottom: 12px;
+    }
 
-        font-size:1.1rem;
+    header h1 {
+        font-size: 1.4rem;
+    }
 
+    .online {
+        font-size: 14px;
+    }
+
+    .home-button {
+        padding: 9px 13px;
+        font-size: 14px;
+    }
+
+
+    /* Check In */
+
+    .checkin-page {
+        padding: 0;
+    }
+
+    .page-title {
+        font-size: 28px;
+        margin-bottom: 2px;
+    }
+
+    .event-name {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+
+    /* Camera */
+
+    .camera-card {
+        padding: 8px;
+        border-radius: 10px;
+    }
+
+    #camera {
+        width: 100%;
+
+        /*
+           4:3 gives a useful phone-sized
+           scanning area without making
+           the page excessively tall.
+        */
+
+        aspect-ratio: 4 / 3;
+
+        border-radius: 8px;
+    }
+
+
+    /* Status */
+
+    .scan-ready {
+        margin-top: 8px;
+        padding: 9px;
+
+        font-size: 16px;
+
+        border-radius: 8px;
+    }
+
+
+    /* Information */
+
+    .info-panel {
+        gap: 8px;
+    }
+
+    .ticket-card,
+    .stats-card {
+        padding: 10px;
+
+        border-radius: 10px;
+    }
+
+    .ticket-card h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .ticket-row,
+    .stat-row {
+        padding: 6px 0;
+        font-size: 14px;
+    }
+
+    .ticket-row strong,
+    .stat-row strong {
+        font-size: 15px;
+    }
+
+}
+
+
+/* ==========================================
+   VERY SMALL PHONES
+========================================== */
+
+@media (max-width: 400px) {
+
+    .app {
+        padding: 5px;
+    }
+
+    .page-title {
+        font-size: 25px;
+    }
+
+    .event-name {
+        font-size: 16px;
+    }
+
+    .camera-card {
+        padding: 6px;
+    }
+
+    #camera {
+        aspect-ratio: 16 / 9;
+    }
+
+    .ticket-card,
+    .stats-card {
+        padding: 8px;
+    }
+
+    .ticket-row,
+    .stat-row {
+        font-size: 13px;
+        padding: 4px 0;
+    }
+
+    .ticket-row strong,
+    .stat-row strong {
+        font-size: 14px;
     }
 
 }
