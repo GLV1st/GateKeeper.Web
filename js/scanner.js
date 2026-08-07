@@ -135,12 +135,11 @@ window.Scanner = {
                 fps: 10,
 
                 qrbox: {
-                    width: 280,
-                    height: 280
-                },
+    width: 250,
+    height: 250
+},
 
-                aspectRatio: 1.7778
-            },
+                           },
 
             async (decodedText) => {
 
