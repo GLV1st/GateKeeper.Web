@@ -38,12 +38,15 @@ body {
    HEADER
 ========================================== */
 
+header,
 .page-header {
     width: 100%;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    gap: 15px;
 
     margin-bottom: 15px;
 }
@@ -62,6 +65,7 @@ body {
 
 .home-button {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
 
@@ -79,6 +83,8 @@ body {
 
     font-size: 15px;
     font-weight: 600;
+
+    transition: 0.2s;
 }
 
 .home-button:hover {
@@ -91,7 +97,7 @@ body {
 
 
 /* ==========================================
-   HOME PAGE
+   HOME / EVENT SELECT
 ========================================== */
 
 .event-select {
@@ -100,21 +106,30 @@ body {
 
 label {
     display: block;
+
     font-weight: bold;
+
     margin-bottom: 8px;
 }
 
 select {
     width: 100%;
+
     padding: 13px;
 
     font-size: 1rem;
 
     border-radius: 10px;
+
     border: 1px solid #ccc;
 
     background: white;
 }
+
+
+/* ==========================================
+   HOME MENU
+========================================== */
 
 .menu {
     display: grid;
@@ -135,7 +150,14 @@ select {
 
     cursor: pointer;
 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    transition: 0.2s;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.menu-card:hover {
+    transform: translateY(-3px);
 }
 
 .icon {
@@ -156,6 +178,7 @@ select {
 .checkin-page {
     width: 100%;
     max-width: 1400px;
+
     margin: 0 auto;
 }
 
@@ -169,6 +192,8 @@ select {
 
     font-size: clamp(30px, 4vw, 46px);
 
+    line-height: 1.1;
+
     margin-bottom: 4px;
 }
 
@@ -176,6 +201,8 @@ select {
     text-align: center;
 
     font-size: clamp(18px, 3vw, 32px);
+
+    line-height: 1.2;
 
     font-weight: bold;
 
@@ -220,28 +247,35 @@ select {
     padding: 10px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, .08);
+        0 4px 12px rgba(0, 0, 0, 0.08);
 
     overflow: hidden;
 }
 
 
 /* ==========================================
-   CAMERA CONTAINER
-
-   IMPORTANT:
-   Keep a fixed height.
-
-   Do NOT use aspect-ratio here.
+   CAMERA
 ========================================== */
+
+/*
+   IMPORTANT
+
+   Keep this at 500px.
+
+   This is the geometry we know works
+   with the current html5-qrcode scanner.
+
+   Do NOT add aspect-ratio.
+   Do NOT force video width/height.
+*/
 
 #camera {
     width: 100%;
 
-    height: 360px;
-    min-height: 360px;
+    height: 500px;
+    min-height: 500px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     overflow: hidden;
 
@@ -251,18 +285,22 @@ select {
 }
 
 
+/* ==========================================
+   DO NOT FORCE VIDEO GEOMETRY
+========================================== */
+
 /*
-   IMPORTANT:
+   html5-qrcode controls the camera stream.
 
-   Do NOT force the html5-qrcode video
-   to 100% width/height.
+   We intentionally don't use:
 
-   html5-qrcode controls the scanner
-   geometry itself.
+   #camera video {
+       width: 100%;
+       height: 100%;
+   }
 
-   Forcing the video dimensions can make
-   the scan box and actual camera image
-   stop lining up.
+   because this can make the scan region
+   and camera stream stop lining up.
 */
 
 
@@ -281,6 +319,8 @@ select {
 
     font-size: clamp(16px, 2vw, 21px);
 
+    line-height: 1.2;
+
     font-weight: bold;
 
     border-radius: 9px;
@@ -292,7 +332,22 @@ select {
 
 
 /* ==========================================
-   TICKET CARD
+   INFORMATION PANEL
+========================================== */
+
+.info-panel {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* ==========================================
+   TICKET / STATS CARDS
 ========================================== */
 
 .ticket-card,
@@ -306,8 +361,10 @@ select {
     padding: 17px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, .08);
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
+.ticket-card {
     margin-bottom: 15px;
 }
 
@@ -327,6 +384,7 @@ select {
     display: flex;
 
     justify-content: space-between;
+
     align-items: center;
 
     gap: 15px;
@@ -357,21 +415,6 @@ select {
 
 
 /* ==========================================
-   INFORMATION PANEL
-========================================== */
-
-.info-panel {
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-}
-
-
-/* ==========================================
    TABLET
 ========================================== */
 
@@ -382,23 +425,18 @@ select {
     }
 
     /*
-       Stack the camera and ticket information.
+       Stack camera and information.
+
+       Camera remains 500px.
     */
 
     .checkin-grid {
         grid-template-columns: 1fr;
     }
 
-    /*
-       IMPORTANT:
-       Keep scanner height fixed.
-
-       Do NOT use aspect-ratio.
-    */
-
     #camera {
-        height: 360px;
-        min-height: 360px;
+        height: 500px;
+        min-height: 500px;
     }
 
 }
@@ -425,6 +463,7 @@ select {
        HEADER
     -------------------------------------- */
 
+    header,
     .page-header {
         margin-bottom: 8px;
     }
@@ -468,32 +507,33 @@ select {
     -------------------------------------- */
 
     .camera-card {
+        width: 100%;
+
         padding: 7px;
 
         border-radius: 11px;
 
-        margin-bottom: 10px;
+        margin-bottom: 9px;
     }
 
 
     /*
-       THIS IS THE IMPORTANT PART.
+       IMPORTANT
 
-       Keep the scanner at a known fixed
-       geometry.
+       KEEP THE CAMERA AT 500px.
 
-       Do NOT change this to aspect-ratio.
+       We know this geometry scans correctly.
+
+       Do NOT use aspect-ratio.
     */
 
     #camera {
         width: 100%;
 
-        height: 300px;
-        min-height: 300px;
+        height: 500px;
+        min-height: 500px;
 
         border-radius: 8px;
-
-        overflow: hidden;
     }
 
 
@@ -513,8 +553,12 @@ select {
 
 
     /* --------------------------------------
-       TICKET
+       TICKET INFORMATION
     -------------------------------------- */
+
+    .info-panel {
+        gap: 8px;
+    }
 
     .ticket-card,
     .stats-card {
@@ -522,7 +566,7 @@ select {
 
         border-radius: 11px;
 
-        margin-bottom: 9px;
+        margin-bottom: 8px;
     }
 
     .ticket-card h2 {
@@ -565,6 +609,7 @@ select {
 
     .home-button {
         padding: 7px 10px;
+
         font-size: 13px;
     }
 
@@ -588,20 +633,20 @@ select {
 
 
     /*
-       KEEP EXACTLY THE SAME CAMERA
-       GEOMETRY AS THE NORMAL PHONE.
+       STILL KEEP 500px.
 
-       This is deliberate.
+       Do not shrink the scanner.
     */
 
     #camera {
         width: 100%;
 
-        height: 300px;
-        min-height: 300px;
+        height: 500px;
+        min-height: 500px;
 
         border-radius: 8px;
     }
+
 
     .scan-ready {
         padding: 7px;
@@ -650,12 +695,12 @@ select {
     }
 
     /*
-       Still do not change scanner geometry.
+       Still 500px.
     */
 
     #camera {
-        height: 280px;
-        min-height: 280px;
+        height: 500px;
+        min-height: 500px;
     }
 
 }
