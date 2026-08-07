@@ -40,9 +40,11 @@ body {
 header,
 .page-header {
     width: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -67,6 +69,7 @@ header h1 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     gap: 8px;
 
     padding: 12px 18px;
@@ -104,16 +107,23 @@ header h1 {
 
 label {
     display: block;
+
     font-weight: bold;
+
     margin-bottom: 10px;
 }
 
 select {
     width: 100%;
+
     padding: 15px;
+
     font-size: 1rem;
+
     border-radius: 10px;
+
     border: 1px solid #ccc;
+
     background: white;
 }
 
@@ -143,7 +153,8 @@ select {
 
     transition: 0.2s;
 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .menu-card:hover {
@@ -167,7 +178,9 @@ select {
 
 footer {
     text-align: center;
+
     margin-top: 40px;
+
     color: #888;
 }
 
@@ -178,8 +191,11 @@ footer {
 
 .checkin-page {
     width: 100%;
+
     max-width: 1400px;
+
     margin: 0 auto;
+
     padding: 0;
 }
 
@@ -190,15 +206,21 @@ footer {
 
 .page-title {
     text-align: center;
+
     font-size: clamp(28px, 4vw, 46px);
+
     margin-bottom: 5px;
 }
 
 .event-name {
     text-align: center;
+
     font-size: clamp(18px, 3vw, 34px);
+
     font-weight: bold;
+
     margin-bottom: 20px;
+
     color: #1e3a8a;
 
     overflow-wrap: anywhere;
@@ -246,16 +268,27 @@ footer {
 
 /* ==========================================
    CAMERA
-   IMPORTANT:
-   Keep fixed geometry so html5-qrcode
-   scanning area remains aligned.
 ========================================== */
+
+/*
+   IMPORTANT
+
+   Keep the camera at a fixed height.
+
+   Do NOT use aspect-ratio.
+   Do NOT force the video dimensions.
+   Do NOT resize #camera inside media queries.
+
+   html5-qrcode needs to control its own
+   internal video and scan overlay.
+*/
 
 #camera {
     width: 100%;
-    height: 420px;
 
-    min-height: 0;
+    height: 500px;
+
+    min-height: 500px;
 
     border-radius: 12px;
 
@@ -268,9 +301,22 @@ footer {
 
 
 /* ==========================================
-   HTML5 QR CODE VIDEO
+   DO NOT OVERRIDE HTML5-QRCODE VIDEO
 ========================================== */
 
+/*
+   Deliberately empty.
+
+   Do NOT add:
+
+   #camera video {
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+   }
+
+   html5-qrcode controls the video itself.
+*/
 
 
 /* ==========================================
@@ -395,8 +441,8 @@ footer {
 
     /*
        IMPORTANT:
-       Do NOT change #camera height here.
-       Scanner remains at 420px.
+       Camera remains 500px high.
+       Do NOT alter #camera here.
     */
 
 }
@@ -411,6 +457,7 @@ footer {
     html,
     body {
         width: 100%;
+
         overflow-x: hidden;
     }
 
@@ -438,6 +485,7 @@ footer {
 
     .home-button {
         padding: 9px 13px;
+
         font-size: 14px;
     }
 
@@ -448,16 +496,19 @@ footer {
 
     .checkin-page {
         width: 100%;
+
         padding: 0;
     }
 
     .page-title {
         font-size: 28px;
+
         margin-bottom: 2px;
     }
 
     .event-name {
         font-size: 18px;
+
         margin-bottom: 10px;
     }
 
@@ -476,15 +527,20 @@ footer {
 
 
     /*
-       Keep scanner geometry stable.
-       Do NOT use aspect-ratio here.
+       IMPORTANT:
+
+       Camera stays at 500px.
+
+       This is intentional while we establish
+       the known-working scanner geometry.
     */
 
     #camera {
         width: 100%;
-        height: 300px;
 
-        min-height: 0;
+        height: 500px;
+
+        min-height: 500px;
 
         border-radius: 8px;
     }
@@ -567,15 +623,17 @@ footer {
 
 
     /*
-       Keep camera at same geometry as
-       normal phones.
+       IMPORTANT:
+
+       Still keep the scanner geometry unchanged.
     */
 
     #camera {
         width: 100%;
-        height: 300px;
 
-        min-height: 0;
+        height: 500px;
+
+        min-height: 500px;
     }
 
 
