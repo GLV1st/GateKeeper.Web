@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", initialise);
 
+
+// =====================================
+// INITIALISE
+// =====================================
+
 async function initialise() {
 
     const eventName =
@@ -18,7 +23,7 @@ async function initialise() {
     }
     catch (err) {
 
-        console.error(err);
+        console.error("Camera error:", err);
 
         document.getElementById("scanStatus").innerHTML =
             "🔴 CAMERA FAILED";
@@ -27,84 +32,200 @@ async function initialise() {
 
 }
 
+
 // =====================================
-// Ticket Scanned
+// TICKET SCANNED
 // =====================================
 
 async function ticketScanned(ticketNumber) {
 
     console.log("Ticket:", ticketNumber);
 
-    document.getElementById("scanStatus").innerHTML =
-        "⏳ Checking Ticket...";
+    const status =
+        document.getElementById("scanStatus");
+
+    status.innerHTML =
+        "⏳ CHECKING TICKET...";
+
+
+    const eventId =
+        localStorage.getItem("CurrentEventId");
+
+
+    // =====================================
+    // Check Event Selected
+    // =====================================
+
+    if (!eventId) {
+
+        status.innerHTML =
+            "🔴 NO EVENT SELECTED";
+
+        console.error(
+            "CurrentEventId is missing"
+        );
+
+        return;
+
+    }
+
 
     try {
 
-        const result = await GateKeeperAPI.checkIn(
+        console.log("Sending check-in request:", {
 
-            ticketNumber,
+            eventId: eventId,
 
-            localStorage.getItem("CurrentEventId")
+            ticketNumber: ticketNumber
 
+        });
+
+
+        const result =
+            await GateKeeperAPI.checkIn(
+
+                ticketNumber,
+
+                eventId
+
+            );
+
+
+        console.log(
+            "Check-in response:",
+            result
         );
+
+
+        // =====================================
+        // API RESPONSE
+        // =====================================
 
         switch (result.Status) {
 
+
+            // =================================
+            // SUCCESS
+            // =================================
+
             case "SUCCESS":
 
-                document.getElementById("scanStatus").innerHTML =
-                    "🟢 " + result.Message;
+                status.innerHTML =
+                    "🟢 " +
+                    (result.Message || "WELCOME!");
 
-                document.getElementById("ticketNumber").textContent =
-                    result.TicketNumber;
+                document.getElementById(
+                    "ticketNumber"
+                ).textContent =
+                    result.TicketNumber || ticketNumber;
 
-                document.getElementById("ticketHolder").textContent =
-                    result.CustomerName;
+                document.getElementById(
+                    "ticketHolder"
+                ).textContent =
+                    result.CustomerName || "-";
 
-                document.getElementById("ticketType").textContent =
-                    result.TicketType;
+                document.getElementById(
+                    "ticketType"
+                ).textContent =
+                    result.TicketType || "-";
 
-                document.getElementById("ticketTime").textContent =
+                document.getElementById(
+                    "ticketTime"
+                ).textContent =
                     new Date().toLocaleTimeString();
 
                 break;
 
+
+            // =================================
+            // ALREADY CHECKED IN
+            // =================================
+
             case "ALREADY_CHECKED_IN":
 
-                document.getElementById("scanStatus").innerHTML =
-                    "🟠 " + result.Message;
+                status.innerHTML =
+                    "🟠 " +
+                    (result.Message ||
+                     "ALREADY CHECKED IN");
 
-                document.getElementById("ticketNumber").textContent =
-                    result.TicketNumber;
+                document.getElementById(
+                    "ticketNumber"
+                ).textContent =
+                    result.TicketNumber || ticketNumber;
 
-                document.getElementById("ticketHolder").textContent =
-                    result.CustomerName;
+                document.getElementById(
+                    "ticketHolder"
+                ).textContent =
+                    result.CustomerName || "-";
 
-                document.getElementById("ticketType").textContent =
-                    result.TicketType;
+                document.getElementById(
+                    "ticketType"
+                ).textContent =
+                    result.TicketType || "-";
 
                 break;
+
+
+            // =================================
+            // CANCELLED
+            // =================================
 
             case "CANCELLED":
 
-                document.getElementById("scanStatus").innerHTML =
-                    "🔴 " + result.Message;
+                status.innerHTML =
+                    "🔴 " +
+                    (result.Message ||
+                     "TICKET CANCELLED");
 
                 break;
+
+
+            // =================================
+            // NOT FOUND
+            // =================================
 
             case "NOT_FOUND":
 
-                document.getElementById("scanStatus").innerHTML =
-                    "🔴 " + result.Message;
+                status.innerHTML =
+                    "🔴 " +
+                    (result.Message ||
+                     "TICKET NOT FOUND");
 
                 break;
 
+
+            // =================================
+            // ERROR
+            // =================================
+
+            case "ERROR":
+
+                status.innerHTML =
+                    "🔴 " +
+                    (result.Message ||
+                     "API ERROR");
+
+                console.error(
+                    "API returned an error:",
+                    result
+                );
+
+                break;
+
+
+            // =================================
+            // UNKNOWN
+            // =================================
+
             default:
 
-                document.getElementById("scanStatus").innerHTML =
-                    "🔴 Unknown response";
+                status.innerHTML =
+                    "🔴 UNKNOWN RESPONSE";
 
-                console.log(result);
+                console.warn(
+                    "Unknown API response:",
+                    result
+                );
 
                 break;
 
@@ -112,27 +233,45 @@ async function ticketScanned(ticketNumber) {
 
     }
     catch (err) {
-console.log(result);
-    console.error(err);
 
-    alert(err);
+        console.error(
+            "Check-in request failed:",
+            err
+        );
 
-    document.getElementById("scanStatus").innerHTML =
-        "🔴 API ERROR";
+        alert(
+            err.message || err
+        );
 
-}}
+        status.innerHTML =
+            "🔴 API ERROR";
+
+    }
+
+
+    // =====================================
+    // READY FOR NEXT SCAN
+    // =====================================
 
     setTimeout(() => {
 
-        document.getElementById("scanStatus").innerHTML =
+        status.innerHTML =
             "🟢 READY TO SCAN";
 
     }, 1500);
 
 }
 
-window.addEventListener("beforeunload", async () => {
 
-    await Scanner.stop();
+// =====================================
+// STOP SCANNER WHEN LEAVING
+// =====================================
 
-});
+window.addEventListener(
+    "beforeunload",
+    async () => {
+
+        await Scanner.stop();
+
+    }
+);
