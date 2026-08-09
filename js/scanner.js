@@ -214,29 +214,28 @@ window.Scanner = {
                 // actual camera view dimensions.
                 //
 
-               qrbox: (
+              qrbox: (
     viewfinderWidth,
     viewfinderHeight
 ) => {
 
-    // Keep the scan area square
-    // and comfortably inside the camera view.
+    // Barcode-shaped scan area
+    const width = Math.floor(viewfinderWidth * 0.85);
 
-    const size =
-        Math.floor(
-            Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-            ) * 0.60
-        );
+    const height = Math.floor(
+        Math.min(
+            viewfinderHeight * 0.30,
+            180
+        )
+    );
 
     this.log(
-        `Scan area: ${size} x ${size}`
+        `Barcode scan area: ${width} x ${height}`
     );
 
     return {
-        width: size,
-        height: size
+        width: width,
+        height: height
     };
 
 },
