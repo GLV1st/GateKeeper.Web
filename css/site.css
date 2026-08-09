@@ -256,17 +256,13 @@ footer {
 
 #camera {
     width: 100%;
-
-    height: 500px;
+    height: 230px;
     min-height: 0;
-    max-height: 500px;
+    max-height: 230px;
 
     border-radius: 12px;
-
     overflow: hidden;
-
     background: #000;
-
     position: relative;
 }
 
