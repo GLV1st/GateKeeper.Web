@@ -21,13 +21,70 @@ window.Scanner = {
 
 
     // =====================================
+    // Beep
+    // =====================================
+
+    beep() {
+
+        try {
+
+            const AudioContext =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+            if (!AudioContext)
+                return;
+
+            const audioContext =
+                new AudioContext();
+
+            const oscillator =
+                audioContext.createOscillator();
+
+            const gain =
+                audioContext.createGain();
+
+            oscillator.type = "sine";
+
+            oscillator.frequency.value = 1000;
+
+            gain.gain.value = 0.15;
+
+            oscillator.connect(gain);
+            gain.connect(audioContext.destination);
+
+            oscillator.start();
+
+            setTimeout(() => {
+
+                oscillator.stop();
+                audioContext.close();
+
+            }, 120);
+
+        }
+        catch (err) {
+
+            console.log(
+                "[Scanner] Beep unavailable:",
+                err
+            );
+
+        }
+
+    },
+
+
+    // =====================================
     // Start Scanner
     // =====================================
 
     async start(callback) {
 
         this.callback = callback;
+
         this.active = true;
+
         this.scanLock = false;
 
         await this.startCamera();
@@ -42,6 +99,7 @@ window.Scanner = {
     async stop() {
 
         this.active = false;
+
         this.scanLock = false;
 
         if (this.html5) {
@@ -49,6 +107,7 @@ window.Scanner = {
             try {
 
                 await this.html5.stop();
+
                 await this.html5.clear();
 
             }
@@ -200,45 +259,46 @@ window.Scanner = {
 
 
                 // =================================
-                // DYNAMIC SCAN AREA
+                // BARCODE SCAN AREA
                 // =================================
-                //
-                // IMPORTANT:
-                //
-                // Do NOT use:
-                //
-                // width: 280
-                // height: 280
-                //
-                // The scan box now follows the
-                // actual camera view dimensions.
-                //
 
-              qrbox: (
-    viewfinderWidth,
-    viewfinderHeight
-) => {
+                qrbox: (
+                    viewfinderWidth,
+                    viewfinderHeight
+                ) => {
 
-    // Barcode-shaped scan area
-    const width = Math.floor(viewfinderWidth * 0.85);
+                    // Wide and short barcode window
 
-    const height = Math.floor(
-        Math.min(
-            viewfinderHeight * 0.30,
-            180
-        )
-    );
+                    const width =
+                        Math.floor(
+                            viewfinderWidth * 0.85
+                        );
 
-    this.log(
-        `Barcode scan area: ${width} x ${height}`
-    );
 
-    return {
-        width: width,
-        height: height
-    };
+                    const height =
+                        Math.floor(
+                            Math.min(
+                                viewfinderHeight * 0.30,
+                                180
+                            )
+                        );
 
-},
+
+                    this.log(
+                        `Barcode scan area: ${width} x ${height}`
+                    );
+
+
+                    return {
+
+                        width: width,
+
+                        height: height
+
+                    };
+
+                },
+
 
                 // =================================
                 // CAMERA ASPECT RATIO
@@ -263,17 +323,25 @@ window.Scanner = {
                     return;
 
 
+                // Lock immediately
+
                 this.scanLock = true;
 
 
                 const value =
-                    decodedText
-                        .trim();
+                    decodedText.trim();
 
 
                 this.log(
-                    "QR: " + value
+                    "Barcode: " + value
                 );
+
+
+                // =================================
+                // BEEP
+                // =================================
+
+                this.beep();
 
 
                 try {
@@ -297,16 +365,19 @@ window.Scanner = {
                 }
                 finally {
 
-                    /*
-                     * Prevent the same QR code
-                     * being processed repeatedly.
-                     */
+                    // =================================
+                    // SCAN LOCK
+                    // =================================
+                    //
+                    // Prevent the same barcode
+                    // firing repeatedly.
+                    //
 
                     setTimeout(() => {
 
                         this.scanLock = false;
 
-                    }, 750);
+                    }, 1500);
 
                 }
 
@@ -319,13 +390,7 @@ window.Scanner = {
 
             error => {
 
-                /*
-                 * html5-qrcode produces lots of
-                 * "not found" messages while it is
-                 * searching.
-                 *
-                 * Ignore those.
-                 */
+                // Normal scanning failures are ignored
 
                 if (
                     typeof error === "string" &&
@@ -338,11 +403,6 @@ window.Scanner = {
 
                 }
 
-
-                /*
-                 * Ignore normal frame scanning
-                 * failures.
-                 */
 
                 if (
                     typeof error === "string" &&
