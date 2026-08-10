@@ -1,100 +1,358 @@
 document.addEventListener("DOMContentLoaded", initialise);
 
+
+// =====================================
+// INITIALISE
+// =====================================
+
 async function initialise() {
 
+    console.log("=================================");
     console.log("GateKeeper Started");
+    console.log("=================================");
 
     await loadEvents();
 
-    document.getElementById("eventSelect").addEventListener("change", eventChanged);
+    const eventSelect =
+        document.getElementById("eventSelect");
+
+    if (eventSelect) {
+
+        eventSelect.addEventListener(
+            "change",
+            eventChanged
+        );
+
+    }
 
 }
+
+
+// =====================================
+// LOAD EVENTS
+// =====================================
 
 async function loadEvents() {
 
-    const ddl = document.getElementById("eventSelect");
+    const ddl =
+        document.getElementById("eventSelect");
 
-    ddl.innerHTML = "";
+    ddl.innerHTML =
+        "<option>Loading events...</option>";
 
-    const events = await GateKeeperAPI.getEvents();
+
+    const events =
+        await GateKeeperAPI.getEvents();
+
 
     if (!events || events.length === 0) {
 
-        ddl.innerHTML = "<option>No Events Available</option>";
+        ddl.innerHTML =
+            "<option>No Events Available</option>";
+
         return;
 
     }
 
-    ddl.innerHTML = "<option value=''>Select Event...</option>";
+
+    ddl.innerHTML =
+        "<option value=''>Select Event...</option>";
+
 
     events.forEach(event => {
 
-        const option = document.createElement("option");
+        const option =
+            document.createElement("option");
 
-        option.value = event.Id;
-        option.textContent = event.Name;
+
+        option.value =
+            event.Id;
+
+
+        option.textContent =
+            event.Name;
+
 
         ddl.appendChild(option);
 
+
+        console.log(
+            "Event loaded:",
+            event.Id,
+            event.Name
+        );
+
     });
 
-    // Restore previously selected event
-    const savedEventId = localStorage.getItem("CurrentEventId");
+
+    // =====================================
+    // RESTORE SAVED EVENT
+    // =====================================
+
+    const savedEventId =
+        localStorage.getItem(
+            "CurrentEventId"
+        );
+
+
+    const savedEventName =
+        localStorage.getItem(
+            "CurrentEventName"
+        );
+
+
+    console.log(
+        "Saved Event ID:",
+        savedEventId
+    );
+
+
+    console.log(
+        "Saved Event Name:",
+        savedEventName
+    );
+
 
     if (savedEventId) {
 
-        ddl.value = savedEventId;
+        ddl.value =
+            savedEventId;
+
+
+        // Check that the saved event actually
+        // exists in the current event list
+
+        if (ddl.value === savedEventId) {
+
+            console.log(
+                "Restored event:",
+                savedEventId,
+                ddl.options[ddl.selectedIndex].text
+            );
+
+        }
+        else {
+
+            console.warn(
+                "Saved event no longer exists."
+            );
+
+            localStorage.removeItem(
+                "CurrentEventId"
+            );
+
+            localStorage.removeItem(
+                "CurrentEventName"
+            );
+
+        }
 
     }
 
 }
+
+
+// =====================================
+// EVENT CHANGED
+// =====================================
 
 function eventChanged() {
 
-    const ddl = document.getElementById("eventSelect");
+    const ddl =
+        document.getElementById("eventSelect");
 
-    if (ddl.value === "")
-        return;
 
-    localStorage.setItem("CurrentEventId", ddl.value);
-    localStorage.setItem("CurrentEventName", ddl.options[ddl.selectedIndex].text);
+    const eventId =
+        ddl.value;
 
-    console.log("Current Event:", ddl.value);
 
-}
-// =====================
-// NAVIGATION
-// =====================
-
-document.getElementById("btnCheckIn").addEventListener("click", () => {
-
-    const eventId = localStorage.getItem("CurrentEventId");
+    // =====================================
+    // No event selected
+    // =====================================
 
     if (!eventId) {
 
-        alert("Please select an event first.");
+        localStorage.removeItem(
+            "CurrentEventId"
+        );
+
+        localStorage.removeItem(
+            "CurrentEventName"
+        );
+
+        console.log(
+            "Event selection cleared"
+        );
+
         return;
 
     }
 
-    window.location.href = "checkin.html";
 
-});
+    const eventName =
+        ddl.options[
+            ddl.selectedIndex
+        ].text;
 
-document.getElementById("btnCheckOut").addEventListener("click", () => {
 
-    alert("Coming next...");
+    // =====================================
+    // SAVE CURRENT EVENT
+    // =====================================
 
-});
+    localStorage.setItem(
+        "CurrentEventId",
+        eventId
+    );
 
-document.getElementById("btnStatus").addEventListener("click", () => {
 
-    alert("Coming next...");
+    localStorage.setItem(
+        "CurrentEventName",
+        eventName
+    );
 
-});
 
-document.getElementById("btnSettings").addEventListener("click", () => {
+    // =====================================
+    // DEBUG
+    // =====================================
 
-    alert("Coming next...");
+    console.log(
+        "================================="
+    );
 
-});
+    console.log(
+        "CURRENT EVENT CHANGED"
+    );
+
+    console.log(
+        "Event ID:",
+        eventId
+    );
+
+    console.log(
+        "Event Name:",
+        eventName
+    );
+
+    console.log(
+        "localStorage Event ID:",
+        localStorage.getItem(
+            "CurrentEventId"
+        )
+    );
+
+    console.log(
+        "localStorage Event Name:",
+        localStorage.getItem(
+            "CurrentEventName"
+        )
+    );
+
+    console.log(
+        "================================="
+    );
+
+}
+
+
+// =====================================
+// CHECK IN
+// =====================================
+
+document
+    .getElementById("btnCheckIn")
+    .addEventListener("click", () => {
+
+        const eventId =
+            localStorage.getItem(
+                "CurrentEventId"
+            );
+
+
+        if (!eventId) {
+
+            alert(
+                "Please select an event first."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Opening Check In for event:",
+            eventId
+        );
+
+
+        window.location.href =
+            "checkin.html";
+
+    });
+
+
+// =====================================
+// CHECK OUT
+// =====================================
+
+document
+    .getElementById("btnCheckOut")
+    .addEventListener("click", () => {
+
+        const eventId =
+            localStorage.getItem(
+                "CurrentEventId"
+            );
+
+
+        if (!eventId) {
+
+            alert(
+                "Please select an event first."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Opening Check Out for event:",
+            eventId
+        );
+
+
+        window.location.href =
+            "checkout.html";
+
+    });
+
+
+// =====================================
+// STATUS
+// =====================================
+
+document
+    .getElementById("btnStatus")
+    .addEventListener("click", () => {
+
+        alert(
+            "Coming next..."
+        );
+
+    });
+
+
+// =====================================
+// SETTINGS
+// =====================================
+
+document
+    .getElementById("btnSettings")
+    .addEventListener("click", () => {
+
+        alert(
+            "Coming next..."
+        );
+
+    });
