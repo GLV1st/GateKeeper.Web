@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GateKeeper Access</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>GateKeeper!</h1>
+
+        <div class="status online">
+            ● Online
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="login-card">
+
+            <div class="icon">🔐</div>
+
+            <h2>GateKeeper Access</h2>
+
+            <p>
+                Enter the event access password to continue.
+            </p>
+
+
+            <form id="loginForm">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Access password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Access GateKeeper
+                </button>
+
+            </form>
+
+
+            <div
+                id="loginMessage"
+                class="login-message"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        Version 1.0.0
+
+    </footer>
+
+
+    <script src="js/auth.js"></script>
+
+
+    <script>
+
+        // Already logged in?
+        if (
+            localStorage.getItem(
+                "gatekeeper_authenticated"
+            ) === "true"
+        ) {
+
+            window.location.href = "index.html";
+        }
+
+
+        document
+            .getElementById("loginForm")
+            .addEventListener(
+                "submit",
+                async function (event) {
+
+                    event.preventDefault();
+
+
+                    const password =
+                        document
+                            .getElementById("password")
+                            .value;
+
+
+                    const message =
+                        document
+                            .getElementById("loginMessage");
+
+
+                    message.textContent =
+                        "Checking password...";
+
+
+                    const result =
+                        await loginGateKeeper(
+                            password
+                        );
+
+
+                    if (result.success) {
+
+                        window.location.href =
+                            "index.html";
+
+                    } else {
+
+                        message.textContent =
+                            result.message;
+
+                        document
+                            .getElementById("password")
+                            .select();
+                    }
+
+                }
+            );
+
+    </script>
+
+</body>
+
+</html>
