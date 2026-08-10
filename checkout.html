@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GateKeeper - Check Out</title>
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/site.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="page-header">
+
+        <button
+            class="home-button"
+            onclick="window.location.href='index.html'"
+        >
+            🏠 Home
+        </button>
+
+        <div class="status online">
+            ● Online
+        </div>
+
+    </header>
+
+
+    <!-- =====================================
+         PAGE TITLE
+    ====================================== -->
+
+    <h1 class="page-title">
+        Check Out
+    </h1>
+
+    <div
+        class="event-name"
+        id="eventName"
+    >
+        Loading...
+    </div>
+
+
+    <!-- =====================================
+         MAIN GRID
+    ====================================== -->
+
+    <div class="checkin-grid">
+
+
+        <!-- =================================
+             CAMERA
+        ================================== -->
+
+        <section class="camera-card">
+
+            <div id="camera"></div>
+
+            <div
+                id="scanStatus"
+                class="scan-ready"
+            >
+                🟢 READY TO SCAN
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             INFORMATION
+        ================================== -->
+
+        <section class="info-panel">
+
+
+            <!-- =================================
+                 LAST TICKET
+            ================================== -->
+
+            <div class="ticket-card">
+
+                <h2>
+                    Last Ticket
+                </h2>
+
+
+                <div class="ticket-row">
+
+                    <span>
+                        Ticket
+                    </span>
+
+                    <strong id="ticketNumber">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="ticket-row">
+
+                    <span>
+                        Holder
+                    </span>
+
+                    <strong id="ticketHolder">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="ticket-row">
+
+                    <span>
+                        Type
+                    </span>
+
+                    <strong id="ticketType">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="ticket-row">
+
+                    <span>
+                        Time
+                    </span>
+
+                    <strong id="ticketTime">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 STATS
+            ================================== -->
+
+            <div class="stats-card">
+
+                <div class="stat-row">
+
+                    <span>
+                        Checked In
+                    </span>
+
+                    <strong id="checkedInCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-row">
+
+                    <span>
+                        On Site
+                    </span>
+
+                    <strong id="onSiteCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="js/scanner.js"></script>
+<script src="js/checkout.js"></script>
+
+</body>
+
+</html>
