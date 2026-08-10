@@ -10,14 +10,86 @@ document.addEventListener(
 
 async function initialise() {
 
+    console.log("=================================");
+    console.log("GateKeeper Check Out Started");
+    console.log("=================================");
+
+
+    // =====================================
+    // LOAD EVENT NAME
+    // =====================================
+
     const eventName =
-        localStorage.getItem("CurrentEventName");
+        localStorage.getItem(
+            "CurrentEventName"
+        );
 
-    document.getElementById(
-        "eventName"
-    ).textContent =
-        eventName || "No Event Selected";
 
+    const eventNameElement =
+        document.getElementById(
+            "eventName"
+        );
+
+
+    if (eventNameElement) {
+
+        eventNameElement.textContent =
+            eventName ||
+            "No Event Selected";
+
+    }
+
+
+    // =====================================
+    // CHECK EVENT ID
+    // =====================================
+
+    const eventId =
+        localStorage.getItem(
+            "CurrentEventId"
+        );
+
+
+    if (!eventId) {
+
+        console.error(
+            "No CurrentEventId found."
+        );
+
+
+        document.getElementById(
+            "scanStatus"
+        ).innerHTML =
+            "🔴 NO EVENT SELECTED";
+
+
+        return;
+
+    }
+
+
+    console.log(
+        "Current Event ID:",
+        eventId
+    );
+
+
+    console.log(
+        "Current Event Name:",
+        eventName
+    );
+
+
+    // =====================================
+    // LOAD LIVE STATISTICS
+    // =====================================
+
+    await updateStats();
+
+
+    // =====================================
+    // START SCANNER
+    // =====================================
 
     try {
 
@@ -52,11 +124,98 @@ async function initialise() {
 
 
 // =====================================
-// BEEP
+// UPDATE STATISTICS
 // =====================================
 
-let audioContext = null;
+async function updateStats() {
 
+    const eventId =
+        localStorage.getItem(
+            "CurrentEventId"
+        );
+
+
+    if (!eventId) {
+
+        console.warn(
+            "Cannot update statistics - no event selected."
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "Loading statistics for event:",
+        eventId
+    );
+
+
+    const stats =
+        await GateKeeperAPI.getEventStats(
+            eventId
+        );
+
+
+    if (!stats) {
+
+        console.error(
+            "No statistics returned."
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "Event statistics:",
+        stats
+    );
+
+
+    // =====================================
+    // CHECKED IN
+    // =====================================
+
+    const checkedInCount =
+        document.getElementById(
+            "checkedInCount"
+        );
+
+
+    if (checkedInCount) {
+
+        checkedInCount.textContent =
+            stats.CheckedIn ?? 0;
+
+    }
+
+
+    // =====================================
+    // ON SITE
+    // =====================================
+
+    const onSiteCount =
+        document.getElementById(
+            "onSiteCount"
+        );
+
+
+    if (onSiteCount) {
+
+        onSiteCount.textContent =
+            stats.OnSite ?? 0;
+
+    }
+
+}
+
+
+// =====================================
+// BEEP
+// =====================================
 
 function beep() {
 
@@ -71,22 +230,8 @@ function beep() {
             return;
 
 
-        if (!audioContext) {
-
-            audioContext =
-                new AudioContext();
-
-        }
-
-
-        if (
-            audioContext.state ===
-            "suspended"
-        ) {
-
-            audioContext.resume();
-
-        }
+        const audioContext =
+            new AudioContext();
 
 
         const oscillator =
@@ -149,7 +294,12 @@ async function ticketScanned(
 ) {
 
     console.log(
-        "Ticket:",
+        "================================="
+    );
+
+
+    console.log(
+        "Ticket scanned:",
         ticketNumber
     );
 
@@ -181,7 +331,7 @@ async function ticketScanned(
 
 
         console.error(
-            "CurrentEventId is missing"
+            "CurrentEventId is missing."
         );
 
 
@@ -195,8 +345,8 @@ async function ticketScanned(
         console.log(
             "Sending check-out request:",
             {
-                eventId: eventId,
-                ticketNumber: ticketNumber
+                eventId,
+                ticketNumber
             }
         );
 
@@ -207,10 +357,8 @@ async function ticketScanned(
 
         const result =
             await GateKeeperAPI.checkOut(
-
                 ticketNumber,
                 eventId
-
             );
 
 
@@ -366,6 +514,7 @@ async function ticketScanned(
                         "TICKET CANCELLED"
                     );
 
+
                 break;
 
 
@@ -381,6 +530,7 @@ async function ticketScanned(
                         result.Message ||
                         "TICKET NOT FOUND"
                     );
+
 
                 break;
 
@@ -404,6 +554,7 @@ async function ticketScanned(
                     result
                 );
 
+
                 break;
 
 
@@ -422,9 +573,17 @@ async function ticketScanned(
                     result
                 );
 
+
                 break;
 
         }
+
+
+        // =====================================
+        // REFRESH STATISTICS
+        // =====================================
+
+        await updateStats();
 
     }
 

@@ -9,10 +9,14 @@ class GateKeeperAPI {
         try {
 
             const response =
-                await fetch(`${CONFIG.apiUrl}/events`);
+                await fetch(
+                    `${CONFIG.apiUrl}/events`
+                );
 
             if (!response.ok)
-                throw new Error("Unable to load events.");
+                throw new Error(
+                    "Unable to load events."
+                );
 
             return await response.json();
 
@@ -32,7 +36,10 @@ class GateKeeperAPI {
     // CHECK IN
     // =====================================
 
-    static async checkIn(ticketNumber, eventId) {
+    static async checkIn(
+        ticketNumber,
+        eventId
+    ) {
 
         try {
 
@@ -59,7 +66,9 @@ class GateKeeperAPI {
 
 
             if (!response.ok)
-                throw new Error("Check In failed.");
+                throw new Error(
+                    "Check In failed."
+                );
 
 
             return await response.json();
@@ -85,7 +94,10 @@ class GateKeeperAPI {
     // CHECK OUT
     // =====================================
 
-    static async checkOut(ticketNumber, eventId) {
+    static async checkOut(
+        ticketNumber,
+        eventId
+    ) {
 
         try {
 
@@ -112,7 +124,9 @@ class GateKeeperAPI {
 
 
             if (!response.ok)
-                throw new Error("Check Out failed.");
+                throw new Error(
+                    "Check Out failed."
+                );
 
 
             return await response.json();
@@ -133,6 +147,55 @@ class GateKeeperAPI {
 
     }
 
+
+    // =====================================
+    // GET EVENT STATISTICS
+    // =====================================
+
+    static async getEventStats(
+        eventId
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${CONFIG.apiUrl}/events/${encodeURIComponent(eventId)}/stats`
+                );
+
+
+            if (!response.ok)
+                throw new Error(
+                    "Unable to load event statistics."
+                );
+
+
+            return await response.json();
+
+        }
+        catch (err) {
+
+            console.error(
+                "Event stats error:",
+                err
+            );
+
+
+            return {
+
+                Total: 0,
+                CheckedIn: 0,
+                CheckedOut: 0,
+                OnSite: 0,
+                NotYetIn: 0,
+                Cancelled: 0
+
+            };
+
+        }
+
+    }
+
 }
 
 
@@ -140,4 +203,5 @@ class GateKeeperAPI {
 // GLOBAL API OBJECT
 // =====================================
 
-window.GateKeeperAPI = GateKeeperAPI;
+window.GateKeeperAPI =
+    GateKeeperAPI;

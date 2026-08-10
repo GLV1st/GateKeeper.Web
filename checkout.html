@@ -19,192 +19,193 @@
 
 </head>
 
+
 <body>
 
-<div class="app">
 
-    <!-- =====================================
-         HEADER
-    ====================================== -->
+<!-- =====================================
+     HEADER
+====================================== -->
 
-    <header class="page-header">
+<header class="page-header">
 
-        <button
-            class="home-button"
-            onclick="window.location.href='index.html'"
+    <button
+        class="home-button"
+        onclick="window.location.href='index.html'"
+    >
+        🏠 Home
+    </button>
+
+    <div class="status online">
+        ● Online
+    </div>
+
+</header>
+
+
+<!-- =====================================
+     PAGE TITLE
+====================================== -->
+
+<h1 class="page-title">
+    Check Out
+</h1>
+
+
+<div
+    class="event-name"
+    id="eventName"
+>
+    Loading...
+</div>
+
+
+<!-- =====================================
+     MAIN GRID
+====================================== -->
+
+<div class="checkin-grid">
+
+
+    <!-- =================================
+         CAMERA
+    ================================== -->
+
+    <section class="camera-card">
+
+        <div id="camera"></div>
+
+        <div
+            id="scanStatus"
+            class="scan-ready"
         >
-            🏠 Home
-        </button>
-
-        <div class="status online">
-            ● Online
+            🟢 READY TO SCAN
         </div>
 
-    </header>
+    </section>
 
 
-    <!-- =====================================
-         PAGE TITLE
-    ====================================== -->
+    <!-- =================================
+         INFORMATION
+    ================================== -->
 
-    <h1 class="page-title">
-        Check Out
-    </h1>
-
-    <div
-        class="event-name"
-        id="eventName"
-    >
-        Loading...
-    </div>
-
-
-    <!-- =====================================
-         MAIN GRID
-    ====================================== -->
-
-    <div class="checkin-grid">
+    <section class="info-panel">
 
 
         <!-- =================================
-             CAMERA
+             LAST TICKET
         ================================== -->
 
-        <section class="camera-card">
+        <div class="ticket-card">
 
-            <div id="camera"></div>
+            <h2>
+                Last Ticket
+            </h2>
 
-            <div
-                id="scanStatus"
-                class="scan-ready"
-            >
-                🟢 READY TO SCAN
+
+            <div class="ticket-row">
+
+                <span>
+                    Ticket
+                </span>
+
+                <strong id="ticketNumber">
+                    -
+                </strong>
+
             </div>
 
-        </section>
+
+            <div class="ticket-row">
+
+                <span>
+                    Holder
+                </span>
+
+                <strong id="ticketHolder">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="ticket-row">
+
+                <span>
+                    Type
+                </span>
+
+                <strong id="ticketType">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="ticket-row">
+
+                <span>
+                    Time
+                </span>
+
+                <strong id="ticketTime">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
 
 
         <!-- =================================
-             INFORMATION
+             EVENT STATISTICS
         ================================== -->
 
-        <section class="info-panel">
+        <div class="stats-card">
 
 
-            <!-- =================================
-                 LAST TICKET
-            ================================== -->
+            <div class="stat-row">
 
-            <div class="ticket-card">
+                <span>
+                    Checked In
+                </span>
 
-                <h2>
-                    Last Ticket
-                </h2>
-
-
-                <div class="ticket-row">
-
-                    <span>
-                        Ticket
-                    </span>
-
-                    <strong id="ticketNumber">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="ticket-row">
-
-                    <span>
-                        Holder
-                    </span>
-
-                    <strong id="ticketHolder">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="ticket-row">
-
-                    <span>
-                        Type
-                    </span>
-
-                    <strong id="ticketType">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="ticket-row">
-
-                    <span>
-                        Time
-                    </span>
-
-                    <strong id="ticketTime">
-                        -
-                    </strong>
-
-                </div>
+                <strong id="checkedInCount">
+                    0
+                </strong>
 
             </div>
 
 
-            <!-- =================================
-                 STATS
-            ================================== -->
+            <div class="stat-row">
 
-            <div class="stats-card">
+                <span>
+                    Checked Out
+                </span>
 
-                <div class="stat-row">
-
-                    <span>
-                        Checked In
-                    </span>
-
-                    <strong id="checkedInCount">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-row">
-
-                    <span>
-                        On Site
-                    </span>
-
-                    <strong id="onSiteCount">
-                        0
-                    </strong>
-
-                </div>
+                <strong id="checkedOutCount">
+                    0
+                </strong>
 
             </div>
 
-        </section>
 
-    </div>
+        </div>
+
+    </section>
 
 </div>
 
 
 <!-- =====================================
-     JAVASCRIPT
+     SCRIPTS
 ====================================== -->
 
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
 <script src="js/scanner.js"></script>
 <script src="js/checkout.js"></script>
+
 
 </body>
 
