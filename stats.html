@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GateKeeper - Event Statistics</title>
+
+    <!-- Shared CSS -->
+    <link
+        rel="stylesheet"
+        href="css/theme.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/site.css"
+    >
+
+    <!-- Stats CSS -->
+    <style>
+
+        /* =====================================
+           DASHBOARD
+        ===================================== */
+
+        .stats-dashboard {
+
+            max-width: 1200px;
+
+            margin: 30px auto;
+
+            padding: 0 20px;
+
+        }
+
+
+        /* =====================================
+           HEADER
+        ===================================== */
+
+        .dashboard-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            gap: 20px;
+
+        }
+
+
+        .dashboard-title {
+
+            margin: 0;
+
+        }
+
+
+        .dashboard-subtitle {
+
+            margin-top: 5px;
+
+            opacity: 0.7;
+
+        }
+
+
+        .refresh-info {
+
+            text-align: right;
+
+            font-size: 13px;
+
+            opacity: 0.7;
+
+        }
+
+
+        /* =====================================
+           MAIN METRIC GRID
+        ===================================== */
+
+        .metric-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .metric-card {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.08);
+
+            border-left: 6px solid #ccc;
+
+        }
+
+
+        .metric-label {
+
+            font-size: 15px;
+
+            opacity: 0.7;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .metric-value {
+
+            font-size: 42px;
+
+            font-weight: 700;
+
+            line-height: 1;
+
+        }
+
+
+        .metric-description {
+
+            margin-top: 10px;
+
+            font-size: 13px;
+
+            opacity: 0.65;
+
+        }
+
+
+        /* =====================================
+           CARD TYPES
+        ===================================== */
+
+        .metric-total {
+            border-left-color: #444;
+        }
+
+        .metric-onsite {
+            border-left-color: #20a464;
+        }
+
+        .metric-in {
+            border-left-color: #2878d7;
+        }
+
+        .metric-out {
+            border-left-color: #777;
+        }
+
+        .metric-waiting {
+            border-left-color: #e59b20;
+        }
+
+        .metric-cancelled {
+            border-left-color: #d9534f;
+        }
+
+
+        /* =====================================
+           ATTENDANCE PANEL
+        ===================================== */
+
+        .dashboard-panel {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .panel-title {
+
+            margin-top: 0;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        /* =====================================
+           ATTENDANCE
+        ===================================== */
+
+        .attendance-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .attendance-percent {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+        }
+
+
+        .progress-bar {
+
+            height: 22px;
+
+            background: #e9e9e9;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+        }
+
+
+        .progress-fill {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: #20a464;
+
+            border-radius: 20px;
+
+            transition:
+                width 0.5s ease;
+
+        }
+
+
+        /* =====================================
+           BREAKDOWN
+        ===================================== */
+
+        .breakdown-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .breakdown-item {
+
+            padding: 18px;
+
+            background: #f7f7f7;
+
+            border-radius: 12px;
+
+        }
+
+
+        .breakdown-label {
+
+            font-size: 13px;
+
+            opacity: 0.7;
+
+        }
+
+
+        .breakdown-value {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
+
+        @media (max-width: 800px) {
+
+            .metric-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+            .breakdown-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .metric-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .dashboard-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+            }
+
+            .refresh-info {
+
+                text-align: left;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+====================================== -->
+
+<header class="page-header">
+
+    <button
+        class="home-button"
+        onclick="window.location.href='index.html'"
+    >
+        🏠 Home
+    </button>
+
+
+    <div class="status online">
+        ● Online
+    </div>
+
+</header>
+
+
+<!-- =====================================
+     DASHBOARD
+====================================== -->
+
+<main class="stats-dashboard">
+
+
+    <!-- =================================
+         DASHBOARD HEADER
+    ================================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1 class="dashboard-title">
+                Event Dashboard
+            </h1>
+
+            <div
+                class="dashboard-subtitle"
+                id="eventName"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+        <div class="refresh-info">
+
+            Live statistics
+
+            <br>
+
+            Last updated:
+            <strong id="lastUpdated">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================
+         MAIN METRICS
+    ================================== -->
+
+    <div class="metric-grid">
+
+
+        <!-- TICKETS SOLD -->
+
+        <div class="metric-card metric-total">
+
+            <div class="metric-label">
+                🎟️ Tickets Sold
+            </div>
+
+            <div
+                class="metric-value"
+                id="totalCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Total tickets for this event
+            </div>
+
+        </div>
+
+
+        <!-- ON SITE -->
+
+        <div class="metric-card metric-onsite">
+
+            <div class="metric-label">
+                🟢 On Site
+            </div>
+
+            <div
+                class="metric-value"
+                id="onSiteCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Currently at the event
+            </div>
+
+        </div>
+
+
+        <!-- CHECKED IN -->
+
+        <div class="metric-card metric-in">
+
+            <div class="metric-label">
+                🔵 Checked In
+            </div>
+
+            <div
+                class="metric-value"
+                id="checkedInCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Tickets scanned in
+            </div>
+
+        </div>
+
+
+        <!-- CHECKED OUT -->
+
+        <div class="metric-card metric-out">
+
+            <div class="metric-label">
+                ⚪ Checked Out
+            </div>
+
+            <div
+                class="metric-value"
+                id="checkedOutCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Tickets scanned out
+            </div>
+
+        </div>
+
+
+        <!-- NOT ARRIVED -->
+
+        <div class="metric-card metric-waiting">
+
+            <div class="metric-label">
+                🟠 Not Yet Arrived
+            </div>
+
+            <div
+                class="metric-value"
+                id="notYetInCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Tickets not yet scanned in
+            </div>
+
+        </div>
+
+
+        <!-- CANCELLED -->
+
+        <div class="metric-card metric-cancelled">
+
+            <div class="metric-label">
+                🔴 Cancelled
+            </div>
+
+            <div
+                class="metric-value"
+                id="cancelledCount"
+            >
+                0
+            </div>
+
+            <div class="metric-description">
+                Cancelled tickets
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================
+         ATTENDANCE
+    ================================== -->
+
+    <section class="dashboard-panel">
+
+        <h2 class="panel-title">
+            Attendance
+        </h2>
+
+
+        <div class="attendance-header">
+
+            <span>
+                Tickets currently on site
+            </span>
+
+            <strong
+                class="attendance-percent"
+                id="attendancePercent"
+            >
+                0%
+            </strong>
+
+        </div>
+
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="attendanceBar"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         BREAKDOWN
+    ================================== -->
+
+    <section class="dashboard-panel">
+
+        <h2 class="panel-title">
+            Event Breakdown
+        </h2>
+
+
+        <div class="breakdown-grid">
+
+
+            <div class="breakdown-item">
+
+                <div class="breakdown-label">
+                    Total Scanned
+                </div>
+
+                <div
+                    class="breakdown-value"
+                    id="scannedCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="breakdown-item">
+
+                <div class="breakdown-label">
+                    Still On Site
+                </div>
+
+                <div
+                    class="breakdown-value"
+                    id="breakdownOnSite"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="breakdown-item">
+
+                <div class="breakdown-label">
+                    Left Site
+                </div>
+
+                <div
+                    class="breakdown-value"
+                    id="breakdownLeft"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script src="js/config.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/stats.js"></script>
+
+
+</body>
+
+</html>
