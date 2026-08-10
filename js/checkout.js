@@ -16,7 +16,7 @@ async function initialise() {
 
 
     // =====================================
-    // LOAD EVENT NAME
+    // LOAD EVENT
     // =====================================
 
     const eventName =
@@ -24,12 +24,10 @@ async function initialise() {
             "CurrentEventName"
         );
 
-
     const eventNameElement =
         document.getElementById(
             "eventName"
         );
-
 
     if (eventNameElement) {
 
@@ -39,10 +37,6 @@ async function initialise() {
 
     }
 
-
-    // =====================================
-    // CHECK EVENT ID
-    // =====================================
 
     const eventId =
         localStorage.getItem(
@@ -56,12 +50,10 @@ async function initialise() {
             "No CurrentEventId found."
         );
 
-
         document.getElementById(
             "scanStatus"
         ).innerHTML =
             "🔴 NO EVENT SELECTED";
-
 
         return;
 
@@ -72,7 +64,6 @@ async function initialise() {
         "Current Event ID:",
         eventId
     );
-
 
     console.log(
         "Current Event Name:",
@@ -194,19 +185,19 @@ async function updateStats() {
 
 
     // =====================================
-    // ON SITE
+    // CHECKED OUT
     // =====================================
 
-    const onSiteCount =
+    const checkedOutCount =
         document.getElementById(
-            "onSiteCount"
+            "checkedOutCount"
         );
 
 
-    if (onSiteCount) {
+    if (checkedOutCount) {
 
-        onSiteCount.textContent =
-            stats.OnSite ?? 0;
+        checkedOutCount.textContent =
+            stats.CheckedOut ?? 0;
 
     }
 
@@ -394,32 +385,10 @@ async function ticketScanned(
                     );
 
 
-                document.getElementById(
-                    "ticketNumber"
-                ).textContent =
-                    result.TicketNumber ||
-                    ticketNumber;
-
-
-                document.getElementById(
-                    "ticketHolder"
-                ).textContent =
-                    result.CustomerName ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketType"
-                ).textContent =
-                    result.TicketType ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketTime"
-                ).textContent =
-                    new Date()
-                        .toLocaleTimeString();
+                showTicket(
+                    result,
+                    ticketNumber
+                );
 
 
                 break;
@@ -439,25 +408,10 @@ async function ticketScanned(
                     );
 
 
-                document.getElementById(
-                    "ticketNumber"
-                ).textContent =
-                    result.TicketNumber ||
-                    ticketNumber;
-
-
-                document.getElementById(
-                    "ticketHolder"
-                ).textContent =
-                    result.CustomerName ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketType"
-                ).textContent =
-                    result.TicketType ||
-                    "-";
+                showTicket(
+                    result,
+                    ticketNumber
+                );
 
 
                 break;
@@ -477,25 +431,10 @@ async function ticketScanned(
                     );
 
 
-                document.getElementById(
-                    "ticketNumber"
-                ).textContent =
-                    result.TicketNumber ||
-                    ticketNumber;
-
-
-                document.getElementById(
-                    "ticketHolder"
-                ).textContent =
-                    result.CustomerName ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketType"
-                ).textContent =
-                    result.TicketType ||
-                    "-";
+                showTicket(
+                    result,
+                    ticketNumber
+                );
 
 
                 break;
@@ -514,7 +453,6 @@ async function ticketScanned(
                         "TICKET CANCELLED"
                     );
 
-
                 break;
 
 
@@ -530,7 +468,6 @@ async function ticketScanned(
                         result.Message ||
                         "TICKET NOT FOUND"
                     );
-
 
                 break;
 
@@ -554,7 +491,6 @@ async function ticketScanned(
                     result
                 );
 
-
                 break;
 
 
@@ -569,10 +505,9 @@ async function ticketScanned(
 
 
                 console.warn(
-                    "Unknown API response:",
+                    "Unknown response:",
                     result
                 );
-
 
                 break;
 
@@ -625,6 +560,75 @@ async function ticketScanned(
 
 
 // =====================================
+// SHOW TICKET INFORMATION
+// =====================================
+
+function showTicket(
+    result,
+    ticketNumber
+) {
+
+    const ticket =
+        document.getElementById(
+            "ticketNumber"
+        );
+
+    const holder =
+        document.getElementById(
+            "ticketHolder"
+        );
+
+    const type =
+        document.getElementById(
+            "ticketType"
+        );
+
+    const time =
+        document.getElementById(
+            "ticketTime"
+        );
+
+
+    if (ticket) {
+
+        ticket.textContent =
+            result.TicketNumber ||
+            ticketNumber ||
+            "-";
+
+    }
+
+
+    if (holder) {
+
+        holder.textContent =
+            result.CustomerName ||
+            "-";
+
+    }
+
+
+    if (type) {
+
+        type.textContent =
+            result.TicketType ||
+            "-";
+
+    }
+
+
+    if (time) {
+
+        time.textContent =
+            new Date()
+                .toLocaleTimeString();
+
+    }
+
+}
+
+
+// =====================================
 // STOP SCANNER WHEN LEAVING
 // =====================================
 
@@ -632,7 +636,20 @@ window.addEventListener(
     "beforeunload",
     async () => {
 
-        await Scanner.stop();
+        try {
+
+            await Scanner.stop();
+
+        }
+
+        catch (err) {
+
+            console.warn(
+                "Scanner stop failed:",
+                err
+            );
+
+        }
 
     }
 );
