@@ -40,9 +40,11 @@ body {
 header,
 .page-header {
     width: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -65,8 +67,10 @@ header h1 {
 
 .home-button {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
     gap: 8px;
 
     padding: 12px 18px;
@@ -104,16 +108,21 @@ header h1 {
 
 label {
     display: block;
+
     font-weight: bold;
+
     margin-bottom: 10px;
 }
 
 select {
     width: 100%;
+
     padding: 15px;
+
     font-size: 1rem;
 
     border-radius: 10px;
+
     border: 1px solid #ccc;
 
     background: white;
@@ -145,7 +154,8 @@ select {
 
     transition: 0.2s;
 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .menu-card:hover {
@@ -169,7 +179,9 @@ select {
 
 footer {
     text-align: center;
+
     margin-top: 40px;
+
     color: #888;
 }
 
@@ -180,8 +192,11 @@ footer {
 
 .checkin-page {
     width: 100%;
+
     max-width: 1400px;
+
     margin: 0 auto;
+
     padding: 0;
 }
 
@@ -192,7 +207,9 @@ footer {
 
 .page-title {
     text-align: center;
+
     font-size: clamp(28px, 4vw, 46px);
+
     margin-bottom: 5px;
 }
 
@@ -241,7 +258,7 @@ footer {
 
     border-radius: 16px;
 
-    padding: 16px;
+    padding: 8px;
 
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.08);
@@ -254,15 +271,49 @@ footer {
    CAMERA VIEW
 ========================================== */
 
-#camera {
-    width: 100%;
-    height: 230px;
-    min-height: 0;
-    max-height: 230px;
+/*
+   IMPORTANT
 
-    border-radius: 12px;
-    overflow: hidden;
+   Keep this height fixed.
+
+   Do NOT use aspect-ratio here.
+   Do NOT use min-height: 500px.
+*/
+
+#camera {
+    width: 100% !important;
+
+    height: 260px !important;
+
+    min-height: 260px !important;
+
+    max-height: 260px !important;
+
+    border-radius: 10px;
+
+    overflow: hidden !important;
+
     background: #000;
+
+    position: relative;
+}
+
+
+/* ==========================================
+   HTML5-QRCODE OUTER CONTAINER
+========================================== */
+
+#camera > div {
+    width: 100% !important;
+
+    height: 260px !important;
+
+    max-width: 100% !important;
+
+    max-height: 260px !important;
+
+    overflow: hidden !important;
+
     position: relative;
 }
 
@@ -273,7 +324,12 @@ footer {
 
 #camera video {
     width: 100% !important;
-    height: 100% !important;
+
+    height: 260px !important;
+
+    min-height: 260px !important;
+
+    max-height: 260px !important;
 
     display: block !important;
 
@@ -282,21 +338,15 @@ footer {
 
 
 /* ==========================================
-   HTML5-QRCODE CONTAINER
-========================================== */
-
-#camera > div {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-
-/* ==========================================
-   KEEP CANVAS INSIDE CAMERA
+   HTML5-QRCODE CANVAS
 ========================================== */
 
 #camera canvas {
-    max-width: 100%;
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    max-height: 260px !important;
 }
 
 
@@ -307,7 +357,7 @@ footer {
 .scan-ready {
     width: 100%;
 
-    margin-top: 12px;
+    margin-top: 8px;
 
     padding: 12px;
 
@@ -416,18 +466,33 @@ footer {
         grid-template-columns: 1fr;
     }
 
-
-    /* --------------------------------------
-       CAMERA
-    -------------------------------------- */
+    /*
+       Keep camera exactly the same height.
+       We don't want the scanner geometry
+       changing between devices.
+    */
 
     #camera {
-        height: 400px;
+        height: 260px !important;
 
-        min-height: 0;
-        max-height: 400px;
+        min-height: 260px !important;
+
+        max-height: 260px !important;
     }
 
+    #camera > div {
+        height: 260px !important;
+
+        max-height: 260px !important;
+    }
+
+    #camera video {
+        height: 260px !important;
+
+        min-height: 260px !important;
+
+        max-height: 260px !important;
+    }
 }
 
 
@@ -440,6 +505,7 @@ footer {
     html,
     body {
         width: 100%;
+
         overflow-x: hidden;
     }
 
@@ -467,26 +533,30 @@ footer {
 
     .home-button {
         padding: 9px 13px;
+
         font-size: 14px;
     }
 
 
     /* --------------------------------------
-       CHECK IN PAGE
+       CHECK IN
     -------------------------------------- */
 
     .checkin-page {
         width: 100%;
+
         padding: 0;
     }
 
     .page-title {
         font-size: 28px;
+
         margin-bottom: 2px;
     }
 
     .event-name {
         font-size: 18px;
+
         margin-bottom: 10px;
     }
 
@@ -506,53 +576,46 @@ footer {
 
     /* --------------------------------------
        CAMERA
-       
-       THIS IS THE IMPORTANT PART.
-
-       The previous CSS was setting:
-       
-       height: 500px;
-       min-height: 500px;
-
-       which overrode your smaller
-       camera setting.
-
-       Now the phone camera is 320px.
     -------------------------------------- */
 
     #camera {
-        width: 100%;
+        width: 100% !important;
 
-        height: 320px;
+        height: 260px !important;
 
-        min-height: 0;
-        max-height: 320px;
+        min-height: 260px !important;
+
+        max-height: 260px !important;
 
         border-radius: 8px;
     }
 
+    #camera > div {
+        width: 100% !important;
 
-    /* --------------------------------------
-       VIDEO
-    -------------------------------------- */
+        height: 260px !important;
+
+        max-width: 100% !important;
+
+        max-height: 260px !important;
+    }
 
     #camera video {
         width: 100% !important;
-        height: 100% !important;
 
-        display: block !important;
+        height: 260px !important;
+
+        min-height: 260px !important;
+
+        max-height: 260px !important;
 
         object-fit: cover !important;
     }
 
-
-    /* --------------------------------------
-       QR CONTAINER
-    -------------------------------------- */
-
-    #camera > div {
-        width: 100% !important;
+    #camera canvas {
         max-width: 100% !important;
+
+        max-height: 260px !important;
     }
 
 
@@ -603,7 +666,6 @@ footer {
     .stat-row strong {
         font-size: 15px;
     }
-
 }
 
 
@@ -623,6 +685,7 @@ footer {
 
     .event-name {
         font-size: 16px;
+
         margin-bottom: 7px;
     }
 
@@ -632,32 +695,35 @@ footer {
 
 
     /* --------------------------------------
-       SMALL PHONE CAMERA
+       CAMERA
     -------------------------------------- */
 
     #camera {
-        width: 100%;
+        width: 100% !important;
 
-        height: 300px;
+        height: 250px !important;
 
-        min-height: 0;
-        max-height: 300px;
+        min-height: 250px !important;
 
-        border-radius: 8px;
+        max-height: 250px !important;
     }
 
+    #camera > div {
+        height: 250px !important;
 
-    /* --------------------------------------
-       VIDEO
-    -------------------------------------- */
+        max-height: 250px !important;
+    }
 
     #camera video {
-        width: 100% !important;
-        height: 100% !important;
+        height: 250px !important;
 
-        display: block !important;
+        min-height: 250px !important;
 
-        object-fit: cover !important;
+        max-height: 250px !important;
+    }
+
+    #camera canvas {
+        max-height: 250px !important;
     }
 
 
@@ -667,6 +733,7 @@ footer {
 
     .scan-ready {
         padding: 8px;
+
         font-size: 15px;
     }
 
@@ -683,6 +750,7 @@ footer {
     .ticket-row,
     .stat-row {
         font-size: 13px;
+
         padding: 4px 0;
     }
 
