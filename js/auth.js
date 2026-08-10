@@ -3,15 +3,20 @@ const GATEKEEPER_API =
 
 const AUTH_KEY = "gatekeeper_authenticated";
 
-async function checkGateKeeperAuth() {
 
-    // Already authenticated on this device
-    if (localStorage.getItem(AUTH_KEY) === "true") {
+function isGateKeeperAuthenticated() {
+
+    return localStorage.getItem(AUTH_KEY) === "true";
+}
+
+
+function checkGateKeeperAuth() {
+
+    if (isGateKeeperAuthenticated()) {
         return true;
     }
 
-    // Not authenticated
-    window.location.href = "auth.html";
+    window.location.replace("auth.html");
 
     return false;
 }
@@ -37,28 +42,47 @@ async function loginGateKeeper(password) {
         );
 
 
-        if (response.ok) {
+        const data = await response.json();
 
-            const data = await response.json();
+        console.log("GateKeeper auth response:", data);
 
-            if (data.authenticated === true) {
 
-                localStorage.setItem(
-                    AUTH_KEY,
-                    "true"
-                );
+        // Accept either camelCase or PascalCase
+        const authenticated =
+            data.authenticated === true ||
+            data.Authenticated === true;
 
-                return {
-                    success: true
-                };
-            }
+
+        if (response.ok && authenticated) {
+
+            localStorage.setItem(
+                AUTH_KEY,
+                "true"
+            );
+
+            return {
+                success: true
+            };
+        }
+
+
+        if (response.status === 401) {
+
+            return {
+                success: false,
+                message: "Incorrect password."
+            };
         }
 
 
         return {
             success: false,
-            message: "Incorrect password."
+            message:
+                data.message ||
+                data.Message ||
+                "Authentication failed."
         };
+
 
     } catch (error) {
 
@@ -69,7 +93,8 @@ async function loginGateKeeper(password) {
 
         return {
             success: false,
-            message: "Unable to contact GateKeeper API."
+            message:
+                "Unable to contact GateKeeper API."
         };
     }
 }
@@ -77,9 +102,7 @@ async function loginGateKeeper(password) {
 
 function logoutGateKeeper() {
 
-    localStorage.removeItem(
-        AUTH_KEY
-    );
+    localStorage.removeItem(AUTH_KEY);
 
-    window.location.href = "auth.html";
+    window.location.replace("auth.html");
 }

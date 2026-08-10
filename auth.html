@@ -11,13 +11,167 @@
     >
 
     <title>GateKeeper Access</title>
-<link rel="stylesheet" href="css/theme.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/site.css">
+
+
+    <!-- GateKeeper styling -->
+
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/site.css">
+
+
+    <!-- Login page styling -->
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        header {
+            width: 100%;
+        }
+
+
+        main {
+            flex: 1;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+        }
+
+
+        .login-card {
+
+            width: 100%;
+            max-width: 520px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            box-sizing: border-box;
+        }
+
+
+        .login-card .icon {
+
+            font-size: 56px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .login-card h2 {
+
+            font-size: 30px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .login-card p {
+
+            font-size: 17px;
+
+            margin-bottom: 30px;
+        }
+
+
+        #password {
+
+            width: 100%;
+
+            height: 64px;
+
+            padding: 0 18px;
+
+            font-size: 22px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            box-sizing: border-box;
+        }
+
+
+        .primary-button {
+
+            width: 100%;
+
+            height: 64px;
+
+            margin-top: 18px;
+
+            font-size: 20px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+        }
+
+
+        .login-message {
+
+            min-height: 25px;
+
+            margin-top: 18px;
+
+            font-size: 16px;
+        }
+
+
+        footer {
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+
+        @media (max-width: 600px) {
+
+            main {
+
+                padding: 20px 15px;
+            }
+
+
+            .login-card {
+
+                padding: 30px 20px;
+            }
+
+
+            .login-card h2 {
+
+                font-size: 26px;
+            }
+
+
+            #password,
+            .primary-button {
+
+                height: 60px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
+
 
     <header>
 
@@ -30,20 +184,30 @@
     </header>
 
 
+
     <main>
 
         <section class="login-card">
 
-            <div class="icon">🔐</div>
 
-            <h2>GateKeeper Access</h2>
+            <div class="icon">
+                🔐
+            </div>
+
+
+            <h2>
+                GateKeeper Access
+            </h2>
+
 
             <p>
                 Enter the event access password to continue.
             </p>
 
 
+
             <form id="loginForm">
+
 
                 <input
                     type="password"
@@ -53,6 +217,7 @@
                     required
                 >
 
+
                 <button
                     type="submit"
                     class="primary-button"
@@ -60,7 +225,9 @@
                     Access GateKeeper
                 </button>
 
+
             </form>
+
 
 
             <div
@@ -68,9 +235,11 @@
                 class="login-message"
             ></div>
 
+
         </section>
 
     </main>
+
 
 
     <footer>
@@ -80,21 +249,33 @@
     </footer>
 
 
+
+    <!-- GateKeeper authentication -->
+
     <script src="js/auth.js"></script>
+
 
 
     <script>
 
-        // Already logged in?
-        if (
-            localStorage.getItem(
-                "gatekeeper_authenticated"
-            ) === "true"
-        ) {
+        /*
+         * If this device is already authenticated,
+         * go straight to the GateKeeper home page.
+         */
 
-            window.location.href = "index.html";
+        if (isGateKeeperAuthenticated()) {
+
+            window.location.replace(
+                "index.html"
+            );
+
         }
 
+
+
+        /*
+         * Login form
+         */
 
         document
             .getElementById("loginForm")
@@ -108,12 +289,23 @@
                     const password =
                         document
                             .getElementById("password")
-                            .value;
+                            .value
+                            .trim();
 
 
                     const message =
                         document
                             .getElementById("loginMessage");
+
+
+                    if (!password) {
+
+                        message.textContent =
+                            "Please enter the access password.";
+
+                        return;
+
+                    }
 
 
                     message.textContent =
@@ -128,23 +320,38 @@
 
                     if (result.success) {
 
-                        window.location.href =
-                            "index.html";
+                        message.textContent =
+                            "Access granted.";
+
+
+                        window.location.replace(
+                            "index.html"
+                        );
+
 
                     } else {
 
                         message.textContent =
-                            result.message;
+                            result.message ||
+                            "Incorrect password.";
+
 
                         document
                             .getElementById("password")
-                            .select();
+                            .value = "";
+
+
+                        document
+                            .getElementById("password")
+                            .focus();
+
                     }
 
                 }
             );
 
     </script>
+
 
 </body>
 
