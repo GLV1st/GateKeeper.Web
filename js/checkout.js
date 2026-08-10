@@ -13,7 +13,6 @@ async function initialise() {
     const eventName =
         localStorage.getItem("CurrentEventName");
 
-
     document.getElementById(
         "eventName"
     ).textContent =
@@ -56,6 +55,9 @@ async function initialise() {
 // BEEP
 // =====================================
 
+let audioContext = null;
+
+
 function beep() {
 
     try {
@@ -69,8 +71,22 @@ function beep() {
             return;
 
 
-        const audioContext =
-            new AudioContext();
+        if (!audioContext) {
+
+            audioContext =
+                new AudioContext();
+
+        }
+
+
+        if (
+            audioContext.state ===
+            "suspended"
+        ) {
+
+            audioContext.resume();
+
+        }
 
 
         const oscillator =
@@ -109,7 +125,6 @@ function beep() {
         oscillator.stop(
             audioContext.currentTime + 0.12
         );
-
 
     }
 
@@ -180,11 +195,8 @@ async function ticketScanned(
         console.log(
             "Sending check-out request:",
             {
-                eventId:
-                    eventId,
-
-                ticketNumber:
-                    ticketNumber
+                eventId: eventId,
+                ticketNumber: ticketNumber
             }
         );
 
@@ -197,7 +209,6 @@ async function ticketScanned(
             await GateKeeperAPI.checkOut(
 
                 ticketNumber,
-
                 eventId
 
             );
@@ -355,7 +366,6 @@ async function ticketScanned(
                         "TICKET CANCELLED"
                     );
 
-
                 break;
 
 
@@ -371,7 +381,6 @@ async function ticketScanned(
                         result.Message ||
                         "TICKET NOT FOUND"
                     );
-
 
                 break;
 
@@ -395,7 +404,6 @@ async function ticketScanned(
                     result
                 );
 
-
                 break;
 
 
@@ -413,7 +421,6 @@ async function ticketScanned(
                     "Unknown API response:",
                     result
                 );
-
 
                 break;
 
