@@ -870,9 +870,9 @@ footer {
 
     .stat-card {
 
-        min-height: 135px;
+        min-height: 100px;
 
-        padding: 14px;
+        padding: 10px;
 
         border-radius: 18px;
 
