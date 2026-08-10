@@ -900,3 +900,69 @@ footer {
     }
 
 }
+/* ==========================================
+   GATEKEEPER HOME LOGO
+========================================== */
+
+.gatekeeper-brand {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 auto 5px auto;
+
+    padding: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    line-height: 0;
+}
+
+.gatekeeper-brand img {
+    display: block;
+
+    width: 100%;
+    max-width: 850px;
+
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ==========================================
+   HOME PAGE EVENT SELECT
+========================================== */
+
+.gatekeeper-main {
+    padding-top: 10px;
+}
+
+.gatekeeper-main .event-select {
+    margin-top: 0;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .gatekeeper-brand {
+        margin-bottom: 0;
+    }
+
+    .gatekeeper-brand img {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .gatekeeper-main {
+        padding-top: 5px;
+    }
+
+}
