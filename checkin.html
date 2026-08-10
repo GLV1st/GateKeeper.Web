@@ -1,600 +1,233 @@
-document.addEventListener(
-    "DOMContentLoaded",
-    initialise
-);
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
 
-// =====================================
-// INITIALISE
-// =====================================
+    <meta charset="UTF-8">
 
-async function initialise() {
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    console.log("=================================");
-    console.log("GateKeeper Check In Started");
-    console.log("=================================");
+    <title>GateKeeper - Check In</title>
 
+    <!-- =====================================
+         SHARED CSS
+    ====================================== -->
 
-    // =====================================
-    // LOAD EVENT NAME
-    // =====================================
+    <link
+        rel="stylesheet"
+        href="css/theme.css"
+    >
 
-    const eventName =
-        localStorage.getItem(
-            "CurrentEventName"
-        );
+    <link
+        rel="stylesheet"
+        href="css/layout.css"
+    >
 
+    <link
+        rel="stylesheet"
+        href="css/site.css"
+    >
 
-    const eventNameElement =
-        document.getElementById(
-            "eventName"
-        );
+</head>
 
 
-    if (eventNameElement) {
+<body>
 
-        eventNameElement.textContent =
-            eventName ||
-            "No Event Selected";
 
-    }
+    <!-- =====================================
+         HEADER
+    ====================================== -->
 
+    <header class="page-header">
 
-    // =====================================
-    // CHECK EVENT ID
-    // =====================================
+        <button
+            class="home-button"
+            onclick="window.location.href='index.html'"
+        >
+            🏠 Home
+        </button>
 
-    const eventId =
-        localStorage.getItem(
-            "CurrentEventId"
-        );
 
+        <div class="status online">
+            ● Online
+        </div>
 
-    if (!eventId) {
+    </header>
 
-        console.error(
-            "No CurrentEventId found."
-        );
 
+    <!-- =====================================
+         PAGE TITLE
+    ====================================== -->
 
-        document.getElementById(
-            "scanStatus"
-        ).innerHTML =
-            "🔴 NO EVENT SELECTED";
+    <h1 class="page-title">
+        Check In
+    </h1>
 
 
-        return;
+    <div
+        class="event-name"
+        id="eventName"
+    >
+        Loading...
+    </div>
 
-    }
 
+    <!-- =====================================
+         MAIN GRID
+    ====================================== -->
 
-    console.log(
-        "Current Event ID:",
-        eventId
-    );
+    <div class="checkin-grid">
 
 
-    console.log(
-        "Current Event Name:",
-        eventName
-    );
+        <!-- =================================
+             CAMERA
+        ================================== -->
 
+        <section class="camera-card">
 
-    // =====================================
-    // LOAD LIVE STATISTICS
-    // =====================================
+            <div id="camera"></div>
 
-    await updateStats();
 
+            <div
+                id="scanStatus"
+                class="scan-ready"
+            >
+                🟢 READY TO SCAN
+            </div>
 
-    // =====================================
-    // START SCANNER
-    // =====================================
+        </section>
 
-    try {
 
-        await Scanner.start(
-            ticketScanned
-        );
+        <!-- =================================
+             INFORMATION PANEL
+        ================================== -->
 
+        <section class="info-panel">
 
-        document.getElementById(
-            "scanStatus"
-        ).innerHTML =
-            "🟢 READY TO SCAN";
 
-    }
+            <!-- =================================
+                 LAST TICKET
+            ================================== -->
 
-    catch (err) {
+            <div class="ticket-card">
 
-        console.error(
-            "Camera error:",
-            err
-        );
+                <h2>
+                    Last Ticket
+                </h2>
 
 
-        document.getElementById(
-            "scanStatus"
-        ).innerHTML =
-            "🔴 CAMERA FAILED";
+                <div class="ticket-row">
 
-    }
+                    <span>
+                        Ticket
+                    </span>
 
-}
+                    <strong id="ticketNumber">
+                        -
+                    </strong>
 
+                </div>
 
-// =====================================
-// UPDATE STATISTICS
-// =====================================
 
-async function updateStats() {
+                <div class="ticket-row">
 
-    const eventId =
-        localStorage.getItem(
-            "CurrentEventId"
-        );
+                    <span>
+                        Holder
+                    </span>
 
+                    <strong id="ticketHolder">
+                        -
+                    </strong>
 
-    if (!eventId) {
+                </div>
 
-        console.warn(
-            "Cannot update statistics - no event selected."
-        );
 
-        return;
+                <div class="ticket-row">
 
-    }
+                    <span>
+                        Type
+                    </span>
 
+                    <strong id="ticketType">
+                        -
+                    </strong>
 
-    console.log(
-        "Loading statistics for event:",
-        eventId
-    );
+                </div>
 
 
-    const stats =
-        await GateKeeperAPI.getEventStats(
-            eventId
-        );
+                <div class="ticket-row">
 
+                    <span>
+                        Time
+                    </span>
 
-    if (!stats) {
+                    <strong id="ticketTime">
+                        -
+                    </strong>
 
-        console.error(
-            "No statistics returned."
-        );
+                </div>
 
-        return;
+            </div>
 
-    }
 
+            <!-- =================================
+                 EVENT STATISTICS
+            ================================== -->
 
-    console.log(
-        "Event statistics:",
-        stats
-    );
+            <div class="stats-card">
 
 
-    // =====================================
-    // CHECKED IN
-    // =====================================
+                <div class="stat-row">
 
-    const checkedInCount =
-        document.getElementById(
-            "checkedInCount"
-        );
+                    <span>
+                        Checked In
+                    </span>
 
+                    <strong id="checkedInCount">
+                        0
+                    </strong>
 
-    if (checkedInCount) {
+                </div>
 
-        checkedInCount.textContent =
-            stats.CheckedIn ?? 0;
 
-    }
+                <div class="stat-row">
 
+                    <span>
+                        On Site
+                    </span>
 
-    // =====================================
-    // ON SITE
-    // =====================================
+                    <strong id="onSiteCount">
+                        0
+                    </strong>
 
-    const onSiteCount =
-        document.getElementById(
-            "onSiteCount"
-        );
+                </div>
 
 
-    if (onSiteCount) {
+            </div>
 
-        onSiteCount.textContent =
-            stats.OnSite ?? 0;
 
-    }
+        </section>
 
-}
 
+    </div>
 
-// =====================================
-// BEEP
-// =====================================
 
-function beep() {
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
 
-    try {
+    <script src="js/config.js"></script>
 
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
+    <script src="js/api.js"></script>
 
+    <script src="js/scanner.js"></script>
 
-        if (!AudioContext)
-            return;
+    <script src="js/checkin.js"></script>
 
 
-        const audioContext =
-            new AudioContext();
+</body>
 
-
-        const oscillator =
-            audioContext.createOscillator();
-
-
-        const gain =
-            audioContext.createGain();
-
-
-        oscillator.type =
-            "sine";
-
-
-        oscillator.frequency.value =
-            900;
-
-
-        gain.gain.value =
-            0.15;
-
-
-        oscillator.connect(
-            gain
-        );
-
-
-        gain.connect(
-            audioContext.destination
-        );
-
-
-        oscillator.start();
-
-
-        oscillator.stop(
-            audioContext.currentTime + 0.12
-        );
-
-    }
-
-    catch (err) {
-
-        console.log(
-            "Beep unavailable:",
-            err
-        );
-
-    }
-
-}
-
-
-// =====================================
-// TICKET SCANNED
-// =====================================
-
-async function ticketScanned(
-    ticketNumber
-) {
-
-    console.log(
-        "================================="
-    );
-
-
-    console.log(
-        "Ticket scanned:",
-        ticketNumber
-    );
-
-
-    const status =
-        document.getElementById(
-            "scanStatus"
-        );
-
-
-    status.innerHTML =
-        "⏳ CHECKING TICKET...";
-
-
-    const eventId =
-        localStorage.getItem(
-            "CurrentEventId"
-        );
-
-
-    // =====================================
-    // CHECK EVENT
-    // =====================================
-
-    if (!eventId) {
-
-        status.innerHTML =
-            "🔴 NO EVENT SELECTED";
-
-
-        console.error(
-            "CurrentEventId is missing."
-        );
-
-
-        return;
-
-    }
-
-
-    try {
-
-        console.log(
-            "Sending check-in request:",
-            {
-                eventId,
-                ticketNumber
-            }
-        );
-
-
-        // =====================================
-        // CHECK IN
-        // =====================================
-
-        const result =
-            await GateKeeperAPI.checkIn(
-                ticketNumber,
-                eventId
-            );
-
-
-        console.log(
-            "Check-in response:",
-            result
-        );
-
-
-        // =====================================
-        // API RESPONSE
-        // =====================================
-
-        switch (
-            result.Status
-        ) {
-
-
-            // =================================
-            // SUCCESS
-            // =================================
-
-            case "SUCCESS":
-
-                beep();
-
-
-                status.innerHTML =
-                    "🟢 " +
-                    (
-                        result.Message ||
-                        "WELCOME!"
-                    );
-
-
-                document.getElementById(
-                    "ticketNumber"
-                ).textContent =
-                    result.TicketNumber ||
-                    ticketNumber;
-
-
-                document.getElementById(
-                    "ticketHolder"
-                ).textContent =
-                    result.CustomerName ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketType"
-                ).textContent =
-                    result.TicketType ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketTime"
-                ).textContent =
-                    new Date()
-                        .toLocaleTimeString();
-
-
-                break;
-
-
-            // =================================
-            // ALREADY CHECKED IN
-            // =================================
-
-            case "ALREADY_CHECKED_IN":
-
-                status.innerHTML =
-                    "🟠 " +
-                    (
-                        result.Message ||
-                        "TICKET ALREADY CHECKED IN"
-                    );
-
-
-                document.getElementById(
-                    "ticketNumber"
-                ).textContent =
-                    result.TicketNumber ||
-                    ticketNumber;
-
-
-                document.getElementById(
-                    "ticketHolder"
-                ).textContent =
-                    result.CustomerName ||
-                    "-";
-
-
-                document.getElementById(
-                    "ticketType"
-                ).textContent =
-                    result.TicketType ||
-                    "-";
-
-
-                break;
-
-
-            // =================================
-            // CANCELLED
-            // =================================
-
-            case "CANCELLED":
-
-                status.innerHTML =
-                    "🔴 " +
-                    (
-                        result.Message ||
-                        "TICKET CANCELLED"
-                    );
-
-
-                break;
-
-
-            // =================================
-            // NOT FOUND
-            // =================================
-
-            case "NOT_FOUND":
-
-                status.innerHTML =
-                    "🔴 " +
-                    (
-                        result.Message ||
-                        "TICKET NOT FOUND"
-                    );
-
-
-                break;
-
-
-            // =================================
-            // ERROR
-            // =================================
-
-            case "ERROR":
-
-                status.innerHTML =
-                    "🔴 " +
-                    (
-                        result.Message ||
-                        "API ERROR"
-                    );
-
-
-                console.error(
-                    "API returned an error:",
-                    result
-                );
-
-
-                break;
-
-
-            // =================================
-            // UNKNOWN
-            // =================================
-
-            default:
-
-                status.innerHTML =
-                    "🔴 UNKNOWN RESPONSE";
-
-
-                console.warn(
-                    "Unknown API response:",
-                    result
-                );
-
-
-                break;
-
-        }
-
-
-        // =====================================
-        // REFRESH STATISTICS
-        // =====================================
-
-        await updateStats();
-
-    }
-
-    catch (err) {
-
-        console.error(
-            "Check-in request failed:",
-            err
-        );
-
-
-        status.innerHTML =
-            "🔴 API ERROR";
-
-
-        alert(
-            err.message ||
-            err
-        );
-
-    }
-
-
-    // =====================================
-    // READY FOR NEXT SCAN
-    // =====================================
-
-    setTimeout(
-        () => {
-
-            status.innerHTML =
-                "🟢 READY TO SCAN";
-
-        },
-        1500
-    );
-
-}
-
-
-// =====================================
-// STOP SCANNER WHEN LEAVING
-// =====================================
-
-window.addEventListener(
-    "beforeunload",
-    async () => {
-
-        await Scanner.stop();
-
-    }
-);
+</html>
