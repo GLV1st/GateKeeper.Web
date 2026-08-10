@@ -546,32 +546,65 @@ function setupNavigation() {
     }
 
 
-    // =====================================
-    // STATUS
-    // =====================================
+// =====================================
+// STATUS
+// =====================================
 
-    const btnStatus =
-        document.getElementById(
-            "btnStatus"
-        );
+const btnStatus =
+    document.getElementById(
+        "btnStatus"
+    );
 
+if (btnStatus) {
 
-    if (btnStatus) {
+    btnStatus.addEventListener(
+        "click",
+        () => {
 
-        btnStatus.addEventListener(
-            "click",
-            () => {
-
-                alert(
-                    "Coming next..."
+            const eventId =
+                localStorage.getItem(
+                    "CurrentEventId"
                 );
 
+            const eventName =
+                localStorage.getItem(
+                    "CurrentEventName"
+                );
+
+
+            console.log(
+                "Event Status clicked."
+            );
+
+            console.log(
+                "Current Event:",
+                eventName
+            );
+
+            console.log(
+                "Current Event ID:",
+                eventId
+            );
+
+
+            if (!eventId) {
+
+                alert(
+                    "Please select an event first."
+                );
+
+                return;
+
             }
-        );
-
-    }
 
 
+            window.location.href =
+                "stats.html";
+
+        }
+    );
+
+}
     // =====================================
     // SETTINGS
     // =====================================
