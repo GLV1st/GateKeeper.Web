@@ -196,7 +196,56 @@
 
         }
 
+/* =====================================
+   ON SITE AGE BREAKDOWN
+===================================== */
 
+.onsite-age-breakdown {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin-top: 6px;
+
+}
+
+
+.onsite-age-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+}
+
+
+.onsite-age-item span {
+
+    opacity: 0.7;
+
+}
+
+
+.onsite-age-item strong {
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #20a464;
+
+}
         /* =====================================
            CARD TYPES
         ===================================== */
@@ -713,26 +762,40 @@
 
         <!-- ON SITE -->
 
-        <div class="metric-card metric-onsite">
+        <!-- ON SITE -->
 
-            <div class="metric-label">
-                🟢 On Site
-            </div>
+<div class="metric-card metric-onsite">
 
-            <div
-                class="metric-value"
-                id="onSiteCount"
-            >
-                0
-            </div>
+    <div class="metric-label">
+        🟢 On Site
+    </div>
 
-            <div class="metric-description">
-                Currently at the event
-            </div>
+    <div
+        class="metric-value"
+        id="onSiteCount"
+    >
+        0
+    </div>
 
+    <div class="onsite-age-breakdown">
+
+        <div class="onsite-age-item">
+            <span>Under 14 Yrs</span>
+            <strong id="onSiteUnder14Count">0</strong>
         </div>
 
+        <div class="onsite-age-item">
+            <span>Over 14 Yrs</span>
+            <strong id="onSiteOver14Count">0</strong>
+        </div>
 
+    </div>
+
+    <div class="metric-description">
+        Currently at the event
+    </div>
+
+</div>
         <!-- CHECKED IN -->
 
         <div class="metric-card metric-in">

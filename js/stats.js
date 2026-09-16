@@ -164,6 +164,14 @@ async function updateDashboard() {
             Number(stats.OnSite || 0);
 
 
+        const onSiteUnder14 =
+            Number(stats.OnSiteUnder14 || 0);
+
+
+        const onSiteOver14 =
+            Number(stats.OnSiteOver14 || 0);
+
+
         const notYetIn =
             Number(stats.NotYetIn || 0);
 
@@ -235,6 +243,22 @@ async function updateDashboard() {
         setValue(
             "cancelledCount",
             cancelled
+        );
+
+
+        // =================================
+        // ON-SITE AGE BREAKDOWN
+        // =================================
+
+        setValue(
+            "onSiteUnder14Count",
+            onSiteUnder14
+        );
+
+
+        setValue(
+            "onSiteOver14Count",
+            onSiteOver14
         );
 
 
