@@ -599,7 +599,7 @@ if (btnStatus) {
 
 
             window.location.href =
-                "stats.html";
+                "admin.html";
 
         }
     );

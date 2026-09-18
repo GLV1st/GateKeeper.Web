@@ -1005,7 +1005,9 @@
 <script src="js/stats.js"></script>
 
 <script>
-    checkGateKeeperAuth();
+    if (!checkAdminAuth()) {
+        throw new Error("GateKeeper admin authentication required.");
+    }
 </script>
 </body>
 

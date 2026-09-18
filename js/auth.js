@@ -2,6 +2,7 @@ const GATEKEEPER_API =
     "https://ticketing-api-gybyg9c5eegaeuav.uksouth-01.azurewebsites.net";
 
 const AUTH_KEY = "gatekeeper_authenticated";
+const ADMIN_AUTH_KEY = "gatekeeper_admin_authenticated";
 
 
 function isGateKeeperAuthenticated() {
@@ -100,9 +101,114 @@ async function loginGateKeeper(password) {
 }
 
 
+
+// =====================================
+// ADMIN AUTHENTICATION
+// =====================================
+
+function isAdminAuthenticated() {
+
+    return localStorage.getItem(ADMIN_AUTH_KEY) === "true";
+}
+
+
+function checkAdminAuth() {
+
+    if (!isGateKeeperAuthenticated()) {
+        window.location.replace("auth.html");
+        return false;
+    }
+
+    if (isAdminAuthenticated()) {
+        return true;
+    }
+
+    window.location.replace("admin.html");
+
+    return false;
+}
+
+
+async function loginAdmin(password) {
+
+    try {
+
+        const response = await fetch(
+            `${GATEKEEPER_API}/api/admin/auth`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    password: password
+                })
+            }
+        );
+
+        let data = {};
+
+        try {
+            data = await response.json();
+        }
+        catch (jsonError) {
+            console.warn("Admin auth response was not JSON.");
+        }
+
+        console.log("GateKeeper admin auth response:", data);
+
+        const authenticated =
+            data.authenticated === true ||
+            data.Authenticated === true;
+
+        if (response.ok && authenticated) {
+
+            localStorage.setItem(
+                ADMIN_AUTH_KEY,
+                "true"
+            );
+
+            return {
+                success: true
+            };
+        }
+
+        if (response.status === 401) {
+
+            return {
+                success: false,
+                message: "Incorrect admin password."
+            };
+        }
+
+        return {
+            success: false,
+            message:
+                data.message ||
+                data.Message ||
+                "Admin authentication failed."
+        };
+
+    }
+    catch (error) {
+
+        console.error(
+            "GateKeeper admin authentication error:",
+            error
+        );
+
+        return {
+            success: false,
+            message: "Unable to contact GateKeeper API."
+        };
+    }
+}
+
+
 function logoutGateKeeper() {
 
     localStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(ADMIN_AUTH_KEY);
 
     window.location.replace("auth.html");
 }

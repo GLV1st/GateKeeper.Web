@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateKeeper - Admin Access</title>
+
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/site.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 520px;
+            padding: 40px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .login-card .icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+        }
+
+        .login-card h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .login-card p {
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        #adminPassword {
+            width: 100%;
+            height: 64px;
+            padding: 0 18px;
+            font-size: 22px;
+            text-align: center;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        .primary-button {
+            width: 100%;
+            height: 64px;
+            margin-top: 18px;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .secondary-button {
+            width: 100%;
+            height: 48px;
+            margin-top: 12px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .login-message {
+            min-height: 25px;
+            margin-top: 18px;
+            font-size: 16px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            main { padding: 20px 15px; }
+            .login-card { padding: 30px 20px; }
+            .login-card h2 { font-size: 26px; }
+            #adminPassword, .primary-button { height: 60px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>GateKeeper!</h1>
+    <div class="status online">● Online</div>
+</header>
+
+<main>
+    <section class="login-card">
+        <div class="icon">🔒</div>
+
+        <h2>Admin Access</h2>
+
+        <p>Enter the administrator password to continue.</p>
+
+        <form id="adminLoginForm">
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Admin password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit" class="primary-button">
+                Continue to Event Status
+            </button>
+        </form>
+
+        <button
+            type="button"
+            class="secondary-button"
+            onclick="window.location.href='index.html'"
+        >
+            ← Back
+        </button>
+
+        <div id="adminLoginMessage" class="login-message"></div>
+    </section>
+</main>
+
+<footer>Version 1.0.0</footer>
+
+<script src="js/auth.js"></script>
+
+<script>
+    // The admin page is only reachable after the main GateKeeper login.
+    if (!isGateKeeperAuthenticated()) {
+        window.location.replace("auth.html");
+    }
+
+    if (isAdminAuthenticated()) {
+        window.location.replace("stats.html");
+    }
+
+    document
+        .getElementById("adminLoginForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const password =
+                document.getElementById("adminPassword").value.trim();
+
+            const message =
+                document.getElementById("adminLoginMessage");
+
+            if (!password) {
+                message.textContent = "Please enter the admin password.";
+                return;
+            }
+
+            message.textContent = "Checking admin password...";
+
+            const result = await loginAdmin(password);
+
+            if (result.success) {
+                message.textContent = "Access granted.";
+                window.location.replace("stats.html");
+            }
+            else {
+                message.textContent =
+                    result.message || "Incorrect admin password.";
+
+                document.getElementById("adminPassword").value = "";
+                document.getElementById("adminPassword").focus();
+            }
+        });
+</script>
+
+</body>
+</html>
