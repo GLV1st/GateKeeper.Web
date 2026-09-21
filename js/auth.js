@@ -5,6 +5,11 @@ const AUTH_KEY = "gatekeeper_authenticated";
 const ADMIN_AUTH_KEY = "gatekeeper_admin_authenticated";
 
 
+/* =========================================================
+   NORMAL GATEKEEPER AUTHENTICATION
+   COP27
+   ========================================================= */
+
 function isGateKeeperAuthenticated() {
 
     return localStorage.getItem(AUTH_KEY) === "true";
@@ -45,10 +50,12 @@ async function loginGateKeeper(password) {
 
         const data = await response.json();
 
-        console.log("GateKeeper auth response:", data);
+        console.log(
+            "GateKeeper auth response:",
+            data
+        );
 
 
-        // Accept either camelCase or PascalCase
         const authenticated =
             data.authenticated === true ||
             data.Authenticated === true;
@@ -101,29 +108,40 @@ async function loginGateKeeper(password) {
 }
 
 
-
-// =====================================
-// ADMIN AUTHENTICATION
-// =====================================
+/* =========================================================
+   ADMIN AUTHENTICATION
+   COPADMIN
+   ========================================================= */
 
 function isAdminAuthenticated() {
 
-    return localStorage.getItem(ADMIN_AUTH_KEY) === "true";
+    return localStorage.getItem(
+        ADMIN_AUTH_KEY
+    ) === "true";
 }
 
 
 function checkAdminAuth() {
 
     if (!isGateKeeperAuthenticated()) {
-        window.location.replace("auth.html");
+
+        window.location.replace(
+            "auth.html"
+        );
+
         return false;
     }
 
+
     if (isAdminAuthenticated()) {
+
         return true;
     }
 
-    window.location.replace("admin.html");
+
+    window.location.replace(
+        "admin.html"
+    );
 
     return false;
 }
@@ -137,29 +155,42 @@ async function loginAdmin(password) {
             `${GATEKEEPER_API}/api/admin/auth`,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json"
                 },
+
                 body: JSON.stringify({
                     password: password
                 })
             }
         );
 
+
         let data = {};
 
         try {
+
             data = await response.json();
-        }
-        catch (jsonError) {
-            console.warn("Admin auth response was not JSON.");
+
+        } catch (jsonError) {
+
+            console.warn(
+                "Admin auth response was not JSON."
+            );
         }
 
-        console.log("GateKeeper admin auth response:", data);
+
+        console.log(
+            "GateKeeper admin auth response:",
+            data
+        );
+
 
         const authenticated =
             data.authenticated === true ||
             data.Authenticated === true;
+
 
         if (response.ok && authenticated) {
 
@@ -173,6 +204,7 @@ async function loginAdmin(password) {
             };
         }
 
+
         if (response.status === 401) {
 
             return {
@@ -180,6 +212,7 @@ async function loginAdmin(password) {
                 message: "Incorrect admin password."
             };
         }
+
 
         return {
             success: false,
@@ -189,8 +222,8 @@ async function loginAdmin(password) {
                 "Admin authentication failed."
         };
 
-    }
-    catch (error) {
+
+    } catch (error) {
 
         console.error(
             "GateKeeper admin authentication error:",
@@ -199,16 +232,28 @@ async function loginAdmin(password) {
 
         return {
             success: false,
-            message: "Unable to contact GateKeeper API."
+            message:
+                "Unable to contact GateKeeper API."
         };
     }
 }
 
 
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
 function logoutGateKeeper() {
 
-    localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem(ADMIN_AUTH_KEY);
+    localStorage.removeItem(
+        AUTH_KEY
+    );
 
-    window.location.replace("auth.html");
+    localStorage.removeItem(
+        ADMIN_AUTH_KEY
+    );
+
+    window.location.replace(
+        "auth.html"
+    );
 }
