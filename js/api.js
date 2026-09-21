@@ -196,6 +196,90 @@ class GateKeeperAPI {
 
     }
 
+
+    // =====================================
+    // GENERATE PHYSICAL TICKETS
+    // =====================================
+
+    static async generatePhysicalTickets(
+        eventId,
+        ticketType,
+        quantity
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${CONFIG.apiUrl}/tickets/generate-physical`,
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            eventId,
+                            ticketType,
+                            quantity
+
+                        })
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                let message =
+                    "Unable to generate physical tickets.";
+
+
+                try {
+
+                    const error =
+                        await response.json();
+
+
+                    if (error.Message)
+                        message = error.Message;
+
+                }
+                catch {
+
+                    // Ignore JSON parsing errors
+
+                }
+
+
+                throw new Error(message);
+
+            }
+
+
+            return await response.json();
+
+        }
+        catch (err) {
+
+            console.error(
+                "Generate physical tickets error:",
+                err
+            );
+
+
+            throw err;
+
+        }
+
+    }
+
 }
 
 
