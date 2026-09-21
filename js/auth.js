@@ -109,7 +109,7 @@ async function loginGateKeeper(password) {
 
 
 /* =========================================================
-   ADMIN AUTHENTICATION
+   EVENT ADMIN AUTHENTICATION
    COPADMIN
    ========================================================= */
 
@@ -152,7 +152,7 @@ async function loginAdmin(password) {
     try {
 
         const response = await fetch(
-            `${GATEKEEPER_API}/api/admin/auth`,
+            `${GATEKEEPER_API}/api/event-auth`,
             {
                 method: "POST",
 
@@ -176,13 +176,13 @@ async function loginAdmin(password) {
         } catch (jsonError) {
 
             console.warn(
-                "Admin auth response was not JSON."
+                "Event admin auth response was not JSON."
             );
         }
 
 
         console.log(
-            "GateKeeper admin auth response:",
+            "GateKeeper event admin auth response:",
             data
         );
 
@@ -226,7 +226,7 @@ async function loginAdmin(password) {
     } catch (error) {
 
         console.error(
-            "GateKeeper admin authentication error:",
+            "GateKeeper event admin authentication error:",
             error
         );
 
