@@ -13,10 +13,6 @@
     <title>GateKeeper - Event Statistics</title>
 
 
-    <!-- =====================================
-         SHARED CSS
-    ====================================== -->
-
     <link
         rel="stylesheet"
         href="css/theme.css"
@@ -33,625 +29,353 @@
     >
 
 
-    <!-- =====================================
-         STATS DASHBOARD CSS
-    ====================================== -->
-
     <style>
 
-        /* =====================================
-           DASHBOARD
-        ===================================== */
-
         .stats-dashboard {
-
             width: 100%;
-
             max-width: 1100px;
-
             margin: 20px auto;
-
             padding: 0 15px;
-
             box-sizing: border-box;
-
         }
-
-
-        /* =====================================
-           HEADER
-        ===================================== */
 
         .dashboard-header {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             gap: 15px;
-
             margin-bottom: 18px;
-
         }
-
 
         .dashboard-title {
-
             margin: 0;
-
             font-size: 34px;
-
         }
-
 
         .dashboard-subtitle {
-
             margin-top: 5px;
-
             font-size: 20px;
-
             opacity: 0.7;
-
         }
-
 
         .refresh-info {
-
             text-align: right;
-
             font-size: 13px;
-
             opacity: 0.7;
-
             white-space: nowrap;
-
         }
-
-
-        /* =====================================
-           MAIN METRIC GRID
-        ===================================== */
 
         .metric-grid {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-
             margin-bottom: 18px;
-
         }
-
-
-        /* =====================================
-           METRIC CARD
-        ===================================== */
 
         .metric-card {
-
             background: white;
-
             border-radius: 18px;
-
             padding: 18px;
-
             box-sizing: border-box;
-
             min-height: 150px;
-
             aspect-ratio: 1 / 0.88;
-
-            box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.08);
-
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             border-left: 6px solid #ccc;
-
             display: flex;
-
             flex-direction: column;
-
             justify-content: space-between;
-
         }
-
 
         .metric-label {
-
             font-size: 17px;
-
             line-height: 1.2;
-
             opacity: 0.7;
-
         }
-
 
         .metric-value {
-
             font-size: 42px;
-
             font-weight: 700;
-
             line-height: 1;
-
             color: #111;
-
         }
-
 
         .metric-description {
-
             margin: 0;
-
             font-size: 12px;
-
             line-height: 1.3;
-
             opacity: 0.65;
-
         }
 
-/* =====================================
-   ON SITE AGE BREAKDOWN
-===================================== */
+        .onsite-age-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 6px;
+        }
 
-.onsite-age-breakdown {
+        .onsite-age-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            line-height: 1.2;
+        }
 
-    display: flex;
+        .onsite-age-item span {
+            opacity: 0.7;
+        }
 
-    flex-direction: column;
-
-    gap: 5px;
-
-    margin-top: 6px;
-
-}
-
-
-.onsite-age-item {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 10px;
-
-    font-size: 13px;
-
-    line-height: 1.2;
-
-}
-
-
-.onsite-age-item span {
-
-    opacity: 0.7;
-
-}
-
-
-.onsite-age-item strong {
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-    color: #20a464;
-
-}
-        /* =====================================
-           CARD TYPES
-        ===================================== */
+        .onsite-age-item strong {
+            font-size: 16px;
+            font-weight: 700;
+            color: #20a464;
+        }
 
         .metric-total {
-
             border-left-color: #444;
-
         }
-
 
         .metric-onsite {
-
             border-left-color: #20a464;
-
         }
-
 
         .metric-in {
-
             border-left-color: #2878d7;
-
         }
-
 
         .metric-out {
-
             border-left-color: #777;
-
         }
-
 
         .metric-waiting {
-
             border-left-color: #e59b20;
-
         }
-
 
         .metric-cancelled {
-
             border-left-color: #d9534f;
-
         }
-
-
-        /* =====================================
-           DASHBOARD PANELS
-        ===================================== */
 
         .dashboard-panel {
-
             background: white;
-
             border-radius: 18px;
-
             padding: 20px;
-
-            box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.08);
-
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             margin-bottom: 18px;
-
         }
-
 
         .panel-title {
-
             margin-top: 0;
-
             margin-bottom: 15px;
-
         }
-
-
-        /* =====================================
-           ATTENDANCE
-        ===================================== */
 
         .attendance-header {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             margin-bottom: 10px;
-
         }
-
 
         .attendance-percent {
-
             font-size: 28px;
-
             font-weight: 700;
-
         }
-
 
         .progress-bar {
-
             height: 20px;
-
             background: #e9e9e9;
-
             border-radius: 20px;
-
             overflow: hidden;
-
         }
-
 
         .progress-fill {
-
             height: 100%;
-
             width: 0%;
-
             background: #20a464;
-
             border-radius: 20px;
-
-            transition:
-                width 0.5s ease;
-
+            transition: width 0.5s ease;
         }
-
-
-        /* =====================================
-           BREAKDOWN
-        ===================================== */
 
         .breakdown-grid {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-
         }
-
 
         .breakdown-item {
-
             padding: 15px;
-
             background: #f7f7f7;
-
             border-radius: 12px;
-
         }
-
 
         .breakdown-label {
-
             font-size: 13px;
-
             opacity: 0.7;
-
         }
 
-
         .breakdown-value {
-
             font-size: 25px;
-
             font-weight: 700;
-
             margin-top: 5px;
-
         }
 
 
         /* =====================================
-           TABLET
-        ===================================== */
+           ADMIN ACTIONS
+        ====================================== */
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .admin-action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 14px;
+            background: #2878d7;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .admin-action-button:hover {
+            opacity: 0.9;
+        }
+
 
         @media (max-width: 800px) {
 
             .metric-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .breakdown-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
 
-                grid-template-columns:
-                    repeat(3, 1fr);
-
+            .admin-actions {
+                grid-template-columns: 1fr;
             }
 
         }
 
-
-        /* =====================================
-           PHONE
-        ===================================== */
 
         @media (max-width: 600px) {
 
             .stats-dashboard {
-
                 margin-top: 12px;
-
                 padding: 0 12px;
-
             }
-
 
             .dashboard-header {
-
                 align-items: flex-start;
-
             }
-
 
             .dashboard-title {
-
                 font-size: 30px;
-
             }
-
 
             .dashboard-subtitle {
-
                 font-size: 18px;
-
             }
-
 
             .refresh-info {
-
                 font-size: 11px;
-
             }
-
-
-            /* -----------------------------
-               TWO COLUMN METRIC GRID
-            ----------------------------- */
 
             .metric-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-
+                grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
-
             }
-
-
-            /* -----------------------------
-               COMPACT SQUARE CARDS
-            ----------------------------- */
 
             .metric-card {
-
                 min-height: 135px;
-
                 aspect-ratio: 1 / 0.9;
-
                 padding: 14px;
-
                 border-radius: 17px;
-
                 border-left-width: 5px;
-
             }
-
 
             .metric-label {
-
                 font-size: 15px;
-
             }
-
 
             .metric-value {
-
                 font-size: 36px;
-
             }
-
 
             .metric-description {
-
                 font-size: 11px;
-
             }
-
-
-            /* -----------------------------
-               PANELS
-            ----------------------------- */
 
             .dashboard-panel {
-
                 padding: 16px;
-
                 border-radius: 17px;
-
             }
-
 
             .panel-title {
-
                 font-size: 20px;
-
             }
-
 
             .attendance-percent {
-
                 font-size: 25px;
-
             }
-
 
             .breakdown-grid {
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-
+                grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
-
             }
-
 
             .breakdown-item {
-
                 padding: 12px 8px;
-
             }
-
 
             .breakdown-label {
-
                 font-size: 11px;
-
             }
 
-
             .breakdown-value {
-
                 font-size: 22px;
-
             }
 
         }
 
 
-        /* =====================================
-           VERY SMALL PHONES
-        ===================================== */
-
         @media (max-width: 400px) {
 
             .dashboard-header {
-
                 flex-direction: column;
-
                 gap: 5px;
-
             }
-
 
             .refresh-info {
-
                 text-align: left;
-
             }
-
 
             .metric-card {
-
                 min-height: 125px;
-
                 padding: 12px;
-
             }
-
 
             .metric-label {
-
                 font-size: 14px;
-
             }
-
 
             .metric-value {
-
                 font-size: 32px;
-
             }
 
-
             .metric-description {
-
                 font-size: 10px;
-
             }
 
         }
@@ -663,10 +387,6 @@
 
 <body>
 
-
-<!-- =====================================
-     HEADER
-====================================== -->
 
 <header class="page-header">
 
@@ -685,16 +405,8 @@
 </header>
 
 
-<!-- =====================================
-     DASHBOARD
-====================================== -->
-
 <main class="stats-dashboard">
 
-
-    <!-- =================================
-         DASHBOARD HEADER
-    ================================== -->
 
     <div class="dashboard-header">
 
@@ -731,14 +443,7 @@
     </div>
 
 
-    <!-- =================================
-         MAIN METRICS
-    ================================== -->
-
     <div class="metric-grid">
-
-
-        <!-- TICKETS SOLD -->
 
         <div class="metric-card metric-total">
 
@@ -760,43 +465,39 @@
         </div>
 
 
-        <!-- ON SITE -->
+        <div class="metric-card metric-onsite">
 
-        <!-- ON SITE -->
+            <div class="metric-label">
+                🟢 On Site
+            </div>
 
-<div class="metric-card metric-onsite">
+            <div
+                class="metric-value"
+                id="onSiteCount"
+            >
+                0
+            </div>
 
-    <div class="metric-label">
-        🟢 On Site
-    </div>
+            <div class="onsite-age-breakdown">
 
-    <div
-        class="metric-value"
-        id="onSiteCount"
-    >
-        0
-    </div>
+                <div class="onsite-age-item">
+                    <span>Under 14 Yrs</span>
+                    <strong id="onSiteUnder14Count">0</strong>
+                </div>
 
-    <div class="onsite-age-breakdown">
+                <div class="onsite-age-item">
+                    <span>Over 14 Yrs</span>
+                    <strong id="onSiteOver14Count">0</strong>
+                </div>
 
-        <div class="onsite-age-item">
-            <span>Under 14 Yrs</span>
-            <strong id="onSiteUnder14Count">0</strong>
+            </div>
+
+            <div class="metric-description">
+                Currently at the event
+            </div>
+
         </div>
 
-        <div class="onsite-age-item">
-            <span>Over 14 Yrs</span>
-            <strong id="onSiteOver14Count">0</strong>
-        </div>
-
-    </div>
-
-    <div class="metric-description">
-        Currently at the event
-    </div>
-
-</div>
-        <!-- CHECKED IN -->
 
         <div class="metric-card metric-in">
 
@@ -818,8 +519,6 @@
         </div>
 
 
-        <!-- CHECKED OUT -->
-
         <div class="metric-card metric-out">
 
             <div class="metric-label">
@@ -840,8 +539,6 @@
         </div>
 
 
-        <!-- NOT ARRIVED -->
-
         <div class="metric-card metric-waiting">
 
             <div class="metric-label">
@@ -861,8 +558,6 @@
 
         </div>
 
-
-        <!-- CANCELLED -->
 
         <div class="metric-card metric-cancelled">
 
@@ -885,10 +580,6 @@
 
     </div>
 
-
-    <!-- =================================
-         ATTENDANCE
-    ================================== -->
 
     <section class="dashboard-panel">
 
@@ -925,10 +616,6 @@
     </section>
 
 
-    <!-- =================================
-         BREAKDOWN
-    ================================== -->
-
     <section class="dashboard-panel">
 
         <h2 class="panel-title">
@@ -937,7 +624,6 @@
 
 
         <div class="breakdown-grid">
-
 
             <div class="breakdown-item">
 
@@ -991,24 +677,60 @@
     </section>
 
 
+    <!-- =================================
+         ADMIN ACTIONS
+    ================================== -->
+
+    <section class="dashboard-panel">
+
+        <h2 class="panel-title">
+            Admin Actions
+        </h2>
+
+
+        <div class="admin-actions">
+
+            <a
+                href="physical-tickets.html"
+                class="admin-action-button"
+            >
+                🎟️ Create Physical Tickets
+            </a>
+
+            <a
+                href="event-report.html"
+                class="admin-action-button"
+            >
+                📊 End of Event Report
+            </a>
+
+        </div>
+
+    </section>
+
+
 </main>
 
 
-<!-- =====================================
-     JAVASCRIPT
-====================================== -->
-
 <script src="js/config.js"></script>
-
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/stats.js"></script>
 
+
 <script>
+
     if (!checkAdminAuth()) {
-        throw new Error("GateKeeper admin authentication required.");
+
+        throw new Error(
+            "GateKeeper admin authentication required."
+        );
+
     }
+
 </script>
+
+
 </body>
 
 </html>
