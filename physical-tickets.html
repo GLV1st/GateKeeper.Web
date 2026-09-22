@@ -12,7 +12,6 @@
 
     <title>GateKeeper - Physical Tickets</title>
 
-
     <link
         rel="stylesheet"
         href="css/theme.css"
@@ -28,19 +27,15 @@
         href="css/site.css"
     >
 
-
     <!-- jsPDF -->
-
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
 
-
-  <!-- CODE 128 BARCODE -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js">
-</script>
+    <!-- CODE 128 BARCODE -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js">
+    </script>
 
 
     <style>
@@ -51,418 +46,386 @@
 
 
         body {
-
             margin: 0;
-
             background: #f4f6f8;
-
         }
 
 
         .page {
-
-            max-width: 1000px;
-
+            max-width: 1100px;
             margin: 0 auto;
-
             padding: 25px 20px 60px;
-
         }
 
 
-        .top-bar {
-
+        .page-header {
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
-            margin-bottom: 25px;
-
+            padding: 15px 25px;
         }
 
 
-        .back-button {
-
-            display: inline-block;
-
+        .home-button {
             padding: 10px 16px;
-
             background: white;
-
             border: 1px solid #d1d5db;
-
             border-radius: 8px;
-
             color: #374151;
-
             text-decoration: none;
-
             font-weight: 600;
-
+            cursor: pointer;
         }
 
 
-        .back-button:hover {
-
+        .home-button:hover {
             background: #f9fafb;
-
         }
 
 
         .status {
-
             color: #15803d;
-
             font-weight: 600;
-
             font-size: 14px;
-
         }
 
 
         h1 {
-
             margin: 0 0 8px;
-
             font-size: 32px;
-
+            color: #172554;
         }
 
 
         .subtitle {
-
             margin: 0 0 25px;
-
             color: #6b7280;
-
         }
 
 
         .panel {
-
             background: white;
-
             border-radius: 18px;
-
             padding: 25px;
-
             margin-bottom: 20px;
-
             box-shadow:
                 0 4px 15px rgba(0,0,0,0.08);
-
         }
 
 
         .form-group {
-
             margin-bottom: 20px;
-
         }
 
 
         label {
-
             display: block;
-
             margin-bottom: 7px;
-
             font-weight: 700;
-
+            color: #172033;
         }
 
 
         select,
         input {
-
             width: 100%;
-
             padding: 13px;
-
             border: 1px solid #d1d5db;
-
             border-radius: 8px;
-
             font-size: 16px;
-
             background: white;
-
             color: #111827;
-
         }
 
 
         select:focus,
         input:focus {
-
             outline: none;
-
             border-color: #2878d7;
-
             box-shadow:
                 0 0 0 3px rgba(40,120,215,0.12);
+        }
 
+
+        .field-help {
+            margin-top: 6px;
+            color: #6b7280;
+            font-size: 13px;
         }
 
 
         .generate-button,
         .email-button {
-
             width: 100%;
-
             padding: 15px;
-
             border: 0;
-
             border-radius: 10px;
-
             color: white;
-
             font-size: 17px;
-
             font-weight: 700;
-
             cursor: pointer;
-
         }
 
 
         .generate-button {
-
             background: #2878d7;
-
         }
 
 
         .generate-button:hover {
-
             background: #1d64b5;
-
         }
 
 
         .email-button {
-
             background: #20a464;
-
             margin-top: 20px;
-
         }
 
 
         .email-button:hover {
-
             background: #18864f;
-
         }
 
 
         button:disabled {
-
             opacity: 0.5;
-
             cursor: not-allowed;
-
         }
 
 
         .message {
-
             display: none;
-
             padding: 15px;
-
             margin-top: 20px;
-
             border-radius: 8px;
-
             font-weight: 600;
-
         }
 
 
         .message.success {
-
             display: block;
-
             background: #dcfce7;
-
             color: #166534;
-
             border: 1px solid #86efac;
-
         }
 
 
         .message.error {
-
             display: block;
-
             background: #fee2e2;
-
             color: #991b1b;
-
             border: 1px solid #fca5a5;
-
         }
 
 
         .message.info {
-
             display: block;
-
             background: #eff6ff;
-
             color: #1e40af;
-
             border: 1px solid #bfdbfe;
-
         }
 
 
         .generated-summary {
-
             display: none;
-
         }
 
 
         .generated-summary h2 {
-
             margin-top: 0;
-
+            color: #172033;
         }
 
 
         .info-box {
-
             padding: 15px;
-
             background: #eff6ff;
-
             border: 1px solid #bfdbfe;
-
             border-radius: 8px;
-
             color: #1e40af;
-
             margin-bottom: 20px;
-
         }
 
 
         .range-grid {
-
             display: grid;
-
             grid-template-columns: 1fr 1fr;
-
             gap: 15px;
-
         }
 
 
         .ticket-count {
-
             margin-top: 15px;
-
             padding: 12px;
-
             background: #f3f4f6;
-
             border-radius: 8px;
-
             text-align: center;
-
             font-weight: 700;
-
         }
 
 
         .ticket-list {
-
             margin-top: 20px;
-
             max-height: 250px;
-
             overflow-y: auto;
-
             padding: 10px;
-
             background: #f8fafc;
-
             border: 1px solid #e5e7eb;
-
             border-radius: 8px;
-
         }
 
 
         .ticket-number {
-
             display: inline-block;
-
             padding: 6px 9px;
-
             margin: 3px;
-
             border-radius: 6px;
-
             background: white;
-
             border: 1px solid #d1d5db;
-
             font-family: monospace;
-
             font-size: 13px;
-
         }
 
 
         .email-section {
-
             margin-top: 25px;
-
             padding-top: 25px;
-
             border-top: 1px solid #e5e7eb;
-
         }
 
 
         .email-help {
-
             margin-top: 6px;
-
             color: #6b7280;
-
             font-size: 13px;
+        }
 
+
+        /* =====================================
+           COP TICKET PREVIEW
+        ===================================== */
+
+        .preview-title {
+            margin: 30px 0 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #172033;
+        }
+
+
+        .cop-preview {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+
+        .preview-ticket {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            border: 1px solid #6B3FA0;
+            background: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        .preview-ticket-header {
+            height: 38px;
+            background: #6B3FA0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .preview-ticket-header img {
+            max-height: 32px;
+            max-width: 100px;
+            object-fit: contain;
+        }
+
+
+        .preview-event {
+            text-align: center;
+            font-weight: 700;
+            font-size: 17px;
+            margin-top: 7px;
+        }
+
+
+        .preview-date {
+            text-align: center;
+            color: #6B3FA0;
+            font-weight: 700;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+
+        .preview-type {
+            background: #f5c400;
+            text-align: center;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 3px;
+            margin-top: 7px;
+        }
+
+
+        .preview-number-label {
+            text-align: center;
+            color: #777;
+            font-size: 8px;
+            margin-top: 9px;
+        }
+
+
+        .preview-number {
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+
+        .preview-barcode {
+            display: block;
+            width: 55%;
+            height: 38px;
+            margin: 7px auto 2px;
+        }
+
+
+        .preview-scan {
+            text-align: center;
+            font-size: 8px;
+            color: #666;
+            padding-bottom: 7px;
         }
 
 
         @media (max-width: 600px) {
 
             .page {
-
                 padding: 15px;
-
             }
 
 
             .range-grid {
-
                 grid-template-columns: 1fr;
-
             }
 
 
             h1 {
-
                 font-size: 27px;
+            }
 
+
+            .preview-number {
+                font-size: 13px;
             }
 
         }
@@ -501,7 +464,7 @@
 
 
     <p class="subtitle">
-        Generate physical tickets and send a selected range to your printer.
+        Generate physical tickets and send a selected range by email.
     </p>
 
 
@@ -530,7 +493,13 @@
         </div>
 
 
-        <div class="form-group">
+        <!-- COP ONLY -->
+
+        <div
+            id="ticketTypeGroup"
+            class="form-group"
+            style="display:none;"
+        >
 
             <label for="ticketType">
                 Ticket Type
@@ -548,6 +517,11 @@
                 </option>
 
             </select>
+
+
+            <div class="field-help">
+                Ticket type is only used for COP Carnival.
+            </div>
 
         </div>
 
@@ -611,8 +585,6 @@
         </div>
 
 
-        <!-- RANGE -->
-
         <div class="range-grid">
 
 
@@ -623,9 +595,7 @@
                 </label>
 
 
-                <select id="fromTicket">
-
-                </select>
+                <select id="fromTicket"></select>
 
             </div>
 
@@ -637,12 +607,9 @@
                 </label>
 
 
-                <select id="toTicket">
-
-                </select>
+                <select id="toTicket"></select>
 
             </div>
-
 
         </div>
 
@@ -655,7 +622,6 @@
         </div>
 
 
-
         <!-- EMAIL -->
 
         <div class="email-section">
@@ -664,9 +630,7 @@
             <div class="form-group">
 
                 <label for="emailAddress">
-
                     Email PDF To
-
                 </label>
 
 
@@ -681,7 +645,8 @@
                 <div class="email-help">
 
                     The selected ticket range will be
-                    generated as a PDF and emailed here.
+                    generated as a styled PDF and emailed
+                    as an attachment.
 
                 </div>
 
@@ -698,12 +663,84 @@
         </div>
 
 
-        <!-- GENERATED TICKET LIST -->
-
         <div
             id="ticketList"
             class="ticket-list"
         ></div>
+
+
+        <!-- PREVIEW -->
+
+        <div class="preview-title">
+            Ticket Preview
+        </div>
+
+
+        <div class="cop-preview">
+
+            <div class="preview-ticket">
+
+                <div class="preview-ticket-header">
+
+                    <img
+                        id="previewLogo"
+                        src="https://copcarnival.org.uk/wp-content/uploads/2026/09/COP_TICKET_TRANSPARENT.png"
+                        alt="COP Carnival"
+                    >
+
+                </div>
+
+
+                <div
+                    id="previewEvent"
+                    class="preview-event"
+                >
+                    Event
+                </div>
+
+
+                <div
+                    id="previewDate"
+                    class="preview-date"
+                >
+                    Event Date
+                </div>
+
+
+                <div
+                    id="previewType"
+                    class="preview-type"
+                >
+                    UNDER 14 YRS
+                </div>
+
+
+                <div class="preview-number-label">
+                    TICKET NUMBER
+                </div>
+
+
+                <div
+                    id="previewNumber"
+                    class="preview-number"
+                >
+                    TICKET-000000
+                </div>
+
+
+                <svg
+                    id="previewBarcode"
+                    class="preview-barcode"
+                ></svg>
+
+
+                <div class="preview-scan">
+                    This barcode will be scanned when you arrive at the event.
+                </div>
+
+            </div>
+
+        </div>
 
 
     </section>
@@ -713,18 +750,11 @@
 
 
 <script src="js/config.js"></script>
-
 <script src="js/api.js"></script>
-
 <script src="js/auth.js"></script>
 
 
 <script>
-
-
-// =====================================
-// VARIABLES
-// =====================================
 
 let generatedTickets = [];
 
@@ -732,10 +762,14 @@ let selectedEvent = null;
 
 let selectedTicketType = "";
 
+let copLogoData = null;
 
-// =====================================
-// START
-// =====================================
+
+const COP_EVENT_ID = "COP-CARN";
+
+const COP_LOGO_URL =
+    "https://copcarnival.org.uk/wp-content/uploads/2026/09/COP_TICKET_TRANSPARENT.png";
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -743,13 +777,14 @@ document.addEventListener(
 );
 
 
+// =====================================
+// INITIALISE
+// =====================================
+
 async function initialise() {
 
-
     if (!checkAdminAuth()) {
-
         return;
-
     }
 
 
@@ -761,6 +796,14 @@ async function initialise() {
         .addEventListener(
             "click",
             generateTickets
+        );
+
+
+    document
+        .getElementById("eventSelect")
+        .addEventListener(
+            "change",
+            eventSelectionChanged
         );
 
 
@@ -787,6 +830,17 @@ async function initialise() {
             generateAndEmail
         );
 
+
+    document
+        .getElementById("ticketType")
+        .addEventListener(
+            "change",
+            updatePreview
+        );
+
+
+    await loadCopLogo();
+
 }
 
 
@@ -796,7 +850,6 @@ async function initialise() {
 
 async function loadEvents() {
 
-
     const select =
         document.getElementById(
             "eventSelect"
@@ -804,7 +857,6 @@ async function loadEvents() {
 
 
     try {
-
 
         const events =
             await GateKeeperAPI.getEvents();
@@ -829,7 +881,6 @@ async function loadEvents() {
 
         events.forEach(
             event => {
-
 
                 const option =
                     document.createElement(
@@ -862,9 +913,16 @@ async function loadEvents() {
         );
 
 
+        if (select.options.length > 1) {
+
+            select.selectedIndex = 1;
+
+            eventSelectionChanged();
+
+        }
+
     }
     catch (error) {
-
 
         console.error(
             "Unable to load events:",
@@ -881,11 +939,136 @@ async function loadEvents() {
 
 
 // =====================================
+// EVENT SELECTION
+// =====================================
+
+function eventSelectionChanged() {
+
+    const select =
+        document.getElementById(
+            "eventSelect"
+        );
+
+
+    if (!select.value) {
+
+        selectedEvent = null;
+
+        showTicketType(false);
+
+        return;
+
+    }
+
+
+    const option =
+        select.options[
+            select.selectedIndex
+        ];
+
+
+    try {
+
+        selectedEvent =
+            JSON.parse(
+                option.dataset.event
+            );
+
+    }
+    catch {
+
+        selectedEvent = {
+
+            EventId:
+                select.value,
+
+            Name:
+                option.textContent
+
+        };
+
+    }
+
+
+    const isCop =
+        isCopCarnival();
+
+
+    showTicketType(isCop);
+
+
+    if (!isCop) {
+
+        selectedTicketType = "";
+
+    }
+    else {
+
+        selectedTicketType =
+            document.getElementById(
+                "ticketType"
+            ).value;
+
+    }
+
+
+    updatePreview();
+
+}
+
+
+// =====================================
+// COP CHECK
+// =====================================
+
+function isCopCarnival() {
+
+    if (!selectedEvent) {
+
+        return false;
+
+    }
+
+
+    const id =
+        getEventId();
+
+
+    const name =
+        getEventName();
+
+
+    return (
+        id.toUpperCase() === COP_EVENT_ID ||
+        name.toLowerCase().includes("cop")
+    );
+
+}
+
+
+// =====================================
+// SHOW / HIDE TICKET TYPE
+// =====================================
+
+function showTicketType(show) {
+
+    const group =
+        document.getElementById(
+            "ticketTypeGroup"
+        );
+
+
+    group.style.display =
+        show ? "block" : "none";
+
+}
+
+
+// =====================================
 // GENERATE TICKETS
 // =====================================
 
 async function generateTickets() {
-
 
     const eventSelect =
         document.getElementById(
@@ -893,10 +1076,10 @@ async function generateTickets() {
         );
 
 
-    const ticketType =
+    const button =
         document.getElementById(
-            "ticketType"
-        ).value;
+            "generateButton"
+        );
 
 
     const quantity =
@@ -905,12 +1088,6 @@ async function generateTickets() {
                 "quantity"
             ).value,
             10
-        );
-
-
-    const button =
-        document.getElementById(
-            "generateButton"
         );
 
 
@@ -942,9 +1119,36 @@ async function generateTickets() {
     }
 
 
+    selectedEvent =
+        JSON.parse(
+            eventSelect.options[
+                eventSelect.selectedIndex
+            ].dataset.event
+        );
+
+
+    const isCop =
+        isCopCarnival();
+
+
+    if (isCop) {
+
+        selectedTicketType =
+            document.getElementById(
+                "ticketType"
+            ).value;
+
+    }
+    else {
+
+        selectedTicketType = "";
+
+    }
+
+
     if (
         !confirm(
-            `Generate ${quantity} physical ${ticketType} tickets?`
+            `Generate ${quantity} physical tickets?`
         )
     ) {
 
@@ -961,29 +1165,12 @@ async function generateTickets() {
 
     try {
 
-
-        const selectedOption =
-            eventSelect.options[
-                eventSelect.selectedIndex
-            ];
-
-
-        selectedEvent =
-            JSON.parse(
-                selectedOption.dataset.event
-            );
-
-
-        selectedTicketType =
-            ticketType;
-
-
         const response =
             await GateKeeperAPI.generatePhysicalTickets(
 
                 eventSelect.value,
 
-                ticketType,
+                selectedTicketType,
 
                 quantity
 
@@ -1008,7 +1195,7 @@ async function generateTickets() {
 
 
         showMessage(
-            `${generatedTickets.length} physical tickets generated successfully.`,
+            `${generatedTickets.length} physical ticket(s) generated successfully.`,
             "success"
         );
 
@@ -1018,7 +1205,6 @@ async function generateTickets() {
 
     }
     catch (error) {
-
 
         console.error(
             error
@@ -1045,11 +1231,10 @@ async function generateTickets() {
 
 
 // =====================================
-// NORMALISE API RESPONSE
+// NORMALISE RESPONSE
 // =====================================
 
 function normaliseTickets(response) {
-
 
     let tickets =
         response;
@@ -1083,15 +1268,12 @@ function normaliseTickets(response) {
         .map(
             ticket => {
 
-
                 if (
                     typeof ticket === "string"
                 ) {
 
                     return {
-
                         number: ticket
-
                     };
 
                 }
@@ -1128,11 +1310,10 @@ function normaliseTickets(response) {
 
 
 // =====================================
-// SET UP PRINT RANGE
+// SET UP RANGE
 // =====================================
 
 function setupPrintRange() {
-
 
     const summary =
         document.getElementById(
@@ -1158,14 +1339,11 @@ function setupPrintRange() {
         );
 
 
-    from.innerHTML =
-        "";
+    from.innerHTML = "";
 
-    to.innerHTML =
-        "";
+    to.innerHTML = "";
 
-    list.innerHTML =
-        "";
+    list.innerHTML = "";
 
 
     generatedTickets.forEach(
@@ -1173,7 +1351,6 @@ function setupPrintRange() {
             ticket,
             index
         ) => {
-
 
             const optionFrom =
                 document.createElement(
@@ -1251,15 +1428,16 @@ function setupPrintRange() {
 
     updateSelectedCount();
 
+    updatePreview();
+
 }
 
 
 // =====================================
-// UPDATE SELECTED COUNT
+// COUNT
 // =====================================
 
 function updateSelectedCount() {
-
 
     const from =
         parseInt(
@@ -1292,17 +1470,106 @@ function updateSelectedCount() {
         .textContent =
             `${count} ticket${count === 1 ? "" : "s"} selected`;
 
+
+    updatePreview();
+
 }
 
 
 // =====================================
-// GENERATE PDF
+// LOAD COP LOGO
+// =====================================
+
+async function loadCopLogo() {
+
+    try {
+
+        const response =
+            await fetch(
+                COP_LOGO_URL,
+                {
+                    mode: "cors"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Logo download failed."
+            );
+
+        }
+
+
+        const blob =
+            await response.blob();
+
+
+        copLogoData =
+            await blobToDataUrl(
+                blob
+            );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "COP logo could not be loaded:",
+            error
+        );
+
+        copLogoData = null;
+
+    }
+
+}
+
+
+// =====================================
+// BLOB TO DATA URL
+// =====================================
+
+function blobToDataUrl(blob) {
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                () =>
+                    resolve(
+                        reader.result
+                    );
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                blob
+            );
+
+        }
+    );
+
+}
+
+
+// =====================================
+// CREATE PDF
 // =====================================
 
 async function createPdf(
     tickets
 ) {
-
 
     const {
         jsPDF
@@ -1372,7 +1639,6 @@ async function createPdf(
         i++
     ) {
 
-
         const position =
             i %
             (columns * rows);
@@ -1403,19 +1669,19 @@ async function createPdf(
         const x =
             margin +
             column *
-                (
-                    ticketWidth +
-                    gap
-                );
+            (
+                ticketWidth +
+                gap
+            );
 
 
         const y =
             margin +
             row *
-                (
-                    ticketHeight +
-                    gap
-                );
+            (
+                ticketHeight +
+                gap
+            );
 
 
         await drawTicket(
@@ -1448,11 +1714,26 @@ async function drawTicket(
     height
 ) {
 
+    const purple =
+        "#6B3FA0";
+
+
+    const yellow =
+        "#f5c400";
+
+
+    const isCop =
+        isCopCarnival();
+
+
+    // ---------------------------------
+    // OUTER BORDER
+    // ---------------------------------
 
     pdf.setDrawColor(
-        180,
-        180,
-        180
+        107,
+        63,
+        160
     );
 
 
@@ -1461,19 +1742,137 @@ async function drawTicket(
     );
 
 
-    pdf.roundedRect(
+    pdf.rect(
         x,
         y,
         width,
-        height,
-        3,
-        3
+        height
     );
 
 
     // ---------------------------------
-    // HEADER
+    // PURPLE HEADER
     // ---------------------------------
+
+    pdf.setFillColor(
+        107,
+        63,
+        160
+    );
+
+
+    pdf.rect(
+        x,
+        y,
+        width,
+        13,
+        "F"
+    );
+
+
+    // ---------------------------------
+    // LOGO
+    // ---------------------------------
+
+    if (
+        isCop &&
+        copLogoData
+    ) {
+
+        try {
+
+            const logoWidth =
+                25;
+
+
+            const logoHeight =
+                8;
+
+
+            pdf.addImage(
+                copLogoData,
+                "PNG",
+                x +
+                    (
+                        width -
+                        logoWidth
+                    ) / 2,
+                y + 2.2,
+                logoWidth,
+                logoHeight
+            );
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to add COP logo:",
+                error
+            );
+
+            drawFallbackLogo(
+                pdf,
+                x,
+                y,
+                width
+            );
+
+        }
+
+    }
+    else if (isCop) {
+
+        drawFallbackLogo(
+            pdf,
+            x,
+            y,
+            width
+        );
+
+    }
+    else {
+
+        pdf.setTextColor(
+            255,
+            255,
+            255
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+
+        pdf.setFontSize(
+            11
+        );
+
+
+        pdf.text(
+            "EVENT TICKET",
+            x +
+                width / 2,
+            y + 8,
+            {
+                align: "center"
+            }
+        );
+
+    }
+
+
+    // ---------------------------------
+    // EVENT NAME
+    // ---------------------------------
+
+    pdf.setTextColor(
+        35,
+        35,
+        35
+    );
+
 
     pdf.setFont(
         "helvetica",
@@ -1482,14 +1881,137 @@ async function drawTicket(
 
 
     pdf.setFontSize(
-        14
+        10
     );
 
 
+    const eventName =
+        getEventName();
+
+
     pdf.text(
-        "GATEKEEPER",
-        x + 5,
-        y + 8
+        eventName,
+        x +
+            width / 2,
+        y + 20,
+        {
+            align: "center",
+            maxWidth:
+                width - 8
+        }
+    );
+
+
+    // ---------------------------------
+    // EVENT DATE
+    // ---------------------------------
+
+    const eventDate =
+        getEventDate();
+
+
+    if (eventDate) {
+
+        pdf.setTextColor(
+            107,
+            63,
+            160
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+
+        pdf.setFontSize(
+            6.5
+        );
+
+
+        pdf.text(
+            eventDate,
+            x +
+                width / 2,
+            y + 25,
+            {
+                align: "center"
+            }
+        );
+
+    }
+
+
+    // ---------------------------------
+    // TICKET TYPE
+    // ---------------------------------
+
+    let contentTop =
+        y + 29;
+
+
+    if (isCop) {
+
+        pdf.setFillColor(
+            245,
+            196,
+            0
+        );
+
+
+        pdf.rect(
+            x,
+            y + 27,
+            width,
+            5,
+            "F"
+        );
+
+
+        pdf.setTextColor(
+            20,
+            20,
+            20
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+
+        pdf.setFontSize(
+            6.5
+        );
+
+
+        pdf.text(
+            selectedTicketType.toUpperCase(),
+            x +
+                width / 2,
+            y + 30.5,
+            {
+                align: "center"
+            }
+        );
+
+
+        contentTop =
+            y + 36;
+
+    }
+
+
+    // ---------------------------------
+    // NUMBER LABEL
+    // ---------------------------------
+
+    pdf.setTextColor(
+        110,
+        110,
+        110
     );
 
 
@@ -1500,20 +2022,253 @@ async function drawTicket(
 
 
     pdf.setFontSize(
-        8
+        5.5
     );
 
 
     pdf.text(
-        "PHYSICAL EVENT TICKET",
-        x + 5,
-        y + 13
+        "TICKET NUMBER",
+        x +
+            width / 2,
+        contentTop,
+        {
+            align: "center"
+        }
     );
 
 
     // ---------------------------------
-    // EVENT
+    // TICKET NUMBER
     // ---------------------------------
+
+    pdf.setTextColor(
+        35,
+        35,
+        35
+    );
+
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    pdf.setFontSize(
+        9
+    );
+
+
+    pdf.text(
+        ticket.number,
+        x +
+            width / 2,
+        contentTop + 5,
+        {
+            align: "center"
+        }
+    );
+
+
+    // ---------------------------------
+    // CODE 128 BARCODE
+    // ---------------------------------
+
+    const barcodeCanvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    try {
+
+        JsBarcode(
+            barcodeCanvas,
+            ticket.number,
+            {
+
+                format:
+                    "CODE128",
+
+                displayValue:
+                    true,
+
+                font:
+                    "monospace",
+
+                fontSize:
+                    9,
+
+                fontOptions:
+                    "normal",
+
+                textMargin:
+                    1,
+
+                margin:
+                    0,
+
+                width:
+                    1.5,
+
+                height:
+                    28,
+
+                background:
+                    "#ffffff",
+
+                lineColor:
+                    "#000000"
+
+            }
+        );
+
+
+        const barcodeData =
+            barcodeCanvas.toDataURL(
+                "image/png"
+            );
+
+
+        const barcodeWidth =
+            width -
+            18;
+
+
+        const barcodeHeight =
+            17;
+
+
+        pdf.addImage(
+            barcodeData,
+            "PNG",
+            x + 9,
+            contentTop + 8,
+            barcodeWidth,
+            barcodeHeight
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Barcode generation failed:",
+            error
+        );
+
+        pdf.setTextColor(
+            200,
+            0,
+            0
+        );
+
+
+        pdf.setFontSize(
+            6
+        );
+
+
+        pdf.text(
+            "BARCODE ERROR",
+            x +
+                width / 2,
+            contentTop + 16,
+            {
+                align: "center"
+            }
+        );
+
+    }
+
+
+    // ---------------------------------
+    // DASHED DIVIDER
+    // ---------------------------------
+
+    pdf.setDrawColor(
+        160,
+        160,
+        160
+    );
+
+
+    pdf.setLineWidth(
+        0.25
+    );
+
+
+    pdf.setLineDashPattern(
+        [2, 1],
+        0
+    );
+
+
+    pdf.line(
+        x + 5,
+        y + height - 9,
+        x + width - 5,
+        y + height - 9
+    );
+
+
+    pdf.setLineDashPattern(
+        [],
+        0
+    );
+
+
+    // ---------------------------------
+    // SCAN MESSAGE
+    // ---------------------------------
+
+    pdf.setTextColor(
+        100,
+        100,
+        100
+    );
+
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    pdf.setFontSize(
+        5.2
+    );
+
+
+    pdf.text(
+        "This barcode will be scanned when you arrive at the event.",
+        x +
+            width / 2,
+        y + height - 3.5,
+        {
+            align: "center"
+        }
+    );
+
+}
+
+
+// =====================================
+// FALLBACK LOGO
+// =====================================
+
+function drawFallbackLogo(
+    pdf,
+    x,
+    y,
+    width
+) {
+
+    pdf.setTextColor(
+        255,
+        255,
+        255
+    );
+
 
     pdf.setFont(
         "helvetica",
@@ -1527,139 +2282,29 @@ async function drawTicket(
 
 
     pdf.text(
-        getEventName(),
-        x + 5,
-        y + 22
-    );
-
-
-    // ---------------------------------
-    // TICKET TYPE
-    // ---------------------------------
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-
-    pdf.setFontSize(
-        9
-    );
-
-
-    pdf.text(
-        selectedTicketType,
-        x + 5,
-        y + 29
-    );
-
-
-    // ---------------------------------
-    // TICKET NUMBER
-    // ---------------------------------
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-
-    pdf.setFontSize(
-        12
-    );
-
-
-    pdf.text(
-        ticket.number,
-        x + 5,
-        y + 38
-    );
-
-
-    // ---------------------------------
-    // QR CODE
-    // ---------------------------------
-
-    const qrContainer =
-        document.createElement(
-            "div"
-        );
-
-
-    new QRCode(
-        qrContainer,
+        "COP",
+        x +
+            width / 2,
+        y + 7,
         {
-
-            text:
-                ticket.number,
-
-            width:
-                120,
-
-            height:
-                120,
-
-            correctLevel:
-                QRCode.CorrectLevel.M
-
+            align: "center"
         }
     );
 
 
-    const canvas =
-        qrContainer.querySelector(
-            "canvas"
-        );
-
-
-    if (canvas) {
-
-
-        const qrData =
-            canvas.toDataURL(
-                "image/png"
-            );
-
-
-        const qrSize =
-            Math.min(
-                30,
-                width - 10
-            );
-
-
-        pdf.addImage(
-            qrData,
-            "PNG",
-            x + width - qrSize - 5,
-            y + 17,
-            qrSize,
-            qrSize
-        );
-
-    }
-
-
-    // ---------------------------------
-    // FOOTER
-    // ---------------------------------
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-
     pdf.setFontSize(
-        7
+        5
     );
 
 
     pdf.text(
-        "Present this ticket at the entrance.",
-        x + 5,
-        y + height - 8
+        "CARNIVAL",
+        x +
+            width / 2,
+        y + 10,
+        {
+            align: "center"
+        }
     );
 
 }
@@ -1670,7 +2315,6 @@ async function drawTicket(
 // =====================================
 
 async function generateAndEmail() {
-
 
     const emailInput =
         document.getElementById(
@@ -1706,9 +2350,7 @@ async function generateAndEmail() {
         );
 
 
-    if (
-        !email
-    ) {
+    if (!email) {
 
         showMessage(
             "Please enter an email address.",
@@ -1722,9 +2364,7 @@ async function generateAndEmail() {
     }
 
 
-    if (
-        !isValidEmail(email)
-    ) {
+    if (!isValidEmail(email)) {
 
         showMessage(
             "Please enter a valid email address.",
@@ -1786,9 +2426,7 @@ async function generateAndEmail() {
     }
 
 
-    button.disabled =
-        true;
-
+    button.disabled = true;
 
     button.textContent =
         "Creating PDF...";
@@ -1796,32 +2434,10 @@ async function generateAndEmail() {
 
     try {
 
-
         const pdf =
             await createPdf(
                 tickets
             );
-
-
-        /*
-         * =================================
-         * NEXT API STEP
-         * =================================
-         *
-         * The Azure endpoint will receive:
-         *
-         * email
-         * eventId
-         * eventName
-         * ticketType
-         * ticketFrom
-         * ticketTo
-         * PDF
-         *
-         * and send the PDF as an email
-         * attachment.
-         *
-         */
 
 
         const pdfBase64 =
@@ -1881,9 +2497,7 @@ async function generateAndEmail() {
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             let errorMessage =
                 "Unable to email the PDF.";
@@ -1924,10 +2538,8 @@ async function generateAndEmail() {
             "success"
         );
 
-
     }
     catch (error) {
-
 
         console.error(
             "Email physical tickets error:",
@@ -1944,10 +2556,7 @@ async function generateAndEmail() {
     }
     finally {
 
-
-        button.disabled =
-            false;
-
+        button.disabled = false;
 
         button.textContent =
             "📧 Generate & Email Tickets";
@@ -1963,11 +2572,8 @@ async function generateAndEmail() {
 
 function getEventId() {
 
-
     if (!selectedEvent) {
-
         return "";
-
     }
 
 
@@ -1988,11 +2594,8 @@ function getEventId() {
 
 function getEventName() {
 
-
     if (!selectedEvent) {
-
         return "Event";
-
     }
 
 
@@ -2006,13 +2609,183 @@ function getEventName() {
 
 
 // =====================================
+// EVENT DATE
+// =====================================
+
+function getEventDate() {
+
+    if (!selectedEvent) {
+        return "";
+    }
+
+
+    const value =
+        selectedEvent.EventDate ||
+        selectedEvent.eventDate ||
+        selectedEvent.Date ||
+        selectedEvent.date ||
+        "";
+
+
+    if (!value) {
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:
+                "numeric",
+
+            month:
+                "long",
+
+            year:
+                "numeric"
+        }
+    );
+
+}
+
+
+// =====================================
+// PREVIEW
+// =====================================
+
+function updatePreview() {
+
+    const event =
+        getEventName();
+
+
+    const date =
+        getEventDate();
+
+
+    const number =
+        generatedTickets.length > 0
+            ? generatedTickets[0].number
+            : "TICKET-000000";
+
+
+    document
+        .getElementById(
+            "previewEvent"
+        )
+        .textContent =
+            event;
+
+
+    document
+        .getElementById(
+            "previewDate"
+        )
+        .textContent =
+            date;
+
+
+    const type =
+        document.getElementById(
+            "previewType"
+        );
+
+
+    if (isCopCarnival()) {
+
+        type.style.display =
+            "block";
+
+
+        type.textContent =
+            (
+                document.getElementById(
+                    "ticketType"
+                ).value ||
+                "Under 14 Yrs"
+            ).toUpperCase();
+
+    }
+    else {
+
+        type.style.display =
+            "none";
+
+    }
+
+
+    document
+        .getElementById(
+            "previewNumber"
+        )
+        .textContent =
+            number;
+
+
+    try {
+
+        JsBarcode(
+            "#previewBarcode",
+            number,
+            {
+
+                format:
+                    "CODE128",
+
+                displayValue:
+                    true,
+
+                font:
+                    "monospace",
+
+                fontSize:
+                    10,
+
+                height:
+                    32,
+
+                margin:
+                    0,
+
+                width:
+                    1.3
+
+            }
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Preview barcode error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================
 // EMAIL VALIDATION
 // =====================================
 
-function isValidEmail(
-    email
-) {
-
+function isValidEmail(email) {
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         .test(email);
@@ -2028,7 +2801,6 @@ function showMessage(
     text,
     type
 ) {
-
 
     const message =
         document.getElementById(
