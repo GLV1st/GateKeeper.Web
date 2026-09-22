@@ -493,7 +493,7 @@
         </div>
 
 
-        <!-- COP ONLY -->
+        <!-- COP-CARN ONLY -->
 
         <div
             id="ticketTypeGroup"
@@ -913,13 +913,16 @@ async function loadEvents() {
         );
 
 
-        if (select.options.length > 1) {
+        // Do not automatically select an event.
+        // The admin must choose one.
 
-            select.selectedIndex = 1;
+        select.selectedIndex = 0;
 
-            eventSelectionChanged();
+        selectedEvent = null;
 
-        }
+        showTicketType(false);
+
+        updatePreview();
 
     }
     catch (error) {
@@ -954,7 +957,11 @@ function eventSelectionChanged() {
 
         selectedEvent = null;
 
+        selectedTicketType = "";
+
         showTicketType(false);
+
+        updatePreview();
 
         return;
 
@@ -1018,7 +1025,14 @@ function eventSelectionChanged() {
 
 
 // =====================================
-// COP CHECK
+// COP-CARNIVAL CHECK
+// =====================================
+//
+// ONLY Event ID COP-CARN gets
+// Under 14 / Over 14 ticket types.
+//
+// COP-COM and every other event
+// get NO ticket type.
 // =====================================
 
 function isCopCarnival() {
@@ -1031,16 +1045,14 @@ function isCopCarnival() {
 
 
     const id =
-        getEventId();
-
-
-    const name =
-        getEventName();
+        String(
+            getEventId()
+        ).trim();
 
 
     return (
-        id.toUpperCase() === COP_EVENT_ID ||
-        name.toLowerCase().includes("cop")
+        id.toUpperCase() ===
+        COP_EVENT_ID
     );
 
 }
@@ -1714,14 +1726,6 @@ async function drawTicket(
     height
 ) {
 
-    const purple =
-        "#6B3FA0";
-
-
-    const yellow =
-        "#f5c400";
-
-
     const isCop =
         isCopCarnival();
 
@@ -1809,6 +1813,7 @@ async function drawTicket(
                 "Unable to add COP logo:",
                 error
             );
+
 
             drawFallbackLogo(
                 pdf,
@@ -2155,6 +2160,7 @@ async function drawTicket(
             "Barcode generation failed:",
             error
         );
+
 
         pdf.setTextColor(
             200,
