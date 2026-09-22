@@ -10,7 +10,37 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Create Physical Tickets</title>
+    <title>GateKeeper - Physical Tickets</title>
+
+
+    <link
+        rel="stylesheet"
+        href="css/theme.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/site.css"
+    >
+
+
+    <!-- jsPDF -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+
+
+    <!-- QR CODE -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
 
 
     <style>
@@ -24,25 +54,18 @@
 
             margin: 0;
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
             background: #f4f6f8;
-
-            color: #1f2937;
 
         }
 
 
         .page {
 
-            max-width: 900px;
+            max-width: 1000px;
 
             margin: 0 auto;
 
-            padding: 30px 20px 60px;
+            padding: 25px 20px 60px;
 
         }
 
@@ -55,7 +78,7 @@
 
             align-items: center;
 
-            margin-bottom: 30px;
+            margin-bottom: 25px;
 
         }
 
@@ -66,7 +89,7 @@
 
             padding: 10px 16px;
 
-            background: #ffffff;
+            background: white;
 
             border: 1px solid #d1d5db;
 
@@ -90,30 +113,11 @@
 
         .status {
 
-            display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            font-size: 14px;
-
             color: #15803d;
 
             font-weight: 600;
 
-        }
-
-
-        .status-dot {
-
-            width: 9px;
-
-            height: 9px;
-
-            border-radius: 50%;
-
-            background: #22c55e;
+            font-size: 14px;
 
         }
 
@@ -129,32 +133,32 @@
 
         .subtitle {
 
-            margin: 0 0 30px;
+            margin: 0 0 25px;
 
             color: #6b7280;
-
-            font-size: 16px;
 
         }
 
 
         .panel {
 
-            background: #ffffff;
+            background: white;
 
-            border-radius: 12px;
+            border-radius: 18px;
 
-            padding: 30px;
+            padding: 25px;
+
+            margin-bottom: 20px;
 
             box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.06);
+                0 4px 15px rgba(0,0,0,0.08);
 
         }
 
 
         .form-group {
 
-            margin-bottom: 22px;
+            margin-bottom: 20px;
 
         }
 
@@ -163,11 +167,9 @@
 
             display: block;
 
-            margin-bottom: 8px;
+            margin-bottom: 7px;
 
             font-weight: 700;
-
-            font-size: 15px;
 
         }
 
@@ -177,15 +179,15 @@
 
             width: 100%;
 
-            padding: 13px 14px;
+            padding: 13px;
 
             border: 1px solid #d1d5db;
 
             border-radius: 8px;
 
-            background: #ffffff;
-
             font-size: 16px;
+
+            background: white;
 
             color: #111827;
 
@@ -197,27 +199,26 @@
 
             outline: none;
 
-            border-color: #2563eb;
+            border-color: #2878d7;
 
             box-shadow:
-                0 0 0 3px rgba(37, 99, 235, 0.12);
+                0 0 0 3px rgba(40,120,215,0.12);
 
         }
 
 
-        .generate-button {
+        .generate-button,
+        .email-button {
 
             width: 100%;
 
             padding: 15px;
 
-            border: none;
+            border: 0;
 
-            border-radius: 8px;
+            border-radius: 10px;
 
-            background: #2563eb;
-
-            color: #ffffff;
+            color: white;
 
             font-size: 17px;
 
@@ -225,21 +226,42 @@
 
             cursor: pointer;
 
-            margin-top: 5px;
+        }
+
+
+        .generate-button {
+
+            background: #2878d7;
 
         }
 
 
         .generate-button:hover {
 
-            background: #1d4ed8;
+            background: #1d64b5;
 
         }
 
 
-        .generate-button:disabled {
+        .email-button {
 
-            background: #9ca3af;
+            background: #20a464;
+
+            margin-top: 20px;
+
+        }
+
+
+        .email-button:hover {
+
+            background: #18864f;
+
+        }
+
+
+        button:disabled {
+
+            opacity: 0.5;
 
             cursor: not-allowed;
 
@@ -250,9 +272,9 @@
 
             display: none;
 
-            margin-top: 25px;
-
             padding: 15px;
+
+            margin-top: 20px;
 
             border-radius: 8px;
 
@@ -287,37 +309,93 @@
         }
 
 
-        .results {
+        .message.info {
 
-            display: none;
+            display: block;
 
-            margin-top: 25px;
+            background: #eff6ff;
+
+            color: #1e40af;
+
+            border: 1px solid #bfdbfe;
 
         }
 
 
-        .results h2 {
+        .generated-summary {
 
-            margin: 0 0 15px;
+            display: none;
 
-            font-size: 21px;
+        }
+
+
+        .generated-summary h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        .info-box {
+
+            padding: 15px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            border-radius: 8px;
+
+            color: #1e40af;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .range-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+
+        }
+
+
+        .ticket-count {
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            background: #f3f4f6;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            font-weight: 700;
 
         }
 
 
         .ticket-list {
 
-            max-height: 300px;
+            margin-top: 20px;
+
+            max-height: 250px;
 
             overflow-y: auto;
 
-            background: #f9fafb;
+            padding: 10px;
+
+            background: #f8fafc;
 
             border: 1px solid #e5e7eb;
 
             border-radius: 8px;
-
-            padding: 12px;
 
         }
 
@@ -326,28 +404,41 @@
 
             display: inline-block;
 
-            background: #ffffff;
+            padding: 6px 9px;
 
-            border: 1px solid #d1d5db;
+            margin: 3px;
 
             border-radius: 6px;
 
-            padding: 7px 10px;
+            background: white;
 
-            margin: 4px;
+            border: 1px solid #d1d5db;
 
             font-family: monospace;
 
-            font-weight: 600;
+            font-size: 13px;
 
         }
 
 
-        .loading {
+        .email-section {
+
+            margin-top: 25px;
+
+            padding-top: 25px;
+
+            border-top: 1px solid #e5e7eb;
+
+        }
+
+
+        .email-help {
+
+            margin-top: 6px;
 
             color: #6b7280;
 
-            font-style: italic;
+            font-size: 13px;
 
         }
 
@@ -356,14 +447,14 @@
 
             .page {
 
-                padding: 20px 15px 40px;
+                padding: 15px;
 
             }
 
 
-            .panel {
+            .range-grid {
 
-                padding: 20px;
+                grid-template-columns: 1fr;
 
             }
 
@@ -371,13 +462,6 @@
             h1 {
 
                 font-size: 27px;
-
-            }
-
-
-            .top-bar {
-
-                align-items: flex-start;
 
             }
 
@@ -391,38 +475,41 @@
 <body>
 
 
-<div class="page">
+<header class="page-header">
+
+    <button
+        class="home-button"
+        onclick="window.location.href='stats.html'"
+    >
+        ← Event Status
+    </button>
 
 
-    <div class="top-bar">
-
-        <a
-            href="stats.html"
-            class="back-button"
-        >
-            ← Event Status
-        </a>
-
-
-        <div class="status">
-
-            <span class="status-dot"></span>
-
-            Admin
-
-        </div>
-
+    <div class="status">
+        ● Admin
     </div>
 
+</header>
 
-    <h1>Create Physical Tickets</h1>
+
+<main class="page">
+
+
+    <h1>
+        Create Physical Tickets
+    </h1>
+
 
     <p class="subtitle">
-        Generate tickets for physical sale or distribution at the event.
+        Generate physical tickets and send a selected range to your printer.
     </p>
 
 
-    <div class="panel">
+    <!-- =====================================
+         GENERATE TICKETS
+    ====================================== -->
+
+    <section class="panel">
 
 
         <div class="form-group">
@@ -430,6 +517,7 @@
             <label for="eventSelect">
                 Event
             </label>
+
 
             <select id="eventSelect">
 
@@ -445,9 +533,7 @@
         <div class="form-group">
 
             <label for="ticketType">
-
                 Ticket Type
-
             </label>
 
 
@@ -469,9 +555,7 @@
         <div class="form-group">
 
             <label for="quantity">
-
                 Quantity
-
             </label>
 
 
@@ -499,28 +583,133 @@
             class="message"
         ></div>
 
-
-        <div
-            id="results"
-            class="results"
-        >
-
-            <h2>
-                Generated Tickets
-            </h2>
+    </section>
 
 
-            <div
-                id="ticketList"
-                class="ticket-list"
-            ></div>
+
+    <!-- =====================================
+         PRINT / EMAIL
+    ====================================== -->
+
+    <section
+        id="generatedSummary"
+        class="panel generated-summary"
+    >
+
+
+        <h2>
+            Print / Email Tickets
+        </h2>
+
+
+        <div class="info-box">
+
+            Select the first and last ticket you want
+            to send. Only that range will be included
+            in the PDF.
 
         </div>
 
 
-    </div>
+        <!-- RANGE -->
 
-</div>
+        <div class="range-grid">
+
+
+            <div class="form-group">
+
+                <label for="fromTicket">
+                    From Ticket
+                </label>
+
+
+                <select id="fromTicket">
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="toTicket">
+                    To Ticket
+                </label>
+
+
+                <select id="toTicket">
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            id="ticketCount"
+            class="ticket-count"
+        >
+            0 tickets selected
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <div class="email-section">
+
+
+            <div class="form-group">
+
+                <label for="emailAddress">
+
+                    Email PDF To
+
+                </label>
+
+
+                <input
+                    type="email"
+                    id="emailAddress"
+                    placeholder="printer@example.com"
+                    autocomplete="email"
+                >
+
+
+                <div class="email-help">
+
+                    The selected ticket range will be
+                    generated as a PDF and emailed here.
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="emailButton"
+                class="email-button"
+            >
+                📧 Generate & Email Tickets
+            </button>
+
+        </div>
+
+
+        <!-- GENERATED TICKET LIST -->
+
+        <div
+            id="ticketList"
+            class="ticket-list"
+        ></div>
+
+
+    </section>
+
+
+</main>
 
 
 <script src="js/config.js"></script>
@@ -532,6 +721,22 @@
 
 <script>
 
+
+// =====================================
+// VARIABLES
+// =====================================
+
+let generatedTickets = [];
+
+let selectedEvent = null;
+
+let selectedTicketType = "";
+
+
+// =====================================
+// START
+// =====================================
+
 document.addEventListener(
     "DOMContentLoaded",
     initialise
@@ -541,10 +746,6 @@ document.addEventListener(
 async function initialise() {
 
 
-    // =====================================
-    // CHECK ADMIN AUTHENTICATION
-    // =====================================
-
     if (!checkAdminAuth()) {
 
         return;
@@ -552,16 +753,8 @@ async function initialise() {
     }
 
 
-    // =====================================
-    // LOAD EVENTS
-    // =====================================
-
     await loadEvents();
 
-
-    // =====================================
-    // BUTTON
-    // =====================================
 
     document
         .getElementById("generateButton")
@@ -570,8 +763,36 @@ async function initialise() {
             generateTickets
         );
 
+
+    document
+        .getElementById("fromTicket")
+        .addEventListener(
+            "change",
+            updateSelectedCount
+        );
+
+
+    document
+        .getElementById("toTicket")
+        .addEventListener(
+            "change",
+            updateSelectedCount
+        );
+
+
+    document
+        .getElementById("emailButton")
+        .addEventListener(
+            "click",
+            generateAndEmail
+        );
+
 }
 
+
+// =====================================
+// LOAD EVENTS
+// =====================================
 
 async function loadEvents() {
 
@@ -609,6 +830,7 @@ async function loadEvents() {
         events.forEach(
             event => {
 
+
                 const option =
                     document.createElement(
                         "option"
@@ -626,6 +848,10 @@ async function loadEvents() {
                     event.Name ||
                     event.name ||
                     "Unnamed Event";
+
+
+                option.dataset.event =
+                    JSON.stringify(event);
 
 
                 select.appendChild(
@@ -653,6 +879,10 @@ async function loadEvents() {
 
 }
 
+
+// =====================================
+// GENERATE TICKETS
+// =====================================
 
 async function generateTickets() {
 
@@ -684,52 +914,12 @@ async function generateTickets() {
         );
 
 
-    const message =
-        document.getElementById(
-            "message"
-        );
-
-
-    const results =
-        document.getElementById(
-            "results"
-        );
-
-
-    const ticketList =
-        document.getElementById(
-            "ticketList"
-        );
-
-
-    // =====================================
-    // RESET
-    // =====================================
-
-    message.className =
-        "message";
-
-    message.textContent =
-        "";
-
-    results.style.display =
-        "none";
-
-    ticketList.innerHTML =
-        "";
-
-
-    // =====================================
-    // VALIDATION
-    // =====================================
-
     if (!eventSelect.value) {
 
-        message.className =
-            "message error";
-
-        message.textContent =
-            "Please select an event.";
+        showMessage(
+            "Please select an event.",
+            "error"
+        );
 
         return;
 
@@ -738,56 +928,32 @@ async function generateTickets() {
 
     if (
         !quantity ||
-        quantity < 1
+        quantity < 1 ||
+        quantity > 10000
     ) {
 
-        message.className =
-            "message error";
-
-        message.textContent =
-            "Please enter a valid quantity.";
-
-        return;
-
-    }
-
-
-    if (quantity > 10000) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "Maximum quantity is 10,000.";
-
-        return;
-
-    }
-
-
-    // =====================================
-    // CONFIRM
-    // =====================================
-
-    const confirmed =
-        confirm(
-            `Generate ${quantity} physical ${ticketType} tickets?`
+        showMessage(
+            "Enter a quantity between 1 and 10,000.",
+            "error"
         );
 
+        return;
 
-    if (!confirmed) {
+    }
+
+
+    if (
+        !confirm(
+            `Generate ${quantity} physical ${ticketType} tickets?`
+        )
+    ) {
 
         return;
 
     }
 
 
-    // =====================================
-    // GENERATE
-    // =====================================
-
-    button.disabled =
-        true;
+    button.disabled = true;
 
     button.textContent =
         "Generating tickets...";
@@ -796,7 +962,23 @@ async function generateTickets() {
     try {
 
 
-        const generated =
+        const selectedOption =
+            eventSelect.options[
+                eventSelect.selectedIndex
+            ];
+
+
+        selectedEvent =
+            JSON.parse(
+                selectedOption.dataset.event
+            );
+
+
+        selectedTicketType =
+            ticketType;
+
+
+        const response =
             await GateKeeperAPI.generatePhysicalTickets(
 
                 eventSelect.value,
@@ -808,94 +990,30 @@ async function generateTickets() {
             );
 
 
-        // =====================================
-        // NORMALISE RESPONSE
-        // =====================================
-
-        let tickets =
-            generated;
+        generatedTickets =
+            normaliseTickets(
+                response
+            );
 
 
         if (
-            generated &&
-            generated.tickets
+            generatedTickets.length === 0
         ) {
 
-            tickets =
-                generated.tickets;
-
-        }
-
-
-        if (
-            !Array.isArray(tickets)
-        ) {
-
-            tickets = [];
-
-        }
-
-
-        // =====================================
-        // SUCCESS
-        // =====================================
-
-        message.className =
-            "message success";
-
-        message.textContent =
-            `${tickets.length || quantity} physical ticket(s) generated successfully.`;
-
-
-        // =====================================
-        // SHOW TICKETS
-        // =====================================
-
-        if (
-            tickets.length > 0
-        ) {
-
-
-            results.style.display =
-                "block";
-
-
-            tickets.forEach(
-                ticket => {
-
-
-                    const number =
-                        ticket.TicketNumber ||
-                        ticket.ticketNumber ||
-                        ticket.Number ||
-                        ticket.number ||
-                        ticket.RowKey ||
-                        ticket.rowKey ||
-                        ticket;
-
-
-                    const span =
-                        document.createElement(
-                            "span"
-                        );
-
-
-                    span.className =
-                        "ticket-number";
-
-
-                    span.textContent =
-                        number;
-
-
-                    ticketList.appendChild(
-                        span
-                    );
-
-                }
+            throw new Error(
+                "Tickets were generated but no ticket numbers were returned."
             );
 
         }
+
+
+        showMessage(
+            `${generatedTickets.length} physical tickets generated successfully.`,
+            "success"
+        );
+
+
+        setupPrintRange();
 
 
     }
@@ -907,12 +1025,921 @@ async function generateTickets() {
         );
 
 
-        message.className =
-            "message error";
-
-        message.textContent =
+        showMessage(
             error.message ||
-            "Unable to generate physical tickets.";
+            "Unable to generate physical tickets.",
+            "error"
+        );
+
+    }
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Generate Physical Tickets";
+
+    }
+
+}
+
+
+// =====================================
+// NORMALISE API RESPONSE
+// =====================================
+
+function normaliseTickets(response) {
+
+
+    let tickets =
+        response;
+
+
+    if (
+        response &&
+        Array.isArray(
+            response.tickets
+        )
+    ) {
+
+        tickets =
+            response.tickets;
+
+    }
+
+
+    if (
+        !Array.isArray(
+            tickets
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return tickets
+        .map(
+            ticket => {
+
+
+                if (
+                    typeof ticket === "string"
+                ) {
+
+                    return {
+
+                        number: ticket
+
+                    };
+
+                }
+
+
+                return {
+
+                    number:
+                        ticket.TicketNumber ||
+                        ticket.ticketNumber ||
+                        ticket.Number ||
+                        ticket.number ||
+                        ticket.RowKey ||
+                        ticket.rowKey,
+
+                    eventId:
+                        ticket.EventId ||
+                        ticket.eventId,
+
+                    eventDate:
+                        ticket.EventDate ||
+                        ticket.eventDate
+
+                };
+
+            }
+        )
+        .filter(
+            ticket =>
+                ticket.number
+        );
+
+}
+
+
+// =====================================
+// SET UP PRINT RANGE
+// =====================================
+
+function setupPrintRange() {
+
+
+    const summary =
+        document.getElementById(
+            "generatedSummary"
+        );
+
+
+    const from =
+        document.getElementById(
+            "fromTicket"
+        );
+
+
+    const to =
+        document.getElementById(
+            "toTicket"
+        );
+
+
+    const list =
+        document.getElementById(
+            "ticketList"
+        );
+
+
+    from.innerHTML =
+        "";
+
+    to.innerHTML =
+        "";
+
+    list.innerHTML =
+        "";
+
+
+    generatedTickets.forEach(
+        (
+            ticket,
+            index
+        ) => {
+
+
+            const optionFrom =
+                document.createElement(
+                    "option"
+                );
+
+
+            optionFrom.value =
+                index;
+
+
+            optionFrom.textContent =
+                ticket.number;
+
+
+            from.appendChild(
+                optionFrom
+            );
+
+
+            const optionTo =
+                document.createElement(
+                    "option"
+                );
+
+
+            optionTo.value =
+                index;
+
+
+            optionTo.textContent =
+                ticket.number;
+
+
+            to.appendChild(
+                optionTo
+            );
+
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+
+            span.className =
+                "ticket-number";
+
+
+            span.textContent =
+                ticket.number;
+
+
+            list.appendChild(
+                span
+            );
+
+        }
+    );
+
+
+    from.value =
+        "0";
+
+
+    to.value =
+        String(
+            generatedTickets.length - 1
+        );
+
+
+    summary.style.display =
+        "block";
+
+
+    updateSelectedCount();
+
+}
+
+
+// =====================================
+// UPDATE SELECTED COUNT
+// =====================================
+
+function updateSelectedCount() {
+
+
+    const from =
+        parseInt(
+            document.getElementById(
+                "fromTicket"
+            ).value,
+            10
+        );
+
+
+    const to =
+        parseInt(
+            document.getElementById(
+                "toTicket"
+            ).value,
+            10
+        );
+
+
+    const count =
+        to >= from
+            ? to - from + 1
+            : 0;
+
+
+    document
+        .getElementById(
+            "ticketCount"
+        )
+        .textContent =
+            `${count} ticket${count === 1 ? "" : "s"} selected`;
+
+}
+
+
+// =====================================
+// GENERATE PDF
+// =====================================
+
+async function createPdf(
+    tickets
+) {
+
+
+    const {
+        jsPDF
+    } = window.jspdf;
+
+
+    const pdf =
+        new jsPDF({
+
+            orientation:
+                "portrait",
+
+            unit:
+                "mm",
+
+            format:
+                "a4"
+
+        });
+
+
+    const pageWidth =
+        210;
+
+
+    const pageHeight =
+        297;
+
+
+    const margin =
+        8;
+
+
+    const columns =
+        2;
+
+
+    const rows =
+        4;
+
+
+    const gap =
+        4;
+
+
+    const ticketWidth =
+        (
+            pageWidth -
+            (margin * 2) -
+            (gap * (columns - 1))
+        ) /
+        columns;
+
+
+    const ticketHeight =
+        (
+            pageHeight -
+            (margin * 2) -
+            (gap * (rows - 1))
+        ) /
+        rows;
+
+
+    for (
+        let i = 0;
+        i < tickets.length;
+        i++
+    ) {
+
+
+        const position =
+            i %
+            (columns * rows);
+
+
+        if (
+            i > 0 &&
+            position === 0
+        ) {
+
+            pdf.addPage();
+
+        }
+
+
+        const column =
+            position %
+            columns;
+
+
+        const row =
+            Math.floor(
+                position /
+                columns
+            );
+
+
+        const x =
+            margin +
+            column *
+                (
+                    ticketWidth +
+                    gap
+                );
+
+
+        const y =
+            margin +
+            row *
+                (
+                    ticketHeight +
+                    gap
+                );
+
+
+        await drawTicket(
+            pdf,
+            tickets[i],
+            x,
+            y,
+            ticketWidth,
+            ticketHeight
+        );
+
+    }
+
+
+    return pdf;
+
+}
+
+
+// =====================================
+// DRAW TICKET
+// =====================================
+
+async function drawTicket(
+    pdf,
+    ticket,
+    x,
+    y,
+    width,
+    height
+) {
+
+
+    pdf.setDrawColor(
+        180,
+        180,
+        180
+    );
+
+
+    pdf.setLineWidth(
+        0.4
+    );
+
+
+    pdf.roundedRect(
+        x,
+        y,
+        width,
+        height,
+        3,
+        3
+    );
+
+
+    // ---------------------------------
+    // HEADER
+    // ---------------------------------
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    pdf.setFontSize(
+        14
+    );
+
+
+    pdf.text(
+        "GATEKEEPER",
+        x + 5,
+        y + 8
+    );
+
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    pdf.setFontSize(
+        8
+    );
+
+
+    pdf.text(
+        "PHYSICAL EVENT TICKET",
+        x + 5,
+        y + 13
+    );
+
+
+    // ---------------------------------
+    // EVENT
+    // ---------------------------------
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    pdf.setFontSize(
+        11
+    );
+
+
+    pdf.text(
+        getEventName(),
+        x + 5,
+        y + 22
+    );
+
+
+    // ---------------------------------
+    // TICKET TYPE
+    // ---------------------------------
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    pdf.setFontSize(
+        9
+    );
+
+
+    pdf.text(
+        selectedTicketType,
+        x + 5,
+        y + 29
+    );
+
+
+    // ---------------------------------
+    // TICKET NUMBER
+    // ---------------------------------
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    pdf.setFontSize(
+        12
+    );
+
+
+    pdf.text(
+        ticket.number,
+        x + 5,
+        y + 38
+    );
+
+
+    // ---------------------------------
+    // QR CODE
+    // ---------------------------------
+
+    const qrContainer =
+        document.createElement(
+            "div"
+        );
+
+
+    new QRCode(
+        qrContainer,
+        {
+
+            text:
+                ticket.number,
+
+            width:
+                120,
+
+            height:
+                120,
+
+            correctLevel:
+                QRCode.CorrectLevel.M
+
+        }
+    );
+
+
+    const canvas =
+        qrContainer.querySelector(
+            "canvas"
+        );
+
+
+    if (canvas) {
+
+
+        const qrData =
+            canvas.toDataURL(
+                "image/png"
+            );
+
+
+        const qrSize =
+            Math.min(
+                30,
+                width - 10
+            );
+
+
+        pdf.addImage(
+            qrData,
+            "PNG",
+            x + width - qrSize - 5,
+            y + 17,
+            qrSize,
+            qrSize
+        );
+
+    }
+
+
+    // ---------------------------------
+    // FOOTER
+    // ---------------------------------
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    pdf.setFontSize(
+        7
+    );
+
+
+    pdf.text(
+        "Present this ticket at the entrance.",
+        x + 5,
+        y + height - 8
+    );
+
+}
+
+
+// =====================================
+// GENERATE + EMAIL
+// =====================================
+
+async function generateAndEmail() {
+
+
+    const emailInput =
+        document.getElementById(
+            "emailAddress"
+        );
+
+
+    const email =
+        emailInput.value.trim();
+
+
+    const from =
+        parseInt(
+            document.getElementById(
+                "fromTicket"
+            ).value,
+            10
+        );
+
+
+    const to =
+        parseInt(
+            document.getElementById(
+                "toTicket"
+            ).value,
+            10
+        );
+
+
+    const button =
+        document.getElementById(
+            "emailButton"
+        );
+
+
+    if (
+        !email
+    ) {
+
+        showMessage(
+            "Please enter an email address.",
+            "error"
+        );
+
+        emailInput.focus();
+
+        return;
+
+    }
+
+
+    if (
+        !isValidEmail(email)
+    ) {
+
+        showMessage(
+            "Please enter a valid email address.",
+            "error"
+        );
+
+        emailInput.focus();
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(from) ||
+        isNaN(to) ||
+        to < from
+    ) {
+
+        showMessage(
+            "Please select a valid ticket range.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const tickets =
+        generatedTickets.slice(
+            from,
+            to + 1
+        );
+
+
+    if (
+        tickets.length === 0
+    ) {
+
+        showMessage(
+            "No tickets selected.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            `Generate a PDF containing ${tickets.length} ticket(s) and email it to ${email}?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Creating PDF...";
+
+
+    try {
+
+
+        const pdf =
+            await createPdf(
+                tickets
+            );
+
+
+        /*
+         * =================================
+         * NEXT API STEP
+         * =================================
+         *
+         * The Azure endpoint will receive:
+         *
+         * email
+         * eventId
+         * eventName
+         * ticketType
+         * ticketFrom
+         * ticketTo
+         * PDF
+         *
+         * and send the PDF as an email
+         * attachment.
+         *
+         */
+
+
+        const pdfBase64 =
+            pdf.output(
+                "datauristring"
+            );
+
+
+        button.textContent =
+            "Sending email...";
+
+
+        const response =
+            await fetch(
+                `${CONFIG.apiUrl}/tickets/email-physical`,
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            email:
+                                email,
+
+                            eventId:
+                                getEventId(),
+
+                            eventName:
+                                getEventName(),
+
+                            ticketType:
+                                selectedTicketType,
+
+                            ticketFrom:
+                                tickets[0].number,
+
+                            ticketTo:
+                                tickets[
+                                    tickets.length - 1
+                                ].number,
+
+                            pdf:
+                                pdfBase64
+
+                        })
+
+                }
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            let errorMessage =
+                "Unable to email the PDF.";
+
+
+            try {
+
+                const error =
+                    await response.json();
+
+
+                if (
+                    error.Message
+                ) {
+
+                    errorMessage =
+                        error.Message;
+
+                }
+
+            }
+            catch {
+
+                // Ignore response parsing errors
+
+            }
+
+
+            throw new Error(
+                errorMessage
+            );
+
+        }
+
+
+        showMessage(
+            `PDF containing ${tickets.length} ticket(s) has been emailed to ${email}.`,
+            "success"
+        );
+
+
+    }
+    catch (error) {
+
+
+        console.error(
+            "Email physical tickets error:",
+            error
+        );
+
+
+        showMessage(
+            error.message ||
+            "Unable to email the ticket PDF.",
+            "error"
+        );
 
     }
     finally {
@@ -921,10 +1948,100 @@ async function generateTickets() {
         button.disabled =
             false;
 
+
         button.textContent =
-            "Generate Physical Tickets";
+            "📧 Generate & Email Tickets";
 
     }
+
+}
+
+
+// =====================================
+// EVENT ID
+// =====================================
+
+function getEventId() {
+
+
+    if (!selectedEvent) {
+
+        return "";
+
+    }
+
+
+    return (
+        selectedEvent.EventId ||
+        selectedEvent.eventId ||
+        selectedEvent.Id ||
+        selectedEvent.id ||
+        ""
+    );
+
+}
+
+
+// =====================================
+// EVENT NAME
+// =====================================
+
+function getEventName() {
+
+
+    if (!selectedEvent) {
+
+        return "Event";
+
+    }
+
+
+    return (
+        selectedEvent.Name ||
+        selectedEvent.name ||
+        "Event"
+    );
+
+}
+
+
+// =====================================
+// EMAIL VALIDATION
+// =====================================
+
+function isValidEmail(
+    email
+) {
+
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+}
+
+
+// =====================================
+// MESSAGE
+// =====================================
+
+function showMessage(
+    text,
+    type
+) {
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    message.className =
+        `message ${type}`;
+
+
+    message.textContent =
+        text;
 
 }
 
