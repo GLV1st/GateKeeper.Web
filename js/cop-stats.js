@@ -46,9 +46,6 @@ async function updateDashboard() {
         const stats =
             await GateKeeperAPI.getEventStats(eventId);
 
-        const passesSold =
-            Number(stats.Total || 0);
-
         const normalTickets =
             Number(stats.NormalTickets || 0);
 
@@ -57,6 +54,12 @@ async function updateDashboard() {
 
         const peopleExpected =
             Number(stats.PeopleExpected || 0);
+
+        // The API's PeopleExpected is the combined normal-ticket
+        // people plus trader people. COP-CARN admission is 1 person
+        // per normal ticket, so the trader people figure is derived.
+        const traderPeopleExpected =
+            Math.max(0, peopleExpected - normalTickets);
 
         const peopleCheckedIn =
             Number(stats.PeopleCheckedIn || 0);
@@ -73,6 +76,18 @@ async function updateDashboard() {
         const cancelled =
             Number(stats.Cancelled || 0);
 
+        const onsiteUnder14 =
+            Number(stats.OnSiteUnder14 || 0);
+
+        const onsiteOver14 =
+            Number(stats.OnSiteOver14 || 0);
+
+        // OnSite is the combined number of normal attendees and trader
+        // people currently at the event. The normal attendee breakdown
+        // is supplied by the API, so the trader portion can be derived.
+        const onsiteTraders =
+            Math.max(0, peopleOnSite - onsiteUnder14 - onsiteOver14);
+
         let attendancePercent = 0;
 
         if (peopleExpected > 0) {
@@ -82,11 +97,14 @@ async function updateDashboard() {
                 );
         }
 
-        setValue("passesSoldCount", passesSold);
-        setValue("peopleExpectedCount", peopleExpected);
-        setValue("peopleOnSiteCount", peopleOnSite);
-        setValue("traderPassesCount", traderPasses);
         setValue("normalTicketsCount", normalTickets);
+        setValue("peopleExpectedNormalCount", normalTickets);
+        setValue("traderPassesCount", traderPasses);
+        setValue("traderPeopleExpectedCount", traderPeopleExpected);
+        setValue("peopleOnSiteCount", peopleOnSite);
+        setValue("onsiteUnder14Count", onsiteUnder14);
+        setValue("onsiteOver14Count", onsiteOver14);
+        setValue("onsiteTradersCount", onsiteTraders);
         setValue("peopleCheckedInCount", peopleCheckedIn);
         setValue("peopleCheckedOutCount", peopleCheckedOut);
         setValue("peopleNotYetInCount", peopleNotYetIn);
