@@ -151,7 +151,12 @@
     }
 
     if (isAdminAuthenticated()) {
-        window.location.replace("stats.html");
+        const statsPage =
+            localStorage.getItem("CurrentEventId") === "COP-CARN"
+                ? "cop-stats.html"
+                : "stats.html";
+
+        window.location.replace(statsPage);
     }
 
     document
@@ -177,7 +182,13 @@
 
             if (result.success) {
                 message.textContent = "Access granted.";
-                window.location.replace("stats.html");
+
+                const statsPage =
+                    localStorage.getItem("CurrentEventId") === "COP-CARN"
+                        ? "cop-stats.html"
+                        : "stats.html";
+
+                window.location.replace(statsPage);
             }
             else {
                 message.textContent =

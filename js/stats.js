@@ -7,194 +7,83 @@ document.addEventListener(
     initialise
 );
 
-
-// =====================================
-// INITIALISE
-// =====================================
-
 async function initialise() {
 
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "GateKeeper Event Dashboard"
-    );
-
-    console.log(
-        "================================="
-    );
-
-
     const eventId =
-        localStorage.getItem(
-            "CurrentEventId"
-        );
-
+        localStorage.getItem("CurrentEventId");
 
     const eventName =
-        localStorage.getItem(
-            "CurrentEventName"
-        );
-
-
-    // =================================
-    // CHECK EVENT
-    // =================================
+        localStorage.getItem("CurrentEventName");
 
     if (!eventId) {
 
-        console.error(
-            "No current event selected."
-        );
+        console.error("No current event selected.");
 
-
-        document.getElementById(
-            "eventName"
-        ).textContent =
+        document.getElementById("eventName").textContent =
             "No Event Selected";
 
-
         return;
-
     }
 
+    console.log("Event ID:", eventId);
+    console.log("Event Name:", eventName);
 
-    console.log(
-        "Event ID:",
-        eventId
-    );
-
-
-    console.log(
-        "Event Name:",
-        eventName
-    );
-
-
-    // =================================
-    // DISPLAY EVENT
-    // =================================
-
-    document.getElementById(
-        "eventName"
-    ).textContent =
+    document.getElementById("eventName").textContent =
         eventName || "Current Event";
 
-
-    // =================================
-    // LOAD STATS
-    // =================================
-
     await updateDashboard();
-
-
-    // =================================
-    // AUTO REFRESH
-    // =================================
 
     setInterval(
         updateDashboard,
         10000
     );
-
 }
-
-
-// =====================================
-// UPDATE DASHBOARD
-// =====================================
 
 async function updateDashboard() {
 
     const eventId =
-        localStorage.getItem(
-            "CurrentEventId"
-        );
-
+        localStorage.getItem("CurrentEventId");
 
     if (!eventId) {
-
-        console.warn(
-            "No event selected."
-        );
-
+        console.warn("No event selected.");
         return;
-
     }
-
 
     try {
 
-        console.log(
-            "Loading event statistics..."
-        );
-
-
         const stats =
-            await GateKeeperAPI.getEventStats(
-                eventId
-            );
+            await GateKeeperAPI.getEventStats(eventId);
 
-
-        console.log(
-            "Dashboard statistics:",
-            stats
-        );
-
-
-        // =================================
-        // VALUES
-        // =================================
+        console.log("Dashboard statistics:", stats);
 
         const total =
             Number(stats.Total || 0);
 
-
         const checkedIn =
             Number(stats.CheckedIn || 0);
-
 
         const checkedOut =
             Number(stats.CheckedOut || 0);
 
-
         const onSite =
             Number(stats.OnSite || 0);
-
 
         const onSiteUnder14 =
             Number(stats.OnSiteUnder14 || 0);
 
-
         const onSiteOver14 =
             Number(stats.OnSiteOver14 || 0);
-
 
         const notYetIn =
             Number(stats.NotYetIn || 0);
 
-
         const cancelled =
             Number(stats.Cancelled || 0);
 
-
-        // =================================
-        // TOTAL SCANNED
-        // =================================
-
         const scanned =
-            checkedIn +
-            checkedOut;
-
-
-        // =================================
-        // ATTENDANCE %
-        // =================================
+            checkedIn + checkedOut;
 
         let attendancePercent = 0;
-
 
         if (total > 0) {
 
@@ -202,127 +91,50 @@ async function updateDashboard() {
                 Math.round(
                     (onSite / total) * 100
                 );
-
         }
 
-
-        // =================================
-        // UPDATE MAIN CARDS
-        // =================================
-
-        setValue(
-            "totalCount",
-            total
-        );
-
-
-        setValue(
-            "onSiteCount",
-            onSite
-        );
-
-
-        setValue(
-            "checkedInCount",
-            checkedIn
-        );
-
-
-        setValue(
-            "checkedOutCount",
-            checkedOut
-        );
-
-
-        setValue(
-            "notYetInCount",
-            notYetIn
-        );
-
-
-        setValue(
-            "cancelledCount",
-            cancelled
-        );
-
-
-        // =================================
-        // ON-SITE AGE BREAKDOWN
-        // =================================
+        setValue("totalCount", total);
+        setValue("onSiteCount", onSite);
+        setValue("checkedInCount", checkedIn);
+        setValue("checkedOutCount", checkedOut);
+        setValue("notYetInCount", notYetIn);
+        setValue("cancelledCount", cancelled);
 
         setValue(
             "onSiteUnder14Count",
             onSiteUnder14
         );
 
-
         setValue(
             "onSiteOver14Count",
             onSiteOver14
         );
-
-
-        // =================================
-        // ATTENDANCE
-        // =================================
 
         setValue(
             "attendancePercent",
             attendancePercent + "%"
         );
 
-
         const attendanceBar =
-            document.getElementById(
-                "attendanceBar"
-            );
-
+            document.getElementById("attendanceBar");
 
         if (attendanceBar) {
 
             attendanceBar.style.width =
                 attendancePercent + "%";
-
         }
 
-
-        // =================================
-        // BREAKDOWN
-        // =================================
-
-        setValue(
-            "scannedCount",
-            scanned
-        );
-
-
-        setValue(
-            "breakdownOnSite",
-            onSite
-        );
-
-
-        setValue(
-            "breakdownLeft",
-            checkedOut
-        );
-
-
-        // =================================
-        // LAST UPDATED
-        // =================================
+        setValue("scannedCount", scanned);
+        setValue("breakdownOnSite", onSite);
+        setValue("breakdownLeft", checkedOut);
 
         const lastUpdated =
-            document.getElementById(
-                "lastUpdated"
-            );
-
+            document.getElementById("lastUpdated");
 
         if (lastUpdated) {
 
             lastUpdated.textContent =
                 new Date().toLocaleTimeString();
-
         }
 
     }
@@ -332,15 +144,8 @@ async function updateDashboard() {
             "Dashboard update failed:",
             err
         );
-
     }
-
 }
-
-
-// =====================================
-// SET VALUE
-// =====================================
 
 function setValue(
     elementId,
@@ -348,16 +153,11 @@ function setValue(
 ) {
 
     const element =
-        document.getElementById(
-            elementId
-        );
-
+        document.getElementById(elementId);
 
     if (!element)
         return;
 
-
     element.textContent =
         value;
-
 }
