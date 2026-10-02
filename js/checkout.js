@@ -441,6 +441,24 @@ async function ticketScanned(
 
 
             // =================================
+            // TRADER / FOOD VENDOR HAS NO PEOPLE ON SITE
+            // =================================
+
+            case "NOT_CHECKED_IN":
+
+                status.innerHTML =
+                    "🟠 " +
+                    (result.Message || "NO PEOPLE CURRENTLY ON SITE");
+
+                showTicket(
+                    result,
+                    ticketNumber
+                );
+
+                break;
+
+
+            // =================================
             // CANCELLED
             // =================================
 

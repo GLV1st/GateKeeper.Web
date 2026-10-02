@@ -150,7 +150,7 @@ async function handleScan(ticketNumber) {
         if (result.Status === "SUCCESS") {
 
             setScanStatus(
-                "🟢 CHECKED IN",
+                "🟢 " + (result.Message || "CHECKED IN"),
                 "scan-success"
             );
 
@@ -171,6 +171,16 @@ async function handleScan(ticketNumber) {
 
             setScanStatus(
                 "🔴 TICKET CANCELLED",
+                "scan-error"
+            );
+
+        }
+        else if (
+            result.Status === "CAPACITY_REACHED"
+        ) {
+
+            setScanStatus(
+                "🔴 " + (result.Message || "MAXIMUM PEOPLE ALREADY ON SITE"),
                 "scan-error"
             );
 
