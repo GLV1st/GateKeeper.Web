@@ -32,100 +32,23 @@ async function loadReport() {
 }
 
 function renderReport(report) {
-    // The API may return either camelCase or PascalCase JSON depending on
-    // the deployed Functions runtime/version. Support both so the report
-    // cannot silently show dashes when the API actually returned data.
-    const r = normaliseReport(report);
+    setText("ticketsSold", report.ticketsSold);
+    setText("totalScans", report.totalScans);
+    setText("totalIn", report.totalInScans);
+    setText("totalOut", report.totalOutScans);
+    setText("peakPeople", report.peakPeopleOnSite);
+    setText("peakTime", formatDateTime(report.peakTime));
+    setText("firstScan", formatTime(report.firstScan));
+    setText("lastScan", formatTime(report.lastScan));
 
-    setText("ticketsSold", r.ticketsSold);
-    setText("totalScans", r.totalScans);
-    setText("totalIn", r.totalInScans);
-    setText("totalOut", r.totalOutScans);
-    setText("peakPeople", r.peakPeopleOnSite);
-    setText("peakTime", formatDateTime(r.peakTime));
-    setText("firstScan", formatTime(r.firstScan));
-    setText("lastScan", formatTime(r.lastScan));
-
-    if (r.busiestPeriod) {
-        setText("busyPeriod", `${formatTime(r.busiestPeriod.start)}–${formatTime(r.busiestPeriod.end)}`);
-        setText("busyPeriodCount", `${r.busiestPeriod.totalScans} scans (${r.busiestPeriod.in} IN / ${r.busiestPeriod.out} OUT)`);
-    } else {
-        setText("busyPeriod", "-");
-        setText("busyPeriodCount", "-");
+    if (report.busiestPeriod) {
+        setText("busyPeriod", `${formatTime(report.busiestPeriod.start)}–${formatTime(report.busiestPeriod.end)}`);
+        setText("busyPeriodCount", `${report.busiestPeriod.totalScans} scans (${report.busiestPeriod.in} IN / ${report.busiestPeriod.out} OUT)`);
     }
 
-    renderTicketTypes(r.ticketTypes);
-    renderPeriods(r.busiestPeriods);
-    renderScanTypes(r.scanTypes);
-
-    // Keep the normalised version for the CSV export.
-    eventReport = r;
-}
-
-function normaliseReport(report) {
-    const get = (camel, pascal, fallback = null) =>
-        report?.[camel] !== undefined ? report[camel] :
-        report?.[pascal] !== undefined ? report[pascal] : fallback;
-
-    const normaliseRow = row => ({
-        ticketType: getRow(row, "ticketType", "TicketType", ""),
-        sold: Number(getRow(row, "sold", "Sold", 0)) || 0,
-        scanned: Number(getRow(row, "scanned", "Scanned", 0)) || 0,
-        in: Number(getRow(row, "in", "In", 0)) || 0,
-        out: Number(getRow(row, "out", "Out", 0)) || 0
-    });
-
-    const normalisePeriod = row => ({
-        start: getRow(row, "start", "Start", null),
-        end: getRow(row, "end", "End", null),
-        in: Number(getRow(row, "in", "In", 0)) || 0,
-        out: Number(getRow(row, "out", "Out", 0)) || 0,
-        totalScans: Number(getRow(row, "totalScans", "TotalScans", 0)) || 0
-    });
-
-    const normaliseScanType = row => ({
-        scanType: getRow(row, "scanType", "ScanType", ""),
-        count: Number(getRow(row, "count", "Count", 0)) || 0
-    });
-
-    return {
-        eventId: get("eventId", "EventId", ""),
-        eventName: get("eventName", "EventName", ""),
-        eventDate: get("eventDate", "EventDate", ""),
-        ticketsSold: Number(get("ticketsSold", "TicketsSold", 0)) || 0,
-        normalTicketsSold: Number(get("normalTicketsSold", "NormalTicketsSold", 0)) || 0,
-        traderPassesSold: Number(get("traderPassesSold", "TraderPassesSold", 0)) || 0,
-        cateringPassesSold: Number(get("cateringPassesSold", "CateringPassesSold", 0)) || 0,
-        cancelledTickets: Number(get("cancelledTickets", "CancelledTickets", 0)) || 0,
-        totalScans: Number(get("totalScans", "TotalScans", 0)) || 0,
-        totalInScans: Number(get("totalInScans", "TotalInScans", 0)) || 0,
-        totalOutScans: Number(get("totalOutScans", "TotalOutScans", 0)) || 0,
-        firstScan: get("firstScan", "FirstScan", null),
-        lastScan: get("lastScan", "LastScan", null),
-        peakPeopleOnSite: Number(get("peakPeopleOnSite", "PeakPeopleOnSite", 0)) || 0,
-        peakTime: get("peakTime", "PeakTime", null),
-        busiestPeriod: normalisePeriodOrNull(get("busiestPeriod", "BusiestPeriod", null)),
-        ticketTypes: (get("ticketTypes", "TicketTypes", []) || []).map(normaliseRow),
-        scanTypes: (get("scanTypes", "ScanTypes", []) || []).map(normaliseScanType),
-        busiestPeriods: (get("busiestPeriods", "BusiestPeriods", []) || []).map(normalisePeriod)
-    };
-}
-
-function normalisePeriodOrNull(row) {
-    if (!row) return null;
-    return {
-        start: getRow(row, "start", "Start", null),
-        end: getRow(row, "end", "End", null),
-        in: Number(getRow(row, "in", "In", 0)) || 0,
-        out: Number(getRow(row, "out", "Out", 0)) || 0,
-        totalScans: Number(getRow(row, "totalScans", "TotalScans", 0)) || 0
-    };
-}
-
-function getRow(row, camel, pascal, fallback = null) {
-    if (row?.[camel] !== undefined) return row[camel];
-    if (row?.[pascal] !== undefined) return row[pascal];
-    return fallback;
+    renderTicketTypes(report.ticketTypes || []);
+    renderPeriods(report.busiestPeriods || []);
+    renderScanTypes(report.scanTypes || []);
 }
 
 function renderTicketTypes(rows) {
