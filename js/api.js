@@ -289,3 +289,23 @@ class GateKeeperAPI {
 
 window.GateKeeperAPI =
     GateKeeperAPI;
+// =====================================
+// GET END OF EVENT REPORT
+// =====================================
+
+GateKeeperAPI.getEventReport = async function(eventId) {
+    const response = await fetch(
+        `${CONFIG.apiUrl}/events/${encodeURIComponent(eventId)}/report`
+    );
+
+    if (!response.ok) {
+        let message = "Unable to generate the event report.";
+        try {
+            const error = await response.json();
+            if (error.Message) message = error.Message;
+        } catch { }
+        throw new Error(message);
+    }
+
+    return await response.json();
+};

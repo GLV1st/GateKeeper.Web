@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateKeeper - End of Event Report</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/site.css">
+    <style>
+        .report-page { max-width: 1150px; margin: 20px auto; padding: 0 15px 40px; }
+        .report-header { display:flex; justify-content:space-between; align-items:flex-start; gap:15px; margin-bottom:18px; }
+        .report-title { margin:0; font-size:34px; }
+        .report-subtitle { margin-top:5px; font-size:19px; opacity:.7; }
+        .report-actions { display:flex; gap:10px; flex-wrap:wrap; }
+        .report-button { border:0; border-radius:12px; padding:12px 18px; font-size:16px; font-weight:700; cursor:pointer; background:#2878d7; color:white; }
+        .report-button.secondary { background:#555; }
+        .report-button:disabled { opacity:.55; cursor:wait; }
+        .report-panel { background:white; border-radius:18px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,.08); margin-bottom:18px; }
+        .metric-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+        .metric { padding:16px; border-radius:14px; background:#f7f7f7; }
+        .metric-label { font-size:13px; opacity:.7; }
+        .metric-value { font-size:30px; font-weight:700; margin-top:5px; }
+        .metric-note { font-size:12px; opacity:.65; margin-top:4px; }
+        h2 { margin-top:0; }
+        table { width:100%; border-collapse:collapse; }
+        th,td { padding:10px 8px; border-bottom:1px solid #e5e5e5; text-align:left; }
+        th { font-size:13px; opacity:.7; }
+        td.num, th.num { text-align:right; }
+        .highlight { font-weight:700; }
+        .empty { padding:20px 0; opacity:.65; }
+        .status { margin-bottom:15px; padding:12px 15px; border-radius:10px; background:#f3f3f3; display:none; }
+        .status.error { display:block; background:#fff0f0; color:#9b1c1c; }
+        .status.ok { display:block; background:#eef9f2; color:#176b39; }
+        .bar-row { display:grid; grid-template-columns:105px 1fr 55px; gap:10px; align-items:center; margin:7px 0; font-size:13px; }
+        .bar { height:18px; background:#e8e8e8; border-radius:20px; overflow:hidden; }
+        .bar-fill { height:100%; background:#2878d7; }
+        @media(max-width:800px) { .metric-grid { grid-template-columns:repeat(2,1fr); } .report-header { flex-direction:column; } }
+        @media(max-width:500px) { .metric-grid { grid-template-columns:1fr 1fr; gap:8px; } .metric-value { font-size:25px; } .report-page { padding:0 10px 30px; } table { font-size:13px; } }
+    </style>
+</head>
+<body>
+<header class="page-header">
+    <button class="home-button" onclick="window.location.href='index.html'">🏠 Home</button>
+    <div class="status online">● Online</div>
+</header>
+
+<main class="report-page">
+    <div class="report-header">
+        <div>
+            <h1 class="report-title">📊 End of Event Report</h1>
+            <div class="report-subtitle" id="eventName">Loading event...</div>
+        </div>
+        <div class="report-actions">
+            <button class="report-button secondary" onclick="window.location.href='stats.html'">← Event Dashboard</button>
+            <button class="report-button" id="downloadButton" onclick="downloadReport()" disabled>⬇️ Download Report</button>
+        </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <section class="report-panel">
+        <h2>Event Summary</h2>
+        <div class="metric-grid">
+            <div class="metric"><div class="metric-label">Tickets / Passes Sold</div><div class="metric-value" id="ticketsSold">0</div></div>
+            <div class="metric"><div class="metric-label">Total Scans</div><div class="metric-value" id="totalScans">0</div></div>
+            <div class="metric"><div class="metric-label">IN Scans</div><div class="metric-value" id="totalIn">0</div></div>
+            <div class="metric"><div class="metric-label">OUT Scans</div><div class="metric-value" id="totalOut">0</div></div>
+            <div class="metric"><div class="metric-label">Peak People On Site</div><div class="metric-value" id="peakPeople">0</div><div class="metric-note" id="peakTime">-</div></div>
+            <div class="metric"><div class="metric-label">Busiest 15 Minutes</div><div class="metric-value" id="busyPeriod">-</div><div class="metric-note" id="busyPeriodCount">-</div></div>
+            <div class="metric"><div class="metric-label">First Scan</div><div class="metric-value" id="firstScan">-</div></div>
+            <div class="metric"><div class="metric-label">Last Scan</div><div class="metric-value" id="lastScan">-</div></div>
+        </div>
+    </section>
+
+    <section class="report-panel">
+        <h2>Tickets Sold by Type</h2>
+        <div id="ticketTypes"></div>
+    </section>
+
+    <section class="report-panel">
+        <h2>Scan Activity by 15 Minutes</h2>
+        <div id="busiestPeriods"></div>
+    </section>
+
+    <section class="report-panel">
+        <h2>Scan Breakdown by Type</h2>
+        <div id="scanTypes"></div>
+    </section>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/event-report.js"></script>
+</body>
+</html>
