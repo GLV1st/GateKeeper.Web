@@ -24,6 +24,7 @@ async function loadReport() {
         eventReport = await GateKeeperAPI.getEventReport(eventId);
         renderReport(eventReport);
         document.getElementById("downloadButton").disabled = false;
+        document.getElementById("downloadCsvButton").disabled = false;
         showOk("Report data loaded successfully.");
     } catch (error) {
         console.error(error);
@@ -156,7 +157,58 @@ function renderScanTypes(rows) {
     }</tbody></table>`;
 }
 
+
 function downloadReport() {
+    if (!eventReport) return;
+
+    const r = eventReport;
+    const periods = r.busiestPeriods || [];
+    const width = 900, height = 340, left = 58, right = 24, top = 28, bottom = 76;
+    const plotW = width - left - right, plotH = height - top - bottom;
+    const max = Math.max(1, ...periods.map(p => Number(p.totalScans) || 0));
+    const barGap = periods.length > 40 ? 2 : 5;
+    const barW = periods.length ? Math.max(2, (plotW / periods.length) - barGap) : 0;
+    const bars = periods.map((p, i) => {
+        const value = Number(p.totalScans) || 0;
+        const bh = (value / max) * plotH;
+        const x = left + i * (plotW / Math.max(1, periods.length)) + barGap / 2;
+        const y = top + plotH - bh;
+        const label = `${formatTime(p.start)}–${formatTime(p.end)}`;
+        const showLabel = periods.length <= 24 || i % Math.ceil(periods.length / 24) === 0;
+        return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(0,bh).toFixed(1)}" rx="2" fill="#2878d7"><title>${escapeHtml(label)}: ${value} scans</title></rect>${showLabel ? `<text x="${(x+barW/2).toFixed(1)}" y="${height-bottom+18}" transform="rotate(-45 ${(x+barW/2).toFixed(1)} ${height-bottom+18})" font-size="10" text-anchor="end" fill="#42516a">${escapeHtml(formatTime(p.start))}</text>` : ""}`;
+    }).join("");
+    const grid = [0, .25, .5, .75, 1].map(f => {
+        const y = top + plotH - plotH*f;
+        return `<line x1="${left}" y1="${y}" x2="${width-right}" y2="${y}" stroke="#dce3ed"/><text x="${left-10}" y="${y+4}" text-anchor="end" font-size="11" fill="#42516a">${Math.round(max*f)}</text>`;
+    }).join("");
+    const chart = periods.length
+        ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Scans per 15 minute period">${grid}<line x1="${left}" y1="${top+plotH}" x2="${width-right}" y2="${top+plotH}" stroke="#8795aa"/>${bars}<text x="${left}" y="15" font-size="12" fill="#42516a">Scans per 15-minute period</text></svg>`
+        : '<p>No scan history recorded for this event.</p>';
+
+    const ticketRows = (r.ticketTypes || []).map(t => `<tr><td>${escapeHtml(t.ticketType)}</td><td>${t.sold||0}</td><td>${t.scanned||0}</td><td>${Math.max(0,(t.sold||0)-(t.scanned||0))}</td><td>${t.in||0}</td><td>${t.out||0}</td></tr>`).join("");
+    const periodRows = periods.map(p => `<tr><td>${escapeHtml(formatTime(p.start))}–${escapeHtml(formatTime(p.end))}</td><td>${p.in||0}</td><td>${p.out||0}</td><td>${p.totalScans||0}</td></tr>`).join("");
+    const scanTypeRows = (r.scanTypes || []).map(t => `<tr><td>${escapeHtml(t.scanType)}</td><td>${t.count||0}</td></tr>`).join("");
+    const safeName = (r.eventName || r.eventId || "Event").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
+    const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(r.eventName || r.eventId)} - Event Report</title><style>
+      body{font-family:Arial,sans-serif;color:#17243a;margin:28px;line-height:1.4}h1{margin-bottom:4px;color:#102b55}h2{margin-top:28px;border-bottom:2px solid #dce5f0;padding-bottom:7px}.muted{color:#64748b}.metrics{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin:22px 0}.metric{background:#f2f5f9;border-radius:9px;padding:14px}.metric span{display:block;color:#64748b;font-size:12px}.metric strong{font-size:22px}table{border-collapse:collapse;width:100%;margin:12px 0 24px;font-size:13px}th,td{padding:8px;border-bottom:1px solid #dce3ed;text-align:left}th{background:#edf2f8}svg{width:100%;height:auto;max-height:520px}.chart-wrap{border:1px solid #dce3ed;border-radius:10px;padding:12px;margin-top:12px}.print{margin-bottom:20px;padding:9px 14px;background:#2878d7;color:#fff;border:0;border-radius:6px;cursor:pointer}@media print{.print{display:none}body{margin:12mm}.metrics{grid-template-columns:repeat(4,1fr)}h2{break-after:avoid}.chart-wrap,table{break-inside:avoid}}@media(max-width:650px){.metrics{grid-template-columns:repeat(2,1fr)}}
+      </style></head><body><button class="print" onclick="window.print()">Print / Save as PDF</button><h1>GateKeeper End of Event Report</h1><div class="muted">${escapeHtml(r.eventName || r.eventId)} (${escapeHtml(r.eventId)})${r.eventDate ? ` · ${escapeHtml(r.eventDate)}` : ""}</div>
+      <h2>Event Summary</h2><div class="metrics">
+      <div class="metric"><span>Tickets / Passes Sold</span><strong>${r.ticketsSold||0}</strong></div><div class="metric"><span>Total Scans</span><strong>${r.totalScans||0}</strong></div><div class="metric"><span>IN Scans</span><strong>${r.totalInScans||0}</strong></div><div class="metric"><span>OUT Scans</span><strong>${r.totalOutScans||0}</strong></div>
+      <div class="metric"><span>Peak People On Site</span><strong>${r.peakPeopleOnSite||0}</strong><div>${escapeHtml(formatDateTime(r.peakTime))}</div></div><div class="metric"><span>Busiest 15 Minutes</span><strong>${r.busiestPeriod ? `${escapeHtml(formatTime(r.busiestPeriod.start))}–${escapeHtml(formatTime(r.busiestPeriod.end))}` : "-"}</strong><div>${r.busiestPeriod?.totalScans||0} scans</div></div><div class="metric"><span>First Scan</span><strong>${escapeHtml(formatTime(r.firstScan))}</strong></div><div class="metric"><span>Last Scan</span><strong>${escapeHtml(formatTime(r.lastScan))}</strong></div></div>
+      <h2>Scan Activity Graph</h2><p class="muted">Each bar shows the total number of scans in a 15-minute period. Hover over a bar for its count.</p><div class="chart-wrap">${chart}</div>
+      <h2>Tickets Sold by Type</h2><table><thead><tr><th>Ticket Type</th><th>Sold</th><th>Scanned</th><th>Not Scanned</th><th>IN</th><th>OUT</th></tr></thead><tbody>${ticketRows || '<tr><td colspan="6">No ticket sales found.</td></tr>'}</tbody></table>
+      <h2>Scan Activity by 15 Minutes</h2><table><thead><tr><th>Period</th><th>IN</th><th>OUT</th><th>Total Scans</th></tr></thead><tbody>${periodRows || '<tr><td colspan="4">No scan history recorded for this event.</td></tr>'}</tbody></table>
+      <h2>Scan Breakdown</h2><table><thead><tr><th>Scan Type</th><th>Count</th></tr></thead><tbody>${scanTypeRows || '<tr><td colspan="2">No scan history recorded for this event.</td></tr>'}</tbody></table>
+      <p class="muted">Generated by GateKeeper · ${escapeHtml(new Date().toLocaleString())}</p></body></html>`;
+    const blob = new Blob([html], {type:"text/html;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${safeName}-Event-Report.html`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+function downloadCsvReport() {
     if (!eventReport) return;
 
     const rows = [];
