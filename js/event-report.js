@@ -160,52 +160,119 @@ function renderScanTypes(rows) {
 
 function downloadReport() {
     if (!eventReport) return;
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        showError("PDF generator did not load. Please refresh the page and try again.");
+        return;
+    }
 
     const r = eventReport;
-    const periods = r.busiestPeriods || [];
-    const width = 900, height = 340, left = 58, right = 24, top = 28, bottom = 76;
-    const plotW = width - left - right, plotH = height - top - bottom;
-    const max = Math.max(1, ...periods.map(p => Number(p.totalScans) || 0));
-    const barGap = periods.length > 40 ? 2 : 5;
-    const barW = periods.length ? Math.max(2, (plotW / periods.length) - barGap) : 0;
-    const bars = periods.map((p, i) => {
-        const value = Number(p.totalScans) || 0;
-        const bh = (value / max) * plotH;
-        const x = left + i * (plotW / Math.max(1, periods.length)) + barGap / 2;
-        const y = top + plotH - bh;
-        const label = `${formatTime(p.start)}–${formatTime(p.end)}`;
-        const showLabel = periods.length <= 24 || i % Math.ceil(periods.length / 24) === 0;
-        return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(0,bh).toFixed(1)}" rx="2" fill="#2878d7"><title>${escapeHtml(label)}: ${value} scans</title></rect>${showLabel ? `<text x="${(x+barW/2).toFixed(1)}" y="${height-bottom+18}" transform="rotate(-45 ${(x+barW/2).toFixed(1)} ${height-bottom+18})" font-size="10" text-anchor="end" fill="#42516a">${escapeHtml(formatTime(p.start))}</text>` : ""}`;
-    }).join("");
-    const grid = [0, .25, .5, .75, 1].map(f => {
-        const y = top + plotH - plotH*f;
-        return `<line x1="${left}" y1="${y}" x2="${width-right}" y2="${y}" stroke="#dce3ed"/><text x="${left-10}" y="${y+4}" text-anchor="end" font-size="11" fill="#42516a">${Math.round(max*f)}</text>`;
-    }).join("");
-    const chart = periods.length
-        ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Scans per 15 minute period">${grid}<line x1="${left}" y1="${top+plotH}" x2="${width-right}" y2="${top+plotH}" stroke="#8795aa"/>${bars}<text x="${left}" y="15" font-size="12" fill="#42516a">Scans per 15-minute period</text></svg>`
-        : '<p>No scan history recorded for this event.</p>';
-
-    const ticketRows = (r.ticketTypes || []).map(t => `<tr><td>${escapeHtml(t.ticketType)}</td><td>${t.sold||0}</td><td>${t.scanned||0}</td><td>${Math.max(0,(t.sold||0)-(t.scanned||0))}</td><td>${t.in||0}</td><td>${t.out||0}</td></tr>`).join("");
-    const periodRows = periods.map(p => `<tr><td>${escapeHtml(formatTime(p.start))}–${escapeHtml(formatTime(p.end))}</td><td>${p.in||0}</td><td>${p.out||0}</td><td>${p.totalScans||0}</td></tr>`).join("");
-    const scanTypeRows = (r.scanTypes || []).map(t => `<tr><td>${escapeHtml(t.scanType)}</td><td>${t.count||0}</td></tr>`).join("");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 12;
     const safeName = (r.eventName || r.eventId || "Event").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
-    const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(r.eventName || r.eventId)} - Event Report</title><style>
-      body{font-family:Arial,sans-serif;color:#17243a;margin:28px;line-height:1.4}h1{margin-bottom:4px;color:#102b55}h2{margin-top:28px;border-bottom:2px solid #dce5f0;padding-bottom:7px}.muted{color:#64748b}.metrics{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin:22px 0}.metric{background:#f2f5f9;border-radius:9px;padding:14px}.metric span{display:block;color:#64748b;font-size:12px}.metric strong{font-size:22px}table{border-collapse:collapse;width:100%;margin:12px 0 24px;font-size:13px}th,td{padding:8px;border-bottom:1px solid #dce3ed;text-align:left}th{background:#edf2f8}svg{width:100%;height:auto;max-height:520px}.chart-wrap{border:1px solid #dce3ed;border-radius:10px;padding:12px;margin-top:12px}.print{margin-bottom:20px;padding:9px 14px;background:#2878d7;color:#fff;border:0;border-radius:6px;cursor:pointer}@media print{.print{display:none}body{margin:12mm}.metrics{grid-template-columns:repeat(4,1fr)}h2{break-after:avoid}.chart-wrap,table{break-inside:avoid}}@media(max-width:650px){.metrics{grid-template-columns:repeat(2,1fr)}}
-      </style></head><body><button class="print" onclick="window.print()">Print / Save as PDF</button><h1>GateKeeper End of Event Report</h1><div class="muted">${escapeHtml(r.eventName || r.eventId)} (${escapeHtml(r.eventId)})${r.eventDate ? ` · ${escapeHtml(r.eventDate)}` : ""}</div>
-      <h2>Event Summary</h2><div class="metrics">
-      <div class="metric"><span>Tickets / Passes Sold</span><strong>${r.ticketsSold||0}</strong></div><div class="metric"><span>Total Scans</span><strong>${r.totalScans||0}</strong></div><div class="metric"><span>IN Scans</span><strong>${r.totalInScans||0}</strong></div><div class="metric"><span>OUT Scans</span><strong>${r.totalOutScans||0}</strong></div>
-      <div class="metric"><span>Peak People On Site</span><strong>${r.peakPeopleOnSite||0}</strong><div>${escapeHtml(formatDateTime(r.peakTime))}</div></div><div class="metric"><span>Busiest 15 Minutes</span><strong>${r.busiestPeriod ? `${escapeHtml(formatTime(r.busiestPeriod.start))}–${escapeHtml(formatTime(r.busiestPeriod.end))}` : "-"}</strong><div>${r.busiestPeriod?.totalScans||0} scans</div></div><div class="metric"><span>First Scan</span><strong>${escapeHtml(formatTime(r.firstScan))}</strong></div><div class="metric"><span>Last Scan</span><strong>${escapeHtml(formatTime(r.lastScan))}</strong></div></div>
-      <h2>Scan Activity Graph</h2><p class="muted">Each bar shows the total number of scans in a 15-minute period. Hover over a bar for its count.</p><div class="chart-wrap">${chart}</div>
-      <h2>Tickets Sold by Type</h2><table><thead><tr><th>Ticket Type</th><th>Sold</th><th>Scanned</th><th>Not Scanned</th><th>IN</th><th>OUT</th></tr></thead><tbody>${ticketRows || '<tr><td colspan="6">No ticket sales found.</td></tr>'}</tbody></table>
-      <h2>Scan Activity by 15 Minutes</h2><table><thead><tr><th>Period</th><th>IN</th><th>OUT</th><th>Total Scans</th></tr></thead><tbody>${periodRows || '<tr><td colspan="4">No scan history recorded for this event.</td></tr>'}</tbody></table>
-      <h2>Scan Breakdown</h2><table><thead><tr><th>Scan Type</th><th>Count</th></tr></thead><tbody>${scanTypeRows || '<tr><td colspan="2">No scan history recorded for this event.</td></tr>'}</tbody></table>
-      <p class="muted">Generated by GateKeeper · ${escapeHtml(new Date().toLocaleString())}</p></body></html>`;
-    const blob = new Blob([html], {type:"text/html;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${safeName}-Event-Report.html`;
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    let y = 14;
+
+    function heading(title) {
+        if (y > pageH - 24) { pdf.addPage(); y = 14; }
+        pdf.setFont("helvetica", "bold"); pdf.setFontSize(15); pdf.setTextColor(16, 43, 85);
+        pdf.text(title, margin, y); y += 8;
+        pdf.setDrawColor(220, 229, 240); pdf.line(margin, y - 3, pageW - margin, y - 3);
+    }
+    function ensureSpace(required = 10) {
+        if (y + required > pageH - margin) { pdf.addPage(); y = 14; }
+    }
+    function drawTable(headers, rows, widths) {
+        const rowH = 7;
+        const x0 = margin;
+        ensureSpace(12);
+        pdf.setFontSize(8); pdf.setFont("helvetica", "bold");
+        pdf.setFillColor(237, 242, 248); pdf.rect(x0, y - 4.5, widths.reduce((a,b)=>a+b,0), rowH, "F");
+        let x = x0;
+        headers.forEach((h, i) => { pdf.text(String(h), x + 2, y); x += widths[i]; });
+        y += 5;
+        pdf.setFont("helvetica", "normal");
+        rows.forEach(row => {
+            if (y + rowH > pageH - margin) { pdf.addPage(); y = 14; }
+            x = x0;
+            row.forEach((cell, i) => {
+                const text = pdf.splitTextToSize(String(cell ?? ""), widths[i] - 4)[0] || "";
+                pdf.text(text, x + 2, y);
+                x += widths[i];
+            });
+            pdf.setDrawColor(225, 231, 239); pdf.line(x0, y + 2, x0 + widths.reduce((a,b)=>a+b,0), y + 2);
+            y += rowH;
+        });
+        y += 5;
+    }
+
+    pdf.setFont("helvetica", "bold"); pdf.setFontSize(21); pdf.setTextColor(16, 43, 85);
+    pdf.text("GateKeeper End of Event Report", margin, y); y += 8;
+    pdf.setFont("helvetica", "normal"); pdf.setFontSize(10); pdf.setTextColor(80, 95, 115);
+    pdf.text(`${r.eventName || r.eventId} (${r.eventId})${r.eventDate ? " | " + r.eventDate : ""}`, margin, y); y += 10;
+
+    heading("Event Summary");
+    const metrics = [
+        ["Tickets / Passes Sold", r.ticketsSold ?? 0], ["Total Scans", r.totalScans ?? 0],
+        ["IN Scans", r.totalInScans ?? 0], ["OUT Scans", r.totalOutScans ?? 0],
+        ["Peak People On Site", `${r.peakPeopleOnSite ?? 0}${r.peakTime ? " at " + formatDateTime(r.peakTime) : ""}`],
+        ["Busiest 15 Minutes", r.busiestPeriod ? `${formatTime(r.busiestPeriod.start)}-${formatTime(r.busiestPeriod.end)} (${r.busiestPeriod.totalScans || 0} scans)` : "-"],
+        ["First Scan", formatDateTime(r.firstScan)], ["Last Scan", formatDateTime(r.lastScan)]
+    ];
+    const boxGap = 3, boxW = (pageW - margin * 2 - boxGap * 3) / 4, boxH = 17;
+    metrics.forEach((m, i) => {
+        const row = Math.floor(i / 4), col = i % 4;
+        const x = margin + col * (boxW + boxGap), yy = y + row * (boxH + 3);
+        pdf.setFillColor(242, 245, 249); pdf.roundedRect(x, yy - 4, boxW, boxH, 2, 2, "F");
+        pdf.setFont("helvetica", "normal"); pdf.setFontSize(7); pdf.setTextColor(90, 105, 125); pdf.text(String(m[0]), x + 3, yy + 1);
+        pdf.setFont("helvetica", "bold"); pdf.setFontSize(10); pdf.setTextColor(23, 36, 58);
+        pdf.text(pdf.splitTextToSize(String(m[1] ?? "-"), boxW - 6)[0], x + 3, yy + 8);
+    });
+    y += boxH * 2 + 10;
+
+    heading("Scan Activity Graph - Scans per 15-Minute Period");
+    const periods = r.busiestPeriods || [];
+    const chartX = margin + 8, chartY = y + 3, chartW = pageW - margin * 2 - 16, chartH = 48;
+    if (periods.length) {
+        const max = Math.max(1, ...periods.map(p => Number(p.totalScans) || 0));
+        pdf.setDrawColor(210, 220, 232); pdf.line(chartX, chartY + chartH, chartX + chartW, chartY + chartH);
+        const slotW = chartW / periods.length;
+        periods.forEach((p, i) => {
+            const value = Number(p.totalScans) || 0;
+            const barH = (value / max) * (chartH - 5);
+            const bx = chartX + i * slotW + Math.max(0.4, slotW * 0.12);
+            const bw = Math.max(0.8, slotW * 0.76);
+            pdf.setFillColor(40, 120, 215); pdf.rect(bx, chartY + chartH - barH, bw, barH, "F");
+            if (periods.length <= 18 || i % Math.ceil(periods.length / 18) === 0) {
+                pdf.setFont("helvetica", "normal"); pdf.setFontSize(6); pdf.setTextColor(66, 81, 106);
+                pdf.text(formatTime(p.start), bx + bw / 2, chartY + chartH + 5, { angle: 45, align: "right" });
+            }
+        });
+        y = chartY + chartH + 15;
+    } else {
+        pdf.setFontSize(10); pdf.setTextColor(100, 116, 139); pdf.text("No scan history recorded for this event.", chartX, chartY + 8); y = chartY + 18;
+    }
+
+    heading("Tickets Sold by Type");
+    drawTable(["Ticket Type", "Sold", "Scanned", "Not Scanned", "IN", "OUT"],
+        (r.ticketTypes || []).map(t => [t.ticketType, t.sold || 0, t.scanned || 0, Math.max(0, (t.sold || 0) - (t.scanned || 0)), t.in || 0, t.out || 0]),
+        [75, 25, 28, 32, 20, 20]);
+
+    heading("Scan Activity by 15 Minutes");
+    drawTable(["Period", "IN", "OUT", "Total Scans"],
+        periods.map(p => [`${formatTime(p.start)}-${formatTime(p.end)}`, p.in || 0, p.out || 0, p.totalScans || 0]),
+        [85, 30, 30, 35]);
+
+    heading("Scan Breakdown by Type");
+    drawTable(["Scan Type", "Count"], (r.scanTypes || []).map(t => [t.scanType, t.count || 0]), [100, 35]);
+
+    const pages = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) {
+        pdf.setPage(i); pdf.setFont("helvetica", "normal"); pdf.setFontSize(7); pdf.setTextColor(120, 130, 145);
+        pdf.text(`Generated by GateKeeper | ${new Date().toLocaleString()} | Page ${i} of ${pages}`, margin, pageH - 5);
+    }
+    pdf.save(`${safeName}-Event-Report.pdf`);
 }
 
 function downloadCsvReport() {
