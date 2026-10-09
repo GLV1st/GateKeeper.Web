@@ -83,15 +83,24 @@ async function updateDashboard() {
         const scanned =
             checkedIn + checkedOut;
 
+        // Attendance must compare people onsite with people expected,
+        // not the number of ticket/pass records sold. A single pass can
+        // represent more than one person (for example, trader/catering).
+        const peopleExpected =
+            Number(stats.PeopleExpected || stats.peopleExpected || total);
+
         let attendancePercent = 0;
 
-        if (total > 0) {
-
+        if (peopleExpected > 0) {
             attendancePercent =
                 Math.round(
-                    (onSite / total) * 100
+                    (onSite / peopleExpected) * 100
                 );
         }
+
+        // Keep the progress bar within its visual range.
+        const attendanceBarPercent =
+            Math.min(100, Math.max(0, attendancePercent));
 
         setValue("totalCount", total);
         setValue("onSiteCount", onSite);
@@ -121,7 +130,7 @@ async function updateDashboard() {
         if (attendanceBar) {
 
             attendanceBar.style.width =
-                attendancePercent + "%";
+                attendanceBarPercent + "%";
         }
 
         setValue("scannedCount", scanned);
